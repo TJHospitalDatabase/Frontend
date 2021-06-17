@@ -10,12 +10,9 @@
                 <el-form ref="search13Ref" :model="patientNameSearch" :rules="searchRules" label-width="0px" class="search_form">
                 <!-- 搜索框 -->
                     <el-form-item prop="name">
-                    <el-input v-model="patientNameSearch.name"   prefix-icon="el-icon-zoom-in"></el-input>             
-                    </el-form-item>
-                    <!-- 按钮 -->
-                    <el-form-item class="btns">
-                        <el-button type="primary" @click="search">搜索</el-button>
-                        <el-button type="info" @click="reset">重置</el-button>
+                    <el-input v-model="patientNameSearch.name"   prefix-icon="el-icon-zoom-in" style="width:70%;"></el-input> 
+                    <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>
+                    <el-button type="info" @click="reset">重置</el-button>              
                     </el-form-item>
                 </el-form>
 
@@ -35,6 +32,8 @@
                     <el-table-column prop="inDate" label="入院日期">
                     </el-table-column>
                     <el-table-column prop="outDate" label="出院日期">
+                    </el-table-column>
+                    <el-table-column prop="operate" label="操作">
                     </el-table-column>
                 </el-table>
             </el-main>
@@ -94,7 +93,7 @@ width: 10%;
             //this.$router.push("/home");
         },
         goBack() {
-        console.log('go back');
+        this.$router.push("/home");
       }
     }
   };

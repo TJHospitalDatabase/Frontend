@@ -3,6 +3,8 @@
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">      
     <!-- 数据表单 -->
             <el-main>
+              <h2><img src='../assets/hosipital.jpg' height="50px"> 欢迎来到住院管理界面！</h2>
+              <h3>病人信息列表</h3>
                 <el-table :data="patientData">
                     <el-table-column prop="patientID" label="编号" width="140">
                     </el-table-column>
@@ -21,6 +23,7 @@
                     <el-table-column prop="outDate" label="出院日期">
                     </el-table-column>
                 </el-table>
+              <h3>病房信息列表</h3>
                 <el-table :data="roomData">
                     <el-table-column prop="roomID" label="房间号">
                     </el-table-column>
