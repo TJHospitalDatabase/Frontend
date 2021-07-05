@@ -1,3 +1,4 @@
+<!-- 增加住院信息 -->
 <template>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="margin-top:20px;">
         <el-form-item label="病人编号" prop="patientID">

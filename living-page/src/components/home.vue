@@ -17,7 +17,7 @@
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">
     <!-- 侧边栏 -->
         <el-aside width="200px">
-            <el-menu router>
+            <el-menu router :default-openeds="['1', '2']">
             <el-submenu index="1">
                 <template slot="title"><i class="el-icon-info"></i>基本信息查询</template>
                 <el-menu-item-group>
@@ -32,10 +32,10 @@
                 <template slot="title"><i class="el-icon-s-home"></i>病房信息查询</template>
                 <el-menu-item-group>
                 <template slot="title">你可以选择以下依赖信息</template>
-                <el-menu-item index="2-1" @click.native="to2_1">科室</el-menu-item>
-                <el-menu-item index="2-2" @click.native="to2_2">楼层</el-menu-item>
-                <el-menu-item index="2-3" @click.native="to2_3">负责护士</el-menu-item>
-                <el-menu-item index="2-4" @click.native="to2_4">日均费用</el-menu-item>
+                <el-menu-item index="2-1" >科室</el-menu-item>
+                <el-menu-item index="2-2" >楼层</el-menu-item>
+                <el-menu-item index="2-3" >负责护士</el-menu-item>
+                <el-menu-item index="2-4" >日均费用</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
                 <el-menu-item index="3" @click.native="to3"><i class="el-icon-upload"></i>增加住院信息</el-menu-item>
@@ -69,41 +69,5 @@ width: 10%;
 
 
 <script>
-  export default {
-    data() {
-      const patientItem = {
-        patientID: '10001',
-        patientName: '杨晶',
-        phoneNumber: 18017505143,
-        doctorName:'袁时金',
-        nurseName:'李芷若',
-        roomID: 737 ,
-        inDate:'2021-3-1',
-        outDate:'2021-7-18'
-      };
-        const roomItem = {
-            roomID:'101',
-            departmentName:'骨科',
-            bedNum:'4',
-            leftNum:'1',
-            nurseName:'范冰冰',
-            fee:'100'
-        };
-      return {
-        patientData: Array(5).fill(patientItem),
-        roomData: Array(5).fill(roomItem)
-      };
 
-     
-    },
-
-     
-
-    methods:{
-        logout(){
-            this.$router.push("/login");
-        },
-        
-    }
-  };
 </script>
