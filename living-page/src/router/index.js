@@ -13,7 +13,6 @@ import To2_4 from '../components/2-4.vue'
 import To3 from '../components/3.vue'
 import Welcome from '../components/welcome.vue'
 
-
 Vue.use(Router)
 
 export default new Router({
