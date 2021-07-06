@@ -5,7 +5,7 @@
             <el-main>
               <h2><img src='../../assets/hosipital.jpg' height="50px"> 欢迎来到住院管理界面！</h2>
               <h3>病人信息列表</h3>
-                <el-table :data="patientList">
+                <el-table :data="this.patientList">
                     <el-table-column prop="id" label="编号" width="140">
                     </el-table-column>
                     <el-table-column prop="name" label="病人姓名" width="120">
@@ -24,7 +24,7 @@
                     </el-table-column>
                 </el-table>
               <h3>病房信息列表</h3>
-                <el-table :data="roomList">
+                <el-table :data="this.roomList">
                     <el-table-column prop="room" label="房间号">
                     </el-table-column>
                     <el-table-column prop="deptName" label="所属科室">
@@ -52,23 +52,20 @@
     },
 
    created () {
-    this.getRoomList(),
-    this.getPatienList()
+     this.getRoomList(),
+     this.getPatienList()
   },    
 
     methods:{
-      async getRoomList () {
-      const { data: res } = await this.$http.get('/room')
-      console.log(res.data)
-      this.roomList=res.data
-    },
-     async getPatienList () {
-         const { data: res } = await this.$http.get('/patientinhospital')
-          console.log(res.data)
-          this.patientList=res.data
+        async getRoomList () {
+        const { data: res } = await this.$http.get('/room')
+        console.log(res.data)
+        this.roomList=res.data
         },
-        logout(){
-            this.$router.push("/login");
+        async getPatienList () {
+            const { data: res } = await this.$http.get('/patientinhospital')
+            console.log(res.data)
+            this.patientList=res.data
         },
     }
   };

@@ -37,8 +37,9 @@
         </el-form-item>
 
         <el-form-item>
-            <el-button type="primary" @click="submitForm('addForm')">立即创建</el-button>
-            <el-button @click="resetForm('addForm')">重置</el-button>
+            <el-button type="primary" @click="addPatient ()">增加病人</el-button>
+            <el-button @click="resetForm('addForm')">重置信息</el-button>
+            <el-button @click="test()">测试接口的按钮</el-button>
         </el-form-item>
     
 </el-form>
@@ -86,21 +87,10 @@
           outData: [
             { type: 'date', required: true, message: '请选择预计出院时间', trigger: 'change' }
           ],
-
         }
       };
     },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
@@ -111,17 +101,22 @@
           // console.log(valid)
           // 表单预校验失败
           if (!valid) return
-          const { data: res } = await this.$http.post('users', this.addForm)
-          if (res.meta.status !== 201) {
-            this.$message.error('添加失败！')
-          }
+          const { data: res } = await this.$http.post('patientinhospital', this.addForm)
+          console.log(res)
+          this.patientList=res.data
           this.$message.success('添加成功！')
-          this.getPatientList()
         })
       },
 
-
-
+    test () {
+         this.$refs.addFormRef.validate(async valid => {
+          // console.log(valid)
+          // 表单预校验失败
+          if (!valid) return
+          const { data: res } = await this.$http
+          console.log(res)
+        })
+      },
     }
   }
 </script>

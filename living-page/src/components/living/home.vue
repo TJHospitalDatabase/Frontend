@@ -6,7 +6,7 @@
         <i class="el-icon-setting" style="margin-right: 15px"></i>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item><i class="el-icon-copy-document"></i>个人中心</el-dropdown-item>
-          <el-dropdown-item @click.native="logout"><i class="el-icon-switch-button"></i>退出账号</el-dropdown-item>
+          <el-dropdown-item ><i class="el-icon-switch-button"></i>退出账号</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <span> 杨院长</span>

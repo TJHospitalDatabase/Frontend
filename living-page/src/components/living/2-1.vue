@@ -16,20 +16,18 @@
                 </div>
 
 
-                <el-table :data="roomData" style="margin-top:20px;">
-                    <el-table-column prop="roomID" label="房间号">
+                <el-table :data="roomList">
+                    <el-table-column prop="room" label="房间号">
                     </el-table-column>
-                    <el-table-column prop="departmentName" label="所属科室">
+                    <el-table-column prop="deptName" label="所属科室">
                     </el-table-column>
-                    <el-table-column prop="nurseName" label="负责护士">
+                    <el-table-column prop="nurse" label="负责护士">
                     </el-table-column>
-                    <el-table-column prop="bedNum" label="总床位数">
+                    <el-table-column prop="allBed" label="总床位数">
                     </el-table-column>
-                    <el-table-column prop="leftNum" label="剩余床位数">
+                    <el-table-column prop="remainBed" label="剩余床位数">
                     </el-table-column>
-                    <el-table-column prop="fee" label="日均费用">
-                    </el-table-column>
-                    <el-table-column prop="operate" label="操作">
+                    <el-table-column prop="dailyCost" label="日均费用">
                     </el-table-column>
                 </el-table>
             </el-main>
@@ -66,6 +64,7 @@ width: 10%;
   export default {
     data() {
       return {
+        roomList:[],
         patientNameSearch:{
             name:''
         },
@@ -126,9 +125,16 @@ width: 10%;
       };
     },
 
-     
+     created () {
+    this.getRoomList()
+  },  
 
     methods:{
+      async getRoomList () {
+      const { data: res } = await this.$http.get('/room')
+      console.log(res.data)
+      this.roomList=res.data
+    },
         reset(){
             //console.log(this);
             this.$refs.search14Ref.resetFields();

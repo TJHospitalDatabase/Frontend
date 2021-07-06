@@ -15,24 +15,22 @@
                     </el-form-item>
                 </el-form>
 
-                <el-table :data="patientData">
-                    <el-table-column prop="patientID" label="编号" width="140">
+                <el-table :data="patientList">
+                    <el-table-column prop="id" label="编号" width="140">
                     </el-table-column>
-                    <el-table-column prop="patientName" label="病人姓名" width="120">
+                    <el-table-column prop="name" label="病人姓名" width="120">
                     </el-table-column>
-                    <el-table-column prop="phoneNumber" label="联系方式">
+                    <el-table-column prop="phone" label="联系方式">
                     </el-table-column>
-                    <el-table-column prop="roomID" label="房间号">
+                    <el-table-column prop="room" label="房间号">
                     </el-table-column>
-                    <el-table-column prop="doctorName" label="主治医师">
+                    <el-table-column prop="doctor" label="主治医师">
                     </el-table-column>
-                    <el-table-column prop="nurseName" label="负责护士">
+                    <el-table-column prop="nurse" label="负责护士">
                     </el-table-column>
-                    <el-table-column prop="inDate" label="入院日期">
+                    <el-table-column prop="inData" label="入院日期">
                     </el-table-column>
-                    <el-table-column prop="outDate" label="出院日期">
-                    </el-table-column>
-                    <el-table-column prop="operate" label="操作">
+                    <el-table-column prop="outData" label="出院日期">
                     </el-table-column>
                 </el-table>
             </el-main>
@@ -75,13 +73,21 @@ width: 10%;
                 name: [
                     { required: true, message: '请输入病人姓名', trigger: 'blur' }
                 ]
-            }
+        },
+        patientList:[],
       };
     },
 
-     
+     created () {
+    this.getPatienList()
+  },  
 
     methods:{
+        async getPatienList () {
+         const { data: res } = await this.$http.get('/patientinhospital')
+          console.log(res.data)
+          this.patientList=res.data
+        },
         reset(){
             //console.log(this);
             this.$refs.search11Ref.resetFields();

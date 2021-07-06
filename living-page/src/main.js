@@ -6,8 +6,6 @@ import './assets/css/global.css'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
-
-//配置请求根路径
 axios.defaults.baseURL = 'http://101.132.106.237:5050'
 Vue.prototype.$http=axios
 
