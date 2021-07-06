@@ -38,7 +38,7 @@
                 <el-menu-item index="2-4" >日均费用</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
-                <el-menu-item index="3" @click.native="to3"><i class="el-icon-upload"></i>增加住院信息</el-menu-item>
+                <el-menu-item index="3" ><i class="el-icon-upload"></i>增加住院信息</el-menu-item>
             </el-menu>
         </el-aside>
     <!-- 数据表单 -->
