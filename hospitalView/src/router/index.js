@@ -1,24 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '../components/login.vue'
-import Home from '../components/home.vue'
-import To1_1 from '../components/1-1.vue'
-import To1_2 from '../components/1-2.vue'
-import To1_3 from '../components/1-3.vue'
-import To1_4 from '../components/1-4.vue'
-import To2_1 from '../components/2-1.vue'
-import To2_2 from '../components/2-2.vue'
-import To2_3 from '../components/2-3.vue'
-import To2_4 from '../components/2-4.vue'
-import To3 from '../components/3.vue'
-import Welcome from '../components/welcome.vue'
+import Home from '../components/living/home.vue'
+import To1_1 from '../components/living/1-1.vue'
+import To1_2 from '../components/living/1-2.vue'
+import To1_3 from '../components/living/1-3.vue'
+import To1_4 from '../components/living/1-4.vue'
+import To2_1 from '../components/living/2-1.vue'
+import To2_2 from '../components/living/2-2.vue'
+import To2_3 from '../components/living/2-3.vue'
+import To2_4 from '../components/living/2-4.vue'
+import To3 from '../components/living/3.vue'
+import Welcome from '../components/living/welcome.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes:[
-    {path:'/',redirect:'/login'},
-    {path:'/login',component: Login},
+    {path:'/',redirect:'/home'},
     {path:'/home',component: Home,
     redirect:'/welcome',
     children:[
