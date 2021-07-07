@@ -11,6 +11,9 @@ import axios from 'axios'
 axios.defaults.baseURL = 'http://101.132.106.237:5050'
 Vue.prototype.$http=axios
 
+
+
+
 Vue.use(ElementUI);
 
 import {

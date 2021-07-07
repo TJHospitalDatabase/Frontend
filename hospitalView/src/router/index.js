@@ -11,6 +11,11 @@ import To2_3 from '../components/living/2-3.vue'
 import To2_4 from '../components/living/2-4.vue'
 import To3 from '../components/living/3.vue'
 import Welcome from '../components/living/welcome.vue'
+import cLogin from '../components/checklistlogin'
+import cHome from '../components/checklistHome'
+import Users from '../components/user/Users'
+import cWelcome from '../components/checklistWelcome'
+import Checklist_result from '../components/user/Checklist_result'
 
 Vue.use(Router)
 
@@ -31,7 +36,17 @@ export default new Router({
       {path:'/3',component: To3},
       {path:'/welcome',component: Welcome},
     ]},
-
+    {path:'/',redirect:'/checklistlogin'},
+    {path:'/checklistlogin',component: cLogin},
+    {path:'/checklisthome',
+    component: cHome,
+    redirect:'/checklistwelcome',
+    children:[
+      {path:'/checklistwelcome',component:cWelcome},
+      {path:'/patient_imformation',component:Users},
+      {path:'/checklist_result',component:Checklist_result},
+    ]
+    }
   ]
 
 })
