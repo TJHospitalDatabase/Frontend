@@ -17,6 +17,12 @@ import Users from '../components/user/Users'
 import cWelcome from '../components/checklistWelcome'
 import Checklist_result from '../components/user/Checklist_result'
 
+import Home_nt from '@/components/nursing_treated_Home.vue'
+import Welcome_nt from '@/components/Welcome.vue'
+import Nurse from '@/components/nurse/nurse_on_duty.vue'
+import Treat from '@/components/treat/treated.vue'
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -46,6 +52,15 @@ export default new Router({
       {path:'/patient_imformation',component:Users},
       {path:'/checklist_result',component:Checklist_result},
     ]
+    },
+    { path: '/', redirect: '/home_nt' },
+    {
+      path: '/home_nt',
+      component: Home_nt,
+      redirect: '/welcome_nt',
+      children: [{ path: '/welcome_nt', component: Welcome_nt },
+        { path: '/1-4-1', component: Nurse },
+        { path: '/2-4-1', component: Treat }]
     }
   ]
 
