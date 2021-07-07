@@ -1,5 +1,8 @@
 <template>
 
+<!-- 为避免冲突！以下代码如需改动请联系杨晶，请勿不告知改动！ --> 
+
+
 <!-- 通过病人姓名查询病人信息 --> 
        <el-container style="height: 500px; height:100%; border: 1px solid #eee">
         <!-- 数据表单 -->

@@ -27,7 +27,8 @@ Vue.use(Router)
 
 export default new Router({
   routes:[
-    {path:'/',redirect:'/home'},
+    //住院界面相关路由开始
+    {path:'/',redirect:'/home'},//这一行后续可以删了
     {path:'/home',component: Home,
     redirect:'/welcome',
     children:[
@@ -42,16 +43,17 @@ export default new Router({
       {path:'/3',component: To3},
       {path:'/welcome',component: Welcome},
     ]},
+    //住院界面相关路由结束
+
     {path:'/',redirect:'/checklistlogin'},
     {path:'/checklistlogin',component: cLogin},
-    {path:'/checklisthome',
-    component: cHome,
-    redirect:'/checklistwelcome',
-    children:[
-      {path:'/checklistwelcome',component:cWelcome},
-      {path:'/patient_imformation',component:Users},
-      {path:'/checklist_result',component:Checklist_result},
-    ]
+    {path:'/checklisthome',component: cHome,
+        redirect:'/checklistwelcome',
+        children:[
+          {path:'/checklistwelcome',component:cWelcome},
+          {path:'/patient_imformation',component:Users},
+          {path:'/checklist_result',component:Checklist_result},
+        ]
     },
     { path: '/', redirect: '/home_nt' },
     {

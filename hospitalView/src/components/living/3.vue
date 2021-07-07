@@ -1,4 +1,8 @@
 <!-- 增加住院信息 -->
+
+<!-- 为避免冲突！以下代码如需改动请联系杨晶，请勿不告知改动！ --> 
+
+
 <template>
     <el-form :model="addForm" 
     :rules="addRules" 
