@@ -21,6 +21,8 @@ import Home_nt from '@/components/nursing_treated_Home.vue'
 import Welcome_nt from '@/components/Welcome.vue'
 import Nurse from '@/components/nurse/nurse_on_duty.vue'
 import Treat from '@/components/treat/treated.vue'
+import drugStore from '../components/drugStore.vue'
+import prescribe from '../components/prescribe.vue'
 
 
 Vue.use(Router)
@@ -63,6 +65,14 @@ export default new Router({
       children: [{ path: '/welcome_nt', component: Welcome_nt },
         { path: '/1-4-1', component: Nurse },
         { path: '/2-4-1', component: Treat }]
+    },
+    {
+      path:'/drugStore',
+      component: drugStore
+    },
+    {
+      path:'/prescribe',
+      component:prescribe
     }
   ]
 
