@@ -24,6 +24,12 @@ import Treat from '@/components/treat/treated.vue'
 import drugStore from '../components/drugStore.vue'
 import prescribe from '../components/prescribe.vue'
 
+import home_register from '../components/register/home_register.vue'
+import registerpage2 from '../components/register/registerpage2.vue'
+import registerpage11 from '../components/register/registerpage11.vue'
+import registerpage12 from '../components/register/registerpage12.vue'
+import registerpage13 from '../components/register/registerpage13.vue'
+import registerpage14 from '../components/register/registerpage14.vue'
 
 Vue.use(Router)
 
@@ -46,6 +52,16 @@ export default new Router({
       {path:'/welcome',component: Welcome},
     ]},
     //住院界面相关路由结束
+
+    { path: '/register/home_register', component: home_register,
+    redirect:'/register/registerpage11',
+    children:[
+    { path:'/register/registerpage11', component: registerpage11},
+    { path:'/register/registerpage12', component: registerpage12},
+    { path:'/register/registerpage13', component: registerpage13},
+    { path:'/register/registerpage14', component: registerpage14},
+    { path:'/register/registerpage2', component: registerpage2},
+  ]},
 
     {path:'/',redirect:'/checklistlogin'},
     {path:'/checklistlogin',component: cLogin},
