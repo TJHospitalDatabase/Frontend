@@ -1,4 +1,5 @@
 <template>
+<!-- 问诊信息 -->
     <div>
         <!--面包屑导航区-->
      <el-breadcrumb separator-class="el-icon-arrow-right">

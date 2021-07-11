@@ -19,7 +19,7 @@
             <el-menu router :default-openeds="['']">
 
             <el-submenu index="1">
-                <template slot="title"><i class="el-icon-info"></i>挂号问诊管理</template>
+                <template slot="title"><i class="el-icon-info"></i>管理</template>
                 <el-menu-item-group>
                     <template slot="title">挂号信息</template>
                     <el-menu-item index="" >病人信息录入</el-menu-item>
@@ -45,8 +45,8 @@
 
             <el-submenu index="3">
                 <template slot="title"><i class="el-icon-info"></i>单目管理</template>
-                <el-menu-item index="" >处方单管理</el-menu-item>
                 <el-menu-item index="" >检查单管理</el-menu-item>
+                <el-menu-item index="" >检查单结果管理</el-menu-item>
                 <el-menu-item index="" >处方单开具</el-menu-item>
                 <el-menu-item index="" >检查单开具</el-menu-item>
                 <el-menu-item index="" >住院单开具</el-menu-item>
