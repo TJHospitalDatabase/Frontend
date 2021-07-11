@@ -1,12 +1,13 @@
 <template>
+<div class="background">
 	<div class="login-register">
 		<div class="contain">
-			<div class="big-box" :class="{active:isLogin}">
+			<div class="big-box" :class="{active:isLogin}"> 
 				<div class="big-contain" v-if="isLogin">
 					<div class="btitle">账户登录</div>
 					<div class="bform">
-						<input type="email" placeholder="邮箱" v-model="form.useremail">
-						<span class="errTips" v-if="emailError">* 邮箱填写错误 *</span>
+						<input type="username" placeholder="用户名" v-model="form.username">
+						<span class="errTips" v-if="emailError">* 用户名不存在 *</span>
 						<input type="password" placeholder="密码" v-model="form.userpwd">
 						<span class="errTips" v-if="emailError">* 密码填写错误 *</span>
 					</div>
@@ -31,15 +32,18 @@
 				</div>
 				<div class="small-contain" v-else>
 					<div class="stitle">医院管理系统</div>
-					<p class="scontent">与我们保持联系，请登录你的账户</p>
+					<p class="scontent">点击下方，登录你的账户</p>
 					<button class="sbutton" @click="changeType">登录</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	</div>
 </template>
 
 <script>
+import axios from 'axios'
+
 	export default{
 		name:'login-register',
 		data(){
@@ -64,16 +68,13 @@
 			},
 			login() {
 				const self = this;
-				if (self.form.useremail != "" && self.form.userpwd != "") {
-					self.$axios({
-						method:'post',
-						url: 'http://127.0.0.1:10520/api/user/login',
-						data: {
-							email: self.form.useremail,
-							password: self.form.userpwd
-						}
-					})
-					.then( res => {
+				if (self.form.username != "" && self.form.userpwd != "") {
+                    axios.get('/logIn', {
+                        id:12,
+                        password:12
+                    })
+					.then(function(res) {
+                        console.log(res.data);
 						switch(res.data){
 							case 0: 
 								alert("登录成功！");
@@ -96,22 +97,18 @@
 			register(){
 				const self = this;
 				if(self.form.username != "" && self.form.useremail != "" && self.form.userpwd != ""){
-					self.$axios({
-						method:'post',
-						url: 'http://127.0.0.1:10520/api/user/add',
-						data: {
-							username: self.form.username,
-							email: self.form.useremail,
-							password: self.form.userpwd
-						}
-					})
-					.then( res => {
+                    axios.post('/signUp', {
+                              err_code: "0000",
+                              err_info: "注册成功123",
+                              data: true
+                            })
+					.then(function(res){
 						switch(res.data){
-							case 0:
+							case 1:
 								alert("注册成功！");
 								this.login();
 								break;
-							case -1:
+							case 0:
 								this.existed = true;
 								break;
 						}
@@ -207,7 +204,7 @@
 	.small-box{
 		width: 30%;
 		height: 100%;
-		background: linear-gradient(135deg,rgb(1, 153, 255),rgb(0, 88, 252));
+		background: linear-gradient(135deg,rgb(1, 196, 255),rgb(0, 109, 252));
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -225,7 +222,7 @@
 		align-items: center;
 	}
 	.stitle{
-		font-size: 1.5em;
+		font-size: 2em;
 		font-weight: bold;
 		color: #fff;
 	}
@@ -261,4 +258,11 @@
 		transform: translateX(-100%);
 		transition: all 1s;
 	}
+    .background{
+        background-image: url(../assets/hospital.jpeg);
+        height: 100%;
+		width: 100%;
+		background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
 </style>
