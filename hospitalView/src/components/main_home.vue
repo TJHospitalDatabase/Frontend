@@ -1,15 +1,21 @@
 <template>
 <el-container style="height:100%;">
  <!-- 头部 -->
-    <el-header class="header" style="text-align: right; font-size: 12px">
+    <el-header class="header" >
+        <div>
+        <img src="../assets/logo.png" style="margin-left: 15px"  alt />
+        <span style=" font-weight:bold;">医院管理系统</span>
+      </div>
+      <div >
       <el-dropdown>
         <i class="el-icon-setting" style="margin-right: 15px"></i>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item><i class="el-icon-copy-document"></i>个人中心</el-dropdown-item>
-          <el-dropdown-item ><i class="el-icon-switch-button"></i>退出账号</el-dropdown-item>
+          <el-dropdown-item ><i class="el-icon-switch-button" @click="logout"></i>退出账号</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span> 院长</span>
+      <span style="font-size: 15px">院长</span>
+       </div>
     </el-header>
 
     <!-- 主体部分 -->
@@ -96,6 +102,26 @@ line-height: 60px;
 font-size: 13px;
 }
 
+.el-header {
+  background-color: #94bdec;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 0;
+  align-items: center;
+  color: rgb(65, 86, 145);
+  font-size: 20px;
+  > div {
+    display: flex;
+    align-items: center;
+    img {
+      height: 40px;
+    }
+    span {
+      margin-left: 15px;
+    }
+  }
+}
+
 .side {
 color: rgb(204, 10, 10);
 width: 10%;
@@ -111,6 +137,9 @@ export default{
             this.$refs.search11Ref.resetFields();
             return this.$message.success('你成功重置了信息！');
         },
+    logout(){
+        this.$router.push("/login");
+    }
   }
 }
 </script>
