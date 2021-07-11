@@ -1,5 +1,6 @@
 <template>
-<!-- 查询病人信息 --> 
+
+<!-- 通过病人姓名查询病人信息 --> 
        <el-container style="height: 500px; height:100%; border: 1px solid #eee">
         <!-- 数据表单 -->
             <el-main>
@@ -7,22 +8,22 @@
                 </el-page-header>
                 <el-form ref="searchRef" :model="queryPatient"  label-width="0px" class="search_form">
                 <!-- 搜索框 -->
-                    <el-form-item >
+                    <el-form-item>
                     <el-input v-model="queryPatient.name"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入病人姓名" ></el-input>
-                    </el-form-item >
+                    </el-form-item>
 
-                    <el-form-item >
+                    <el-form-item>
                     <el-input v-model="queryPatient.nurse"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入护士姓名" ></el-input>
                     </el-form-item>
 
-                    <el-form-item >
+                    <el-form-item>
                     <el-input v-model="queryPatient.doctor"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入医生姓名" ></el-input>
                     </el-form-item>
 
-                    <el-form-item >
+                    <el-form-item>
                     <el-input v-model="queryPatient.room"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入房间号" ></el-input>
                     </el-form-item>
@@ -56,19 +57,50 @@
                           icon="el-icon-edit"
                           size="mini"
                           circle
-                          @click="editPatient(scope.row.id)"
+                          @click="showEditDialog(scope.row.name)"
                         ></el-button>
                         <el-button
                           type="danger"
                           icon="el-icon-delete"
                           size="mini"
                           circle
-                          @click="removePtient(scope.row.id)"
+                          @click="removePatient(scope.row.id)"
                         ></el-button>
                       </template>
                       </el-table-column>
                 </el-table>
             </el-main>
+
+ <!-- 修改病人的对话框 -->
+    <el-dialog
+      title="修改病人信息"
+      :visible.sync="editDialogVisible"
+      width="50%"
+      @close="editDialogClosed"
+    >
+      <!-- 内容主体 -->
+      <el-form
+        :model="editForm"
+        ref="editFormRef"
+        label-width="70px"
+      >
+        <el-form-item label="病人姓名">
+          <el-input v-model="editForm.name" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="房号" >
+          <el-input v-model="editForm.room"></el-input>
+        </el-form-item>
+        <el-form-item label="出院日期">
+          <el-input v-model="editForm.outData"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editPatient">确 定</el-button>
+      </span>
+    </el-dialog>
+
+
  </el-container> 
 </template>
 
@@ -108,26 +140,27 @@ width: 10%;
             room:'',
         },
      
-        patientList:[
-         
-        ],
+        patientList:[],
+
+        editDialogVisible: false,
+        editForm: { },
 
       };
     },
 
     created () {
-      this.getPatienList()
+      this.getPatientList()
       },  
 
     methods:{
-        async getPatienList () {
+        async getPatientList () {
           const { data: res } =await this.$http.post('patientinhospital', this.queryPatient)
           console.log(res.data)
           this.patientList=res.data
         },
         search(){
             console.log(this.queryPatient)
-            this.getPatienList()
+            this.getPatientList()
         },
         reset(){
             //console.log(this);
@@ -137,13 +170,36 @@ width: 10%;
         goBack() {
         this.$router.push("/home");
         },
-        editPatient(id){
-            console.log(id)
-        },
-        removePatient(id){
-            console.log(id)
-        },
-        async removePatient (id) {
+        
+           // 编辑病人信息
+      async showEditDialog (editName) {
+        const { data: res } = await this.$http.post('patientinhospital', {name:editName})
+        this.editForm = res.data
+        this.editDialogVisible = true
+      },
+
+
+    // 监听修改病人对话框的关闭事件
+    editDialogClosed () {
+      this.$refs.editFormRef.resetFields()
+    },
+    // 修改病人信息
+    async editPatient () {
+        //const { data: res } = await this.$http.put('patientinhospital', this.editForm )
+        // 隐藏对话框
+        this.editDialogVisible = false
+        this.$message.success('更新病人信息成功！')
+        this.getPatientList()
+
+    },
+
+
+
+
+
+
+
+        async removePatient (removeId) {
           const confirmResult = await this.$confirm(
             '此操作将永久删除该用户, 是否继续?',
             '提示',
@@ -158,10 +214,12 @@ width: 10%;
           if (confirmResult !== 'confirm') {
             return this.$message.info('已取消删除')
           }
-          const { data: res } = await this.$http.delete('patientinhospital' + id)
+          const { data: res } = await this.$http.delete('patientinhospital' , {id:removeId})
+          console.log(removeId)
+          console.log(res)
           // if (res.meta.status !== 0000) return this.$message.error('删除用户失败！')
           this.$message.success('删除用户成功！')
-          this.getUserList()
+
     },
     }
   };

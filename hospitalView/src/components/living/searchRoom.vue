@@ -54,12 +54,42 @@
                           icon="el-icon-edit"
                           size="mini"
                           circle
-                          @click="editRoom(scope.row.id)"
+                          @click="showEditDialog(scope.row.id)"
                         ></el-button>
                         </template>
                       </el-table-column>
                 </el-table>
             </el-main>
+
+      <!-- 修改病房的对话框 -->
+      <el-dialog
+        title="修改病人信息"
+        :visible.sync="editDialogVisible"
+        width="50%"
+        @close="editDialogClosed"
+      >
+      <!-- 内容主体 -->
+      <el-form
+        :model="editForm"
+        ref="editFormRef"
+        label-width="70px"
+      >
+        <el-form-item label="病人ID">
+          <el-input v-model="editForm.id" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="房号" >
+          <el-input v-model="editForm.room"></el-input>
+        </el-form-item>
+        <el-form-item label="出院日期">
+          <el-input v-model="editForm.outData"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editRoom">确 定</el-button>
+      </span>
+    </el-dialog>
+          
     </el-container>
  </el-container> 
 </template>
@@ -98,8 +128,11 @@ width: 10%;
           nurse:'',
           deptName:'',
           uB:1000,
-          lB:10
-          }
+          lB:0
+          },
+
+        editDialogVisible: false,
+        editForm: {},
       };
     },
 
@@ -114,23 +147,37 @@ width: 10%;
           console.log(res.data)
           this.roomList=res.data
         },
-
         reset(){
             this.$refs.searchRef.resetFields();
             return this.$message.success('你成功重置了信息！');
         },
-
         search(){
             console.log(this.queryRoom)
         },
-
         goBack() {
         this.$router.push("/home");
         },
-
-        editRoom(id){
-            console.log(id)
+        
+        // 编辑病房信息
+        async showEditDialog (editId) {
+          const { data: res } = await this.$http.post('patientinhospital', {id:editId})
+          this.editForm = res.data
+          this.editDialogVisible = true
         },
+
+
+    // 监听修改病房对话框的关闭事件
+    editDialogClosed () {
+      this.$refs.editFormRef.resetFields()
+    },
+    // 修改病房信息
+    async editRoom () {
+        //const { data: res } = await this.$http.put('patientinhospital', this.editForm )
+        // 隐藏添加病房对话框
+        this.editDialogVisible = false
+        this.$message.success('更新用户信息成功！')
+        this.getRoomList()
+      },
     }
   };
 </script>

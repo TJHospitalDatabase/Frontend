@@ -60,8 +60,6 @@
 
             <el-submenu index="4">
                 <template slot="title"><i class="el-icon-info"></i>住院管理</template>
-                <el-menu-item-group>
-            
                     <el-menu-item index="searchPatient" >住院病人信息查询</el-menu-item>
                     <!-- <el-menu-item index="1-1" >通过姓名查询</el-menu-item>
                     <el-menu-item index="1-2" >通过房间号查询</el-menu-item>
@@ -72,7 +70,6 @@
                     <el-menu-item index="2-3" >通过负责护士查询</el-menu-item>
                     <el-menu-item index="2-4" >通过日均费用查询</el-menu-item> -->
                 <el-menu-item index="Nurse" >住院护士值班信息</el-menu-item>
-                </el-menu-item-group>
             </el-submenu>
 
 
