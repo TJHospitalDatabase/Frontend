@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import main_home from '../components/main_home.vue'
+import main_welcome from '../components/main_welcome.vue'
 import Home from '../components/living/home.vue'
 import To1_1 from '../components/living/1-1.vue'
 import To1_2 from '../components/living/1-2.vue'
@@ -35,6 +37,16 @@ Vue.use(Router)
 
 export default new Router({
   routes:[
+    //总路由配置
+    {path:'/',redirect:'/main_home'},
+    {path:'/main_home',component: main_home,
+    redirect:'/main_welcome',
+    children:[
+      {path:'/main_welcome',component: main_welcome},
+    ]},
+
+
+
     //住院界面相关路由开始
     {path:'/',redirect:'/home'},//这一行后续可以删了
     {path:'/home',component: Home,
