@@ -19,57 +19,57 @@
             <el-menu router :default-openeds="['']">
 
             <el-submenu index="1">
-                <template slot="title"><i class="el-icon-info"></i>管理</template>
+                <template slot="title"><i class="el-icon-info"></i>门诊管理</template>
                 <el-menu-item-group>
                     <template slot="title">挂号信息</template>
-                    <el-menu-item index="" >病人信息录入</el-menu-item>
-                    <el-menu-item index="" >病人信息查询</el-menu-item>
-                    <el-menu-item index="" >挂号</el-menu-item>
-                    <el-menu-item index="" >挂号单处理</el-menu-item>
+                    <el-menu-item index="registerpage11" >病人信息录入</el-menu-item>
+                    <el-menu-item index="registerpage12" >病人信息查询</el-menu-item>
+                    <el-menu-item index="registerpage13" >挂号</el-menu-item>
+                    <el-menu-item index="registerpage14" >挂号单处理</el-menu-item>
                 </el-menu-item-group>
                 <el-menu-item-group>
                     <template slot="title">查询挂号</template>
-                    <el-menu-item index="" >挂号信息查询</el-menu-item>
+                    <el-menu-item index="registerpage2" >挂号信息查询</el-menu-item>
                 </el-menu-item-group>
                 <el-menu-item-group>
                     <template slot="title">问诊信息</template>
-                    <el-menu-item index="" >问诊信息列表</el-menu-item>
+                    <el-menu-item index="Treat" >问诊信息列表</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
 
             <el-submenu index="2">
                 <template slot="title"><i class="el-icon-info"></i>药品管理</template>
-                <el-menu-item index="" >药品库管理</el-menu-item>
-                <el-menu-item index="" >开药查询</el-menu-item>
+                <el-menu-item index="drugStore" >药品库管理</el-menu-item>
+                <el-menu-item index="prescribe" >开药查询</el-menu-item>
             </el-submenu>
 
             <el-submenu index="3">
                 <template slot="title"><i class="el-icon-info"></i>单目管理</template>
-                <el-menu-item index="" >检查单管理</el-menu-item>
-                <el-menu-item index="" >检查单结果管理</el-menu-item>
-                <el-menu-item index="" >处方单开具</el-menu-item>
-                <el-menu-item index="" >检查单开具</el-menu-item>
-                <el-menu-item index="" >住院单开具</el-menu-item>
+                <el-menu-item index="Checklist" >检查单管理</el-menu-item>
+                <el-menu-item index="Checklist_result" >检查单结果管理</el-menu-item>
+                <el-menu-item index="prescription" >处方单开具</el-menu-item>
+                <el-menu-item index="examine" >检查单开具</el-menu-item>
+                <el-menu-item index="hospital" >住院单开具</el-menu-item>
             </el-submenu>
 
             <el-submenu index="4">
                 <template slot="title"><i class="el-icon-info"></i>住院管理</template>
                 <el-menu-item-group>
                     <template slot="title">病人信息查询</template>
-                    <el-menu-item index="" >通过姓名查询</el-menu-item>
-                    <el-menu-item index="" >通过房间号查询</el-menu-item>
-                    <el-menu-item index="" >通过医生查询</el-menu-item>
-                    <el-menu-item index="" >通过负责护士查询</el-menu-item>
+                    <el-menu-item index="1-1" >通过姓名查询</el-menu-item>
+                    <el-menu-item index="1-2" >通过房间号查询</el-menu-item>
+                    <el-menu-item index="1-3" >通过医生查询</el-menu-item>
+                    <el-menu-item index="1-4" >通过负责护士查询</el-menu-item>
                 </el-menu-item-group>
                 <el-menu-item-group>
                     <template slot="title">病房信息查询</template>
-                    <el-menu-item index="" >通过科室查询</el-menu-item>
-                    <el-menu-item index="" >通过负责护士查询</el-menu-item>
-                    <el-menu-item index="" >通过日均费用查询</el-menu-item>
+                    <el-menu-item index="2-1" >通过科室查询</el-menu-item>
+                    <el-menu-item index="2-3" >通过负责护士查询</el-menu-item>
+                    <el-menu-item index="2-4" >通过日均费用查询</el-menu-item>
                 </el-menu-item-group>
                 <el-menu-item-group>
                 <template slot="title">值班信息</template>
-                <el-menu-item index="" >护士值班信息</el-menu-item>
+                <el-menu-item index="Nurse" >护士值班信息</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
 

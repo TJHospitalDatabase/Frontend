@@ -38,7 +38,7 @@ Vue.use(Router)
 export default new Router({
   routes:[
     //总路由配置
-    {path:'/',redirect:'/main_home'},
+    {path:'/',redirect:'/login'},
     {path:'/login',component: Login},
     {path:'/main_home',component: main_home,
         redirect:'/main_welcome',
