@@ -45,6 +45,10 @@
                 <el-menu-item index="3" ><i class="el-icon-upload"></i>增加住院信息</el-menu-item>
             </el-menu>
         </el-aside>
+
+
+
+        
     <!-- 数据表单 -->
             <el-main>
               <el-container  style="height: 500px; height:100%; border: 1px solid #eee">
