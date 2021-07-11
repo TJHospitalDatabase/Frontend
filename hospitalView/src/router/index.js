@@ -41,93 +41,38 @@ export default new Router({
     {path:'/',redirect:'/main_home'},
     {path:'/login',component: Login},
     {path:'/main_home',component: main_home,
-    redirect:'/main_welcome',
-    children:[
-      { path:'/checklist_result',component:Checklist_result},
-      { path:'/checklist',component:Checklist},
-      {path:'/main_welcome',component: main_welcome},
-      {path: '/hospital',component:hospital},
-      {path:'/prescription',component:prescription },
-      {path:'/examine',component:examine},
-
-      {path:'/drugStore',component: drugStore},
-      {path:'/prescribe',component:prescribe},
-
-
-      {path:'/1-1',component: To1_1},
-      {path:'/1-2',component: To1_2},
-      {path:'/1-3',component: To1_3},
-      {path:'/1-4',component: To1_4},
-      {path:'/2-1',component: To2_1},
-      {path:'/2-3',component: To2_3},
-      {path:'/2-4',component: To2_4},
-      { path: '/nurse_on_duty', component: Nurse },
-
-
-      { path:'/register/registerpage11', component: registerpage11},
-      { path:'/register/registerpage12', component: registerpage12},
-      { path:'/register/registerpage13', component: registerpage13},
-      { path:'/register/registerpage14', component: registerpage14},
-      { path:'/register/registerpage2', component: registerpage2},
-      { path: '/treated', component: Treat },
-    
-    ]},
-
-
-
-    //住院界面相关路由开始
-    {path:'/',redirect:'/home'},//这一行后续可以删了
-    {path:'/home',component: Home,
-    redirect:'/welcome',
-    children:[
-      {path:'/1-1',component: To1_1},
-      {path:'/1-2',component: To1_2},
-      {path:'/1-3',component: To1_3},
-      {path:'/1-4',component: To1_4},
-      {path:'/2-1',component: To2_1},
-      {path:'/2-3',component: To2_3},
-      {path:'/2-4',component: To2_4},
-      {path:'/welcome',component: Welcome},
-    ]},
-    //住院界面相关路由结束
-
-    { path: '/register/home_register', component: home_register,
-    redirect:'/register/registerpage11',
-    children:[
-    { path:'/register/registerpage11', component: registerpage11},
-    { path:'/register/registerpage12', component: registerpage12},
-    { path:'/register/registerpage13', component: registerpage13},
-    { path:'/register/registerpage14', component: registerpage14},
-    { path:'/register/registerpage2', component: registerpage2},
-  ]},
-
-    {path:'/',redirect:'/checklistlogin'},
-    
-    {path:'/checklisthome',component: cHome,
-        redirect:'/checklistwelcome',
+        redirect:'/main_welcome',
         children:[
-          {path:'/checklistwelcome',component:cWelcome},
-          {path:'/patient_imformation',component:Users},
-          {path:'/checklist_result',component:Checklist_result},
-        ]
-    },
-    { path: '/', redirect: '/home_nt' },
-    {
-      path: '/home_nt',
-      component: Home_nt,
-      redirect: '/welcome_nt',
-      children: [{ path: '/welcome_nt', component: Welcome_nt },
-        { path: '/1-4-1', component: Nurse },
-        { path: '/2-4-1', component: Treat }]
-    },
-    {
-      path:'/drugStore',
-      component: drugStore
-    },
-    {
-      path:'/prescribe',
-      component:prescribe
-    }
+          {path:'/main_welcome',component: main_welcome},
+          { path:'/checklist_result',component:Checklist_result},
+          { path:'/checklist',component:Checklist}, 
+          {path: '/hospital',component:hospital},
+          {path:'/prescription',component:prescription },
+          {path:'/examine',component:examine},
+
+          {path:'/drugStore',component: drugStore},
+          {path:'/prescribe',component:prescribe},
+
+          {path:'/1-1',component: To1_1},
+          {path:'/1-2',component: To1_2},
+          {path:'/1-3',component: To1_3},
+          {path:'/1-4',component: To1_4},
+          {path:'/2-1',component: To2_1},
+          {path:'/2-3',component: To2_3},
+          {path:'/2-4',component: To2_4},
+          { path: '/nurse_on_duty', component: Nurse },
+
+
+          { path:'/register/registerpage11', component: registerpage11},
+          { path:'/register/registerpage12', component: registerpage12},
+          { path:'/register/registerpage13', component: registerpage13},
+          { path:'/register/registerpage14', component: registerpage14},
+          { path:'/register/registerpage2', component: registerpage2},
+          { path: '/treated', component: Treat },
+    
+    ]},
+
+   
   ]
 
 })
