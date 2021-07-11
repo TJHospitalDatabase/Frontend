@@ -80,7 +80,7 @@
           departmentID: '123',
           DoctorID:''
         },
-        ],
+       ],
         departmentIDSearch:{
             departmentID:''
         },

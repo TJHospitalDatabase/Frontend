@@ -24,7 +24,6 @@ import To2_3 from '../components/living/2-3.vue'
 import To2_4 from '../components/living/2-4.vue'
 import Nurse from '../components/living/nurse_on_duty.vue'
 
-import home_register from '../components/register/home_register.vue'
 import registerpage2 from '../components/register/registerpage2.vue'
 import registerpage11 from '../components/register/registerpage11.vue'
 import registerpage12 from '../components/register/registerpage12.vue'
@@ -62,13 +61,12 @@ export default new Router({
           {path:'/2-4',component: To2_4},
           { path: '/nurse_on_duty', component: Nurse },
 
-
-          { path:'/register/registerpage11', component: registerpage11},
-          { path:'/register/registerpage12', component: registerpage12},
-          { path:'/register/registerpage13', component: registerpage13},
-          { path:'/register/registerpage14', component: registerpage14},
-          { path:'/register/registerpage2', component: registerpage2},
-          { path: '/treated', component: Treat },
+          { path:'/registerpage11', component: registerpage11},
+          { path:'/registerpage12', component: registerpage12},
+          { path:'/registerpage13', component: registerpage13},
+          { path:'/registerpage14', component: registerpage14},
+          { path:'/registerpage2', component: registerpage2},
+          { path:'/treated', component: Treat },
     
     ]},
 
