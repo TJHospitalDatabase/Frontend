@@ -21,6 +21,16 @@
 						<input type="email" placeholder="邮箱" v-model="form.useremail">
 						<input type="password" placeholder="密码" v-model="form.userpwd">
 					</div>
+					<div class="bselect">
+					<el-select v-model="value" clearable placeholder="角色选择" style="width:350px">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+					</div>		
 					<button class="bbutton" @click="register">注册</button>
 				</div>
 			</div>
@@ -43,7 +53,6 @@
 
 <script>
 import axios from 'axios'
-
 	export default{
 		name:'login-register',
 		data(){
@@ -56,7 +65,25 @@ import axios from 'axios'
 					username:'',
 					useremail:'',
 					userpwd:''
-				}
+				},
+				options: [
+		{
+		  value: '选项1',
+          label: '挂号部'
+						},{
+          value: '选项2',
+          label: '门诊部'
+        }, {
+          value: '选项3',
+          label: '住院部',
+        }, {
+          value: '选项4',
+          label: '药品管理部'
+        }, {
+          value: '选项5',
+          label: '检查管理部'
+        }],
+        value: ''
 			}
 		},
 		methods:{
@@ -173,6 +200,11 @@ import axios from 'axios'
 		justify-content: space-around;
 		align-items: center;
 	}
+	.bselect{
+		position:relative;
+		top:-27px;
+		left:2px;
+	}
 	.bform .errTips{
 		display: block;
 		width: 50%;
@@ -251,7 +283,7 @@ import axios from 'axios'
 	}
 	.small-box.active{
 		left: 100%;
-		border-top-left-radius: 0;
+		border-top-left-radius: 1;
 		border-bottom-left-radius: 0;
 		border-top-right-radius: inherit;
 		border-bottom-right-radius: inherit;
@@ -265,4 +297,12 @@ import axios from 'axios'
 		background-size: 100% 100%;
         background-repeat: no-repeat;
     }
+	  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+	height:50%;
+  }
+  .el-icon-arrow-down {
+    font-size: 20px;
+  }
 </style>
