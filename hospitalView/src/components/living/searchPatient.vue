@@ -6,36 +6,56 @@
             <el-main>
                 <el-page-header @back="goBack" content="查询病人信息">
                 </el-page-header>
-                <el-form ref="searchRef" :model="queryPatient"  label-width="0px" class="search_form">
+
+              <el-button type="primary"  @click="dialog = true" 
+              style="margin-top:20px; margin-bottom:20px;"
+              >高级搜索</el-button>
+
+              <el-drawer
+                  title="可选搜索依赖项"
+                  :before-close="handleClose"
+                  :visible.sync="dialog"
+                  direction="ltr"
+                  custom-class="demo-drawer"
+                  ref="drawer"
+                >
+                  <div class="demo-drawer__content">
+                   <el-form ref="searchRef" :model="queryPatient"  label-width="0px" class="search_form">
                 <!-- 搜索框 -->
                     <el-form-item>
-                    <el-input v-model="queryPatient.name"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+                    病人姓名：
+                    <el-input v-model="queryPatient.name"   prefix-icon="el-icon-zoom-in"  
                         placeholder="请输入病人姓名" ></el-input>
                     </el-form-item>
 
                     <el-form-item>
-                    <el-input v-model="queryPatient.nurse"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+                    护士姓名：
+                    <el-input v-model="queryPatient.nurse"   prefix-icon="el-icon-zoom-in" 
                         placeholder="请输入护士姓名" ></el-input>
                     </el-form-item>
 
                     <el-form-item>
-                    <el-input v-model="queryPatient.doctor"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+                    医生姓名：
+                    <el-input v-model="queryPatient.doctor"   prefix-icon="el-icon-zoom-in" 
                         placeholder="请输入医生姓名" ></el-input>
                     </el-form-item>
 
                     <el-form-item>
-                    <el-input v-model="queryPatient.room"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+                    所属病房：
+                    <el-input v-model="queryPatient.room"   prefix-icon="el-icon-zoom-in" 
                         placeholder="请输入房间号" ></el-input>
                     </el-form-item>
-
-                    <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>
-                    <el-button type="info" @click="reset">重置</el-button>   
-
                 </el-form>
+                    <div class="demo-drawer__footer" style="margin-left:20px;">
+                      <el-button @click="cancelForm">取 消</el-button>
+                      <el-button type="primary" @click="$refs.drawer.closeDrawer(),search()"  :loading="loading">提 交</el-button>
+                    </div>
+                  </div>
+                </el-drawer>
 
                 <el-table :data="patientList">
                     <el-table-column prop="id" label="编号" width="140">
-                    </el-table-column>
+                    </el-table-column>  
                     <el-table-column prop="name" label="病人姓名" width="120">
                     </el-table-column>
                     <el-table-column prop="phone" label="联系方式">
@@ -71,68 +91,52 @@
                 </el-table>
             </el-main>
 
- <!-- 修改病人的对话框 -->
-    <el-dialog
-      title="修改病人信息"
-      :visible.sync="editDialogVisible"
-      width="50%"
-      @close="editDialogClosed"
-    >
-      <!-- 内容主体 -->
-      <el-form
-        :model="editForm"
-        ref="editFormRef"
-        label-width="70px"
-      >
-        <el-form-item label="病人姓名">
-          <el-input v-model="editForm.name" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="房号" >
-          <el-input v-model="editForm.room"></el-input>
-        </el-form-item>
-        <el-form-item label="出院日期">
-          <el-input v-model="editForm.outData"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPatient">确 定</el-button>
-      </span>
-    </el-dialog>
+      <!-- 修改病人的对话框 -->
+          <el-dialog
+            title="修改病人信息"
+            :visible.sync="editDialogVisible"
+            width="50%"
+            @close="editDialogClosed"
+          >
+            <!-- 内容主体 -->
+            <el-form
+              :model="editForm"
+              ref="editFormRef"
+              label-width="70px"
+            >
+              <el-form-item label="病人姓名">
+                <el-input v-model="editForm.name" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="房号" >
+                <el-input v-model="editForm.room"></el-input>
+              </el-form-item>
+              <el-form-item label="出院日期">
+                <el-input v-model="editForm.outData"></el-input>
+              </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="editDialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="editPatient">确 定</el-button>
+            </span>
+          </el-dialog>
 
 
  </el-container> 
 </template>
 
 
-<style lang="less" scoped>
-.header {
-background-color: #9ac7fa;
-line-height: 60px;
-text-align: right; 
-font-size: 13px;
-}
-
-.btns{
-    display: flex;
-    justify-content: flex-end;
-}
-
-.side {
-color: rgb(204, 10, 10);
-width: 10%;
-}
-.search_form{
-    width:100%;
-    margin-top: 30px;
-}
-</style>
-
 
 <script>
   export default {
     data() {
       return {
+      table: false,
+      dialog: false,
+      loading: false,
+
+      formLabelWidth: '80px',
+      timer: null,
+
         queryPatient:{
             name:'',
             doctor:'',
@@ -153,6 +157,33 @@ width: 10%;
       },  
 
     methods:{
+
+        handleClose(done) {
+          if (this.loading) {
+            return;
+          }
+          this.$confirm('确定要提交搜索信息吗？')
+            .then(_ => {
+              this.loading = true;
+              this.timer = setTimeout(() => {
+                done();
+                // 动画关闭需要一定的时间
+                setTimeout(() => {
+                  this.loading = false;
+                }, 0);
+              }, 0);
+            })
+            .catch(_ => {});
+        },
+
+        cancelForm() {
+          this.loading = false;
+          this.dialog = false;
+          clearTimeout(this.timer);
+        },
+
+
+
         async getPatientList () {
           const { data: res } =await this.$http.post('patientinhospital', this.queryPatient)
           console.log(res.data)
@@ -162,42 +193,32 @@ width: 10%;
             console.log(this.queryPatient)
             this.getPatientList()
         },
-        reset(){
-            //console.log(this);
-            this.$refs.searchRef.resetFields();
-            return this.$message.success('你成功重置了信息！');
-        },
+
         goBack() {
         this.$router.push("/home");
         },
         
-           // 编辑病人信息
-      async showEditDialog (editName) {
-        const { data: res } = await this.$http.post('patientinhospital', {name:editName})
-        this.editForm = res.data
-        this.editDialogVisible = true
-      },
+           // 编辑用户信息
+    async showEditDialog (editName) {
+      const { data: res } = await this.$http.post('patientinhospital', {name:editName})
+      this.editForm = res.data
+      this.editDialogVisible = true
+    },
 
 
-    // 监听修改病人对话框的关闭事件
+    // 监听修改用户对话框的关闭事件
     editDialogClosed () {
       this.$refs.editFormRef.resetFields()
     },
-    // 修改病人信息
+    // 修改用户信息
     async editPatient () {
         //const { data: res } = await this.$http.put('patientinhospital', this.editForm )
-        // 隐藏对话框
+        // 隐藏添加用户对话框
         this.editDialogVisible = false
-        this.$message.success('更新病人信息成功！')
+        this.$message.success('更新用户信息成功！')
         this.getPatientList()
 
     },
-
-
-
-
-
-
 
         async removePatient (removeId) {
           const confirmResult = await this.$confirm(
@@ -224,3 +245,16 @@ width: 10%;
     }
   };
 </script>
+
+<style lang="less" scoped>
+
+.search_form{
+    width:100%;
+    margin-top: 30px;
+    margin-left: 30px;
+}
+.el-input{
+  width:50%;
+}
+</style>
+

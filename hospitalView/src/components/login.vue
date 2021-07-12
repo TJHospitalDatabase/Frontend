@@ -189,7 +189,7 @@ import axios from 'axios'
 	.btitle{
 		font-size: 1.5em;
 		font-weight: bold;
-		color: rgb(57,167,176);
+		color: rgb(95, 162, 216);
 	}
 	.bform{
 		width: 100%;
@@ -228,7 +228,7 @@ import axios from 'axios'
 		border-radius: 24px;
 		border: none;
 		outline: none;
-		background-color: rgb(0, 81, 255);
+		background-color: rgb(117, 149, 218);
 		color: #fff;
 		font-size: 0.9em;
 		cursor: pointer;
@@ -236,7 +236,7 @@ import axios from 'axios'
 	.small-box{
 		width: 30%;
 		height: 100%;
-		background: linear-gradient(135deg,rgb(1, 196, 255),rgb(0, 109, 252));
+		background: linear-gradient(135deg,rgb(99, 165, 252),rgb(164, 192, 226));
 		position: absolute;
 		top: 0;
 		left: 0;

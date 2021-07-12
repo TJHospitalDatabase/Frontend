@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import main_home from '../components/main_home.vue'
-import main_welcome from '../components/main_welcome.vue'
+import home from '../components/home.vue'
+import welcome from '../components/welcome.vue'
 import Login from '../components/login'
 
 import hospital from '../components/bills/hospital.vue'
@@ -38,12 +38,12 @@ Vue.use(Router)
 export default new Router({
   routes:[
     //总路由配置
-    {path:'/',redirect:'/main_home'},
+    {path:'/',redirect:'/home'},
     {path:'/login',component: Login},
-    {path:'/main_home',component: main_home,
-        redirect:'/main_welcome',
+    {path:'/home',component: home,
+        redirect:'/welcome',
         children:[
-          {path:'/main_welcome',component: main_welcome},
+          {path:'/welcome',component: welcome},
           { path:'/checklist_result',component:Checklist_result},
           { path:'/checklist',component:Checklist}, 
           {path: '/hospital',component:hospital},
