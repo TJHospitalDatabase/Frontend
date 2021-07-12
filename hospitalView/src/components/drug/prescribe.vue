@@ -1,68 +1,8 @@
 <template>
 <!-- 开药查询 -->
   <el-container style="height: 942px; border: 1px solid #eee">
-    <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-      <el-menu :default-openeds="['1', '3']">
-        <el-submenu index="1">
-          <template slot="title"><i class="el-icon-message"></i>导航一</template>
-          <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <el-menu-item index="1-1">选项1</el-menu-item>
-            <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="1-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-submenu index="2">
-          <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-          <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <el-menu-item index="2-1">选项1</el-menu-item>
-            <el-menu-item index="2-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="2-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="2-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-submenu index="3">
-          <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-          <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <el-menu-item index="3-1">选项1</el-menu-item>
-            <el-menu-item index="3-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="3-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="3-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-      </el-menu>
-    </el-aside>
     
     <el-container>
-      <el-header style="text-align: right; font-size: 12px">
-        <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <span>王小虎</span>
-      </el-header>
       <el-main>
         <el-container 
         style="height: 450px; 
@@ -83,18 +23,28 @@
               <el-input v-model="queryForm.patientName"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="dialogTableVisible = true">查询</el-button>
+              <el-button type="primary" @click="queryForPrescription">查询</el-button>
             </el-form-item>
           </el-form>
         </el-container>
 
-        <el-dialog title="开药单" :visible.sync="dialogTableVisible">
+        <el-dialog
+          title="提示"
+          :visible.sync="errorVisible"
+          width="30%">
+          <span>{{errorMes}}</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="errorVisible = false">确 定</el-button>
+          </span>
+        </el-dialog>
+
+        <el-dialog title="开药单" :visible.sync="prescriptionVisible">
           <el-dialog
             width="30%"
             title="药品信息"
-            :visible.sync="innerVisible"
+            :visible.sync="drugDetailVisible"
             append-to-body>
-            <el-table :data="drugData2">
+            <el-table :data="drugDetail">
               <el-table-column property="drugID" label="药品编码" width="150"></el-table-column>
               <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
               <el-table-column property="shelvesID" label="货架" ></el-table-column>
@@ -103,15 +53,16 @@
 
           <el-container direction="vertical">
             <div style="margin-left:30px">
-              <div>ID：{{queryForm.patientID}}</div>              
-              <p>姓名：{{queryForm.patientName}}</p>
-              <p>性别：男</p>
+              <div>ID：{{prescription.patientID}}</div>              
+              <p>姓名：{{prescription.patientName}}</p>
+              <p>性别：{{prescription.gender}}</p>
+              <p>年龄：{{prescription.age}}</p>
               <p>诊断信息：</p>
               <br/>
               <br/>
             </div>
             
-            <el-table :data="drugData">
+            <el-table :data="prescription.drugData">
               <el-table-column property="drugClassID" label="药品编码" width="150"></el-table-column>
               <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
               <el-table-column property="drugNum" label="药品盒数" width="150"></el-table-column>
@@ -120,7 +71,7 @@
 
             <div class="dialog-footer" style="margin-top:30px align-items:center">
               
-              <el-button type="primary" size="medium" @click="innerVisible = true">开药</el-button>
+              <el-button type="primary" size="medium" @click="queryForDrugInfo">开药</el-button>
             </div>
           </el-container>
           
@@ -158,7 +109,12 @@
   }
 </style>
 
+
+
 <script>
+  import axios from 'axios'
+  import qs from 'qs'
+
   export default {
     data() {
       return {
@@ -166,23 +122,30 @@
           patientID:'',
           patientName:''
         },
-        dialogTableVisible:false,
-        innerVisible:false,
-        drugData:[
-          {
-            drugClassID: "00001",
-            drugName: "一号药品",
-            drugNum: "2",
-            price: "58.5"
-          },
-          {
-            drugClassID: "00002",
-            drugName: "二号药品",
-            drugNum: "3",
-            price: "20.3"
-          }
-        ],
-        drugData2:[
+        prescriptionVisible:false,
+        drugDetailVisible:false,
+        errorVisible: false,
+        errorMes:'',
+        prescription:{
+          patientID:'',
+          patientName:'',
+          age:'',
+          gender:'',
+
+          drugData:[{
+              drugClassID: "00001",
+              drugName: "一号药品",
+              drugNum: "2",
+              price: "58.5"
+            },
+            {
+              drugClassID: "00002",
+              drugName: "二号药品",
+              drugNum: "3",
+              price: "20.3"
+            }]
+        },
+        drugDetail:[
           {
             drugID:"140014",
             drugName: "一号药品",
@@ -210,6 +173,78 @@
           }
         ]
       }
+    },
+    methods:{
+      queryForPrescription:function(){
+        console.log("test1");
+        
+        axios
+          .get("/drug/patient",{
+            params:{
+              patientID: this.queryForm.patientID
+            }
+          })
+          .then((response)=>{
+            if(response.data.err_code==0){
+              console.log("test2");
+              console.log(response.data);
+
+              this.prescription.patientID=response.data.data[0].patientID;
+              this.prescription.patientName=response.data.data[0].name;
+              this.prescription.age=response.data.data[0].age;
+              this.prescription.gender=(response.data.data[0].gender=='M')?"男":"女";
+              this.prescription.drugData=[];
+              for(let i = 0; i < response.data.data[0].giveDrug.length; ++i){
+                this.prescription.drugData.push({
+                  drugClassID: response.data.data[0].giveDrug[i].drugClassID,
+                  drugName: response.data.data[0].giveDrug[i].drugName,
+                  drugNum: response.data.data[0].giveDrug[i].number,
+                  price: response.data.data[0].giveDrug[i].price
+                })
+              }
+
+              this.prescriptionVisible=true;
+            }
+            else{
+              this.errorVisible=true;
+              this.errorMes=response.data.err_desc;
+            }
+          })
+          .catch((error)=>{
+            this.errorVisible=true;
+            this.errorMes=response.data.err_desc;
+          })
+      },
+      drugDataHandle:function(){
+        let result=[];
+        for(let i = 0; i < this.prescription.drugData.length; ++i){
+          result.push({
+            drugClassID: this.prescription.drugData[i].drugClassID,
+            number: this.prescription.drugData[i].drugNum
+          })
+        }
+        return result;
+      },
+      queryForDrugInfo:function() {
+        console.log(this);
+        axios
+        .put("/drug/giveDrug",this.drugDataHandle())
+        .then((response)=>{
+          if(response.data.err_code==0){
+            console.log(this);
+            this.drugDetailVisible=true;
+            this.drugDetail=response.data.data;
+            
+          }
+          else{
+
+          }
+        })
+        .catch((error)=>{
+          
+        })
+      }
     }
+
   };
 </script>
