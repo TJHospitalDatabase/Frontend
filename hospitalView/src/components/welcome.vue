@@ -8,8 +8,29 @@
               <h2><img src='../assets/hosipital.jpg' style="height:50px; "> 
               欢迎来到医院管理系统！</h2>
 
+            <el-card class="info-card">
+              <div slot="header" class="clearfix">
+                <span>个人信息</span>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="logout">退出登录</el-button>
+              </div>
+              <!-- 以下为具体内容 -->
               <div>
-                <el-carousel indicator-position="outside" style="position: absolute; width:40%">
+                <div class="avatar_box" style="float:left;">
+                  <img class="avatar_img" src="../assets/avatar.jpg" >
+                </div>
+
+                <div  style="width:400px;  margin-left:180px;">
+                    <div style="margin-bottom:10px;">用户名: 张国庆</div>
+                    <div style="margin-bottom:10px;">职位：主治医师</div>
+                    <div style="margin-bottom:10px;">所属科室：神经外科</div>
+                    <div style="margin-bottom:10px;">当前时间：{{this.getCurrentTime()}}</div>
+                </div>
+              </div>
+              </el-card>
+
+
+              <div>
+                <el-carousel indicator-position="outside" style="float:left; width:50%">
                    <el-carousel-item >
                        <img src='../assets/doctor.jpg' style="height: 100%; width:100%">
                     </el-carousel-item>
@@ -47,6 +68,8 @@
                 </el-card>
               </div>
 
+            
+            
 
             </el-main>
     </el-container>
@@ -56,7 +79,7 @@
   export default {
     data() {
       return {
-        
+        gettime:'',
       };
     },
 
@@ -65,6 +88,21 @@
   },    
 
     methods:{
+    getCurrentTime() {
+        //获取当前时间并打印
+    　　let yy = new Date().getFullYear();
+    　　let mm = new Date().getMonth()+1;
+    　　let dd = new Date().getDate();
+    　　let hh = new Date().getHours();
+    　　let mf = new Date().getMinutes()<10 ? '0'+new Date().getMinutes() : new Date().getMinutes();
+     　　this.gettime = yy+'/'+mm+'/'+dd+' '+hh+':'+mf;
+        console.log(this.gettime)  
+        return this.gettime;
+    　　
+    },
+      logout () {
+      this.$router.push('/login')
+    },
       open1() {
         this.$alert('根据上海市卫生健康委员会《关于2020年春节假期调整卫生健康系统相关工作安排的通知》要求，急诊、发热门诊24小时照常开放，其他门诊暂停。' , 
         '中秋节门诊安排', {
@@ -136,4 +174,44 @@
   .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
   }
+
+   .text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+  .info-card {
+    width: 100%;
+    box-shadow: 0 0 10px rgb(146, 141, 141);
+  }
+
+    .avatar_box {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 0 10px #ddd;
+    background-color: #fff;
+    margin-bottom: 15px;
+  }
+
+  .avatar_img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #eee;
+    }
 </style>

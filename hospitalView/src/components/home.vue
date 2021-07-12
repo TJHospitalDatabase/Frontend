@@ -10,11 +10,11 @@
       <el-dropdown>
         <i class="el-icon-setting" style="margin-right: 15px"></i>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item><i class="el-icon-copy-document"></i>个人中心</el-dropdown-item>
-          <el-dropdown-item ><i class="el-icon-switch-button" @click="logout"></i>退出账号</el-dropdown-item>
+          <el-dropdown-item @click.native="goBack"><i class="el-icon-copy-document" ></i>返回主页</el-dropdown-item>
+          <el-dropdown-item @click.native="logout"><i class="el-icon-switch-button"></i>退出账号</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span style="font-size: 15px">院长</span>
+      <span style="font-size: 15px">张国庆</span>
        </div>
     </el-header>
 
@@ -125,6 +125,7 @@ width: 10%;
 <script>
 export default{
   methods:{
+    
      reset(){
             //console.log(this);
             this.$refs.search11Ref.resetFields();
@@ -132,7 +133,10 @@ export default{
         },
     logout(){
         this.$router.push("/login");
-    }
+    },
+    goBack() {
+        this.$router.push("/home");
+    },
   }
 }
 </script>

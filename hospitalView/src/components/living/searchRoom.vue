@@ -165,7 +165,6 @@ width: 10%;
           this.editDialogVisible = true
         },
 
-
     // 监听修改病房对话框的关闭事件
     editDialogClosed () {
       this.$refs.editFormRef.resetFields()
