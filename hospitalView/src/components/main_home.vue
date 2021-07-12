@@ -39,7 +39,7 @@
                 </el-menu-item-group>
                 <el-menu-item-group>
                     <template slot="title">问诊信息</template>
-                    <el-menu-item index="Treat" >问诊信息列表</el-menu-item>
+                    <el-menu-item index="treated" >问诊信息列表</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
 
@@ -69,7 +69,7 @@
                     <!-- <el-menu-item index="2-1" >通过科室查询</el-menu-item>
                     <el-menu-item index="2-3" >通过负责护士查询</el-menu-item>
                     <el-menu-item index="2-4" >通过日均费用查询</el-menu-item> -->
-                <el-menu-item index="Nurse" >住院护士值班信息</el-menu-item>
+                <el-menu-item index="nurse_on_duty" >住院护士值班信息</el-menu-item>
             </el-submenu>
 
 
