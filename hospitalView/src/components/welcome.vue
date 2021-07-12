@@ -5,12 +5,11 @@
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">      
     <!-- 数据表单 -->
             <el-main>
-              <h2><img src='../assets/hosipital.jpg' style="height:50px; "> 
-              欢迎来到医院管理系统！</h2>
+              <h2 class="newtext"> 欢迎来到医院管理系统！</h2>
 
             <el-card class="info-card">
               <div slot="header" class="clearfix">
-                <span>个人信息</span>
+                <span class="newtext">个人信息</span>
                 <el-button style="float: right; padding: 3px 0" type="text" @click="logout">退出登录</el-button>
               </div>
               <!-- 以下为具体内容 -->
@@ -19,11 +18,11 @@
                   <img class="avatar_img" src="../assets/avatar.jpg" >
                 </div>
 
-                <div  style="width:400px;  margin-left:180px;">
-                    <div style="margin-bottom:10px;">用户名: 张国庆</div>
+                <div  style="width:400px;  margin-left:180px; color: rgb(65, 86, 145);">
+                    <div style="margin-bottom:10px;">用户名:  张国庆</div>
                     <div style="margin-bottom:10px;">职位：主治医师</div>
-                    <div style="margin-bottom:10px;">所属科室：神经外科</div>
-                    <div style="margin-bottom:10px;">当前时间：{{this.getCurrentTime()}}</div>
+                    <div style="margin-bottom:10px;">所属科室： 神经外科</div>
+                    <div style="margin-bottom:10px;">当前时间： {{this.getCurrentTime()}}</div>
                 </div>
               </div>
               </el-card>
@@ -47,7 +46,7 @@
            
                 <el-card class="box-card" style="float:right; width:45%; " >
                   <div slot="header" class="clearfix">
-                    <span><i class="el-icon-info"></i> 公告栏</span>
+                    <span style="color: rgb(65, 86, 145);"><i class="el-icon-info" ></i> 公告栏</span>
                   </div>
                  
                   <div>
@@ -158,7 +157,9 @@
 </script>
 
 <style>
-
+  .newtext{
+    color: rgb(65, 86, 145);
+  }
   .el-carousel__item h3 {
     color: #475669;
     font-size: 18px;

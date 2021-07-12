@@ -3,8 +3,8 @@
  <!-- 头部 -->
     <el-header class="header" >
         <div>
-        <img src="../assets/logo.png" style="margin-left: 15px"  alt />
-        <span style=" font-weight:bold;">医院管理系统</span>
+        <img src="../assets/hosipital.jpg" style="margin-left: 15px"  alt />
+        <span style=" font-weight:bold;">上海市红十字第八人民医院管理系统</span>
       </div>
       <div >
       <el-dropdown>
@@ -21,7 +21,7 @@
     <!-- 主体部分 -->
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">
     <!-- 侧边栏 -->
-        <el-aside width="200px">
+        <el-aside width="200px" >
             <el-menu router :default-openeds="['']">
 
             <el-submenu index="1">
@@ -76,7 +76,7 @@
             </el-menu>
         </el-aside>
     <!-- 数据表单 -->
-            <el-main>
+            <el-main >
               <el-container  style="height: 500px; height:100%; border: 1px solid #eee">
             <!--路由占位符-->
             <router-view></router-view>
@@ -95,8 +95,16 @@ line-height: 60px;
 font-size: 13px;
 }
 
+.el-main{
+  background-color: #ffffff;
+  > .el-contaniner{
+  background-color: #ffffff;
+  }
+}
+
+
 .el-header {
-  background-color: #94bdec;
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   padding-left: 0;
@@ -115,10 +123,13 @@ font-size: 13px;
   }
 }
 
-.side {
-color: rgb(204, 10, 10);
-width: 10%;
+.el-aside{
+  background-color: #e9f3fc;
+  > .el-menu{
+      background-color: #e9f3fc;
+  }
 }
+
 </style>
 
 
