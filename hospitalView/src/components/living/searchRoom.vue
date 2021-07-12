@@ -155,7 +155,7 @@ width: 10%;
             console.log(this.queryRoom)
         },
         goBack() {
-        this.$router.push("/home");
+        this.$router.push("/main_home");
         },
         
         // 编辑病房信息

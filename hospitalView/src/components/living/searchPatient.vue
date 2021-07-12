@@ -168,7 +168,7 @@ width: 10%;
             return this.$message.success('你成功重置了信息！');
         },
         goBack() {
-        this.$router.push("/home");
+        this.$router.push("/main_home");
         },
         
            // 编辑病人信息
