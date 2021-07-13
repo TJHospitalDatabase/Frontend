@@ -22,7 +22,7 @@
 						<input type="password" placeholder="密码" v-model="form.userpwd">
 					</div>
 					<div class="bselect">
-					<el-select v-model="value" clearable placeholder="角色选择" style="width:350px">
+					<el-select v-model="form.value" clearable placeholder="角色选择" style="width:350px">
                         <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -64,23 +64,24 @@ import axios from 'axios'
 				form:{
 					username:'',
 					useremail:'',
-					userpwd:''
+					userpwd:'',
+					value:''
 				},
 				options: [
 		{
-		  value: '选项1',
+		  value: '1',
           label: '挂号部'
 						},{
-          value: '选项2',
+          value: '2',
           label: '门诊部'
         }, {
-          value: '选项3',
+          value: '3',
           label: '住院部',
         }, {
-          value: '选项4',
+          value: '4',
           label: '药品管理部'
         }, {
-          value: '选项5',
+          value: '5',
           label: '检查管理部'
         }],
         value: ''
@@ -92,26 +93,30 @@ import axios from 'axios'
 				this.form.username = ''
 				this.form.useremail = ''
 				this.form.userpwd = ''
+				this.form.value = ''
 			},
 			login() {
 				const self = this;
 				if (self.form.username != "" && self.form.userpwd != "") {
-                    axios.get('/logIn', {
-                        id:12,
-                        password:12
+                    axios.get('/logIn', {params:{user_id: self.form.username,
+                        password: self.form.userpwd}          
                     })
 					.then(function(res) {
                         console.log(res.data);
-						switch(res.data){
-							case 0: 
-								alert("登录成功！");
+						switch(res.data.err_code){
+							case "0000": 
+							{
+                                alert("登录成功！");
+								self.$router.push({path:'/welcome'});
 								break;
-							case -1:
-								this.emailError = true;
+							}								
+							default:
+							{
+								alert("登录失败！");
+                                self.emailError = true;						
+								self.passwordError = true;
 								break;
-							case 1:
-								this.passwordError = true;
-								break;
+							}							
 						}
 					})
 					.catch( err => {
@@ -123,20 +128,19 @@ import axios from 'axios'
 			},
 			register(){
 				const self = this;
-				if(self.form.username != "" && self.form.useremail != "" && self.form.userpwd != ""){
-                    axios.post('/signUp', {
-                              err_code: "0000",
-                              err_info: "注册成功123",
-                              data: true
-                            })
+				if(self.form.username != "" && self.form.useremail != "" && self.form.userpwd != ""&& self.form.value != ""){
+                    axios.post('/signUp', {params:{password:self.form.userpwd,
+                        user_id:self.form.username,
+						email:self.form.useremai,
+						role:self.form.value}  })
 					.then(function(res){
-						switch(res.data){
-							case 1:
+						switch(res.data.err_code){
+							case "0000":
 								alert("注册成功！");
-								this.login();
+								self.login();
 								break;
-							case 0:
-								this.existed = true;
+							default:
+								self.existed = true;
 								break;
 						}
 					})
@@ -228,7 +232,7 @@ import axios from 'axios'
 		border-radius: 24px;
 		border: none;
 		outline: none;
-		background-color: rgb(117, 149, 218);
+		background-color: rgb(0, 153, 255);
 		color: #fff;
 		font-size: 0.9em;
 		cursor: pointer;
@@ -236,7 +240,7 @@ import axios from 'axios'
 	.small-box{
 		width: 30%;
 		height: 100%;
-		background: linear-gradient(135deg,rgb(99, 165, 252),rgb(164, 192, 226));
+		background: linear-gradient(135deg,rgb(0, 179, 250),rgb(0, 183, 255));
 		position: absolute;
 		top: 0;
 		left: 0;
