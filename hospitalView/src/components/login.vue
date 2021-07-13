@@ -3,7 +3,7 @@
 	<div class="login-register">
 		<div class="contain">
 			<div class="big-box" :class="{active:isLogin}"> 
-				<div class="big-contain" v-if="isLogin">
+				<div class="big-contain" v-if="!isLogin">
 					<div class="btitle">账户登录</div>
 					<div class="bform">
 						<input type="username" placeholder="用户名" v-model="form.username">
@@ -35,7 +35,7 @@
 				</div>
 			</div>
 			<div class="small-box" :class="{active:isLogin}">
-				<div class="small-contain" v-if="isLogin">
+				<div class="small-contain" v-if="!isLogin">
 					<div class="stitle">你好!</div>
 					<p class="scontent">开始注册，进入医院管理系统</p>
 					<button class="sbutton" @click="changeType">注册</button>
@@ -107,6 +107,7 @@ import axios from 'axios'
 							case "0000": 
 							{
                                 alert("登录成功！");
+								window.sessionStorage.setItem("token",role)
 								self.$router.push({path:'/welcome'});
 								break;
 							}								
@@ -131,7 +132,7 @@ import axios from 'axios'
 				if(self.form.username != "" && self.form.useremail != "" && self.form.userpwd != ""&& self.form.value != ""){
                     axios.post('/signUp', {params:{password:self.form.userpwd,
                         user_id:self.form.username,
-						email:self.form.useremai,
+						email:self.form.useremail,
 						role:self.form.value}  })
 					.then(function(res){
 						switch(res.data.err_code){
