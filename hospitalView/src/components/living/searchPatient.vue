@@ -25,25 +25,25 @@
             :rules="searchPatientFormRules"
             label-width="0px" class="search_form">
           <!-- 搜索框 -->
-            <el-form-item prop="patient_name">
+            <el-form-item prop="patienT_NAME">
             病人姓名：
             <el-input v-model="queryPatient.patienT_NAME"   prefix-icon="el-icon-zoom-in"  
                 placeholder="请输入病人姓名" ></el-input>
             </el-form-item>
 
-            <el-form-item prop="nurse_name">
+            <el-form-item prop="nursE_NAME">
             护士姓名：
             <el-input v-model="queryPatient.nursE_NAME"   prefix-icon="el-icon-zoom-in" 
                 placeholder="请输入护士姓名" ></el-input>
             </el-form-item>
 
-            <el-form-item prop="doctor_name">
+            <el-form-item prop="doctoR_NAME">
             医生姓名：
             <el-input v-model="queryPatient.doctoR_NAME"   prefix-icon="el-icon-zoom-in" 
                 placeholder="请输入医生姓名"></el-input>
             </el-form-item>
 
-            <el-form-item prop="room_id">
+            <el-form-item prop="rooM_ID">
             所属病房：
             <el-input v-model="queryPatient.rooM_ID"   prefix-icon="el-icon-zoom-in" 
                 placeholder="请输入房间号" ></el-input>
@@ -92,7 +92,6 @@
             </template>
             </el-table-column>
       </el-table>
-
       <!-- 分页器 -->
       <div class="block" style="margin-top:15px;">
           <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
@@ -104,8 +103,6 @@
           </el-pagination>
         </div>
     </el-main>
-
-
 
     <!-- 修改病人的对话框 -->
     <el-dialog
@@ -199,6 +196,7 @@
           ],
           rooM_ID:[
             { min: 2, max: 4, message: '请输入正确的房间号', trigger: 'blur'},
+            { type:'number', message: '请输入数字', trigger: 'blur'},
           ]
         },
 
@@ -221,81 +219,89 @@
       },  
 
     methods:{
-      // 模糊搜索
-      frontSearch () {
-        const searchGoal = this.searchGoal
-        if (searchGoal) {
-          // filter() 方法过滤
-          this.patientList = this.patientList.filter(data => {
-              return Object.keys(data).some(key => {
-              // indexOf() 返回某个指定的字符在某个字符串中首次出现的位置
-              return String(data[key]).toLowerCase().indexOf(searchGoal) > -1
+        // 模糊搜索
+        frontSearch () {
+          const searchGoal = this.searchGoal
+          if (searchGoal) {
+            // filter() 方法过滤
+            this.patientList = this.patientList.filter(data => {
+                return Object.keys(data).some(key => {
+                // indexOf() 返回某个指定的字符在某个字符串中首次出现的位置
+                return String(data[key]).toLowerCase().indexOf(searchGoal) > -1
+              })
             })
-          })
-        }
-        console.log(this.patientList)
-      },
+          }
+          console.log(this.patientList)
+        },
 
         async getPatientList () {
           const { data: res } =await this.$http.post('patientinhospital', this.queryPatient)
           //console.log(res.data)
           this.patientList=res.data
         },
+
         search(){
           console.log('搜索病人的依赖项为：')
             console.log(this.queryPatient)
             this.getPatientList()
         },
        
-          // 出现编辑信息的对话框，展示要编辑的病人信息
+        // 出现编辑信息的对话框，展示要编辑的病人信息
         async showEditDialog (editSampleP) {
           //const { data: res } = await this.$http.post('patientinhospital', {patienT_ID: editID})
           this.editDialogVisible = true
-          this.editForm.patienT_ID = editSampleP.patienT_ID
-          this.editForm.phone = editSampleP.phone
-          this.editForm.rooM_ID = editSampleP.rooM_ID
-          this.editForm.aischargE_DATE = editSampleP.aischargE_DATE
-          //this.editForm = editSampleP
+          // this.editForm.patienT_ID = editSampleP.patienT_ID
+          // this.editForm.phone = editSampleP.phone
+          // this.editForm.rooM_ID = editSampleP.rooM_ID
+          // this.editForm.aischargE_DATE = editSampleP.aischargE_DATE
+          this.editForm = editSampleP
           console.log('要编辑的病人的原信息为：')
           console.log(this.editForm)      
         },
 
-          // 填写后修改信息
-          async editPatient () {
-            //this.editForm.aischargE_DATE = fmt
-            console.log('填写的新信息信息为：')
-            console.log(this.editForm)
-            const { data: res } = await this.$http.put('patientinhospital', this.editForm)
-            console.log('后端对此put请求的返回结果：')
-            console.log(res)              
-            this.editDialogVisible = false
-            this.$message.success('更新病人信息成功！')
-            this.getPatientList()
+        // 填写后修改信息
+        async editPatient () {
+          console.log('填写的put修改请求参数为（id，电话，房间号，出院日期）：')
+          console.log(this.editForm.patienT_ID,this.editForm.phone,this.editForm.rooM_ID,this.editForm.aischargE_DATE)
+
+
+          const { data: res } = await this.$http.put('patientinhospital', {
+            PATIENT_ID:this.editForm.patienT_ID,
+            PHONE:this.editForm.phone,
+            ROOM_ID:this.editForm.rooM_ID,
+            AISCHARGE_DATE:this.editForm.aischargE_DATE
+          })
+
+          console.log('后端对此put请求的返回结果：')
+          console.log(res)              
+          this.editDialogVisible = false
+          this.$message.success('更新病人信息成功！')
+          this.getPatientList()
         },
 
-          async removePatient (removeId) {
-              const confirmResult = await this.$confirm(
-                '此操作将永久删除该病人, 是否继续?',
-                '提示',
-                {
-                  confirmButtonText: '确定',
-                  cancelButtonText: '取消',
-                  type: 'warning'
-                }
-              ).catch(err => err)
-              // 点击确定 返回值为：confirm
-              // 点击取消 返回值为： cancel
-              if (confirmResult !== 'confirm') {
-                return this.$message.info('已取消删除')
+        async removePatient (removeId) {
+            const confirmResult = await this.$confirm(
+              '此操作将永久删除该病人, 是否继续?',
+              '提示',
+              {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
               }
-              const { data: res } = await this.$http.delete('patientinhospital' , {params:{patienT_ID:removeId}} )
-              console.log('要删除的病人id是：')
-              console.log(removeId)
-              console.log('后端对此delete请求的返回结果：')
-              console.log(res)
-              // if (res.meta.status !== 0000) return this.$message.error('删除病人失败！')
-              this.$message.success('删除病人成功！')
-          },
+            ).catch(err => err)
+            // 点击确定 返回值为：confirm
+            // 点击取消 返回值为： cancel
+            if (confirmResult !== 'confirm') {
+              return this.$message.info('已取消删除')
+            }
+            const { data: res } = await this.$http.delete('patientinhospital' , {params:{patienT_ID:removeId}} )
+            console.log('要删除的病人id是：')
+            console.log(removeId)
+            console.log('后端对此delete请求的返回结果：')
+            console.log(res)
+            // if (res.meta.status !== 0000) return this.$message.error('删除病人失败！')
+            this.$message.success('删除病人成功！')
+        },
 
         change(e){
           this.$forceUpdate()
@@ -313,7 +319,7 @@
         },
         // 监听修改对话框的关闭事件
         editDialogClosed () {
-          this.$refs.editFormRef.resetFields()
+          //this.$refs.editFormRef.resetFields()
         },     
         handleClose(done) {
           if (this.loading) {
