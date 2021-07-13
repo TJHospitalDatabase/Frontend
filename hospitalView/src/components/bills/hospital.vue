@@ -1,5 +1,4 @@
 <template>
-<!-- 住院单开具 -->
     <div>
         <!--        面包屑-->
         <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -12,7 +11,7 @@
         <!--        卡片-->
         <el-card class="box-card">
             <!--            搜索与添加-->
-            <el-row :gutter="1000">
+            <el-row :gutter="1100">
                 <el-col :span="12">
                     <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
                     <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query">
@@ -23,28 +22,16 @@
                     <el-button type="primary" @click="showAddActivity">添加住院单</el-button>
                 </el-col>
             </el-row>
-            <!--            活动列表 只展示一些活动信息,详细信息可在详情查看-->
-            <el-table :data="activityList">
-                <el-table-column type="index"></el-table-column>
-                <el-table-column label="住院单名称" prop="name"></el-table-column>
-                <el-table-column label="住院位置" prop="place"></el-table-column>
-                <el-table-column label="住院单状态" prop="status"></el-table-column>
-                <el-table-column label="显示详情">
-                    <template slot-scope="scope">
-                        <el-button type="primary" @click="showDialog(scope.row.activityId)">查看</el-button>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <!--                        修改按钮-->
-                        <el-button type="primary" @click="showEditDialog(scope.row.activityId)"
-                                   icon="el-icon-edit"></el-button>
-                        <!--                        删除按钮-->
-                        <el-button type="primary" @click="removeById(scope.row.activityId)"
-                                   icon="el-icon-delete"></el-button>
-
-                    </template>
-                </el-table-column>
+            <el-table :data="hospitalCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border stripe>
+                <el-table-column type="index" width=100></el-table-column>
+                <el-table-column label="住院单id" prop="recipT_ID" width=140></el-table-column>
+                <el-table-column label="病人id" prop="patienT_ID" width=140></el-table-column>
+                <el-table-column label="医生id" prop="doctoR_ID" width=140></el-table-column>
+                <el-table-column label="入院时间" prop="admissioN_DATE" width=180></el-table-column>
+                <el-table-column label="出院时间" prop="aischargE_DATE" width=180></el-table-column>
+                <el-table-column label="开具时间" prop="sigN_DATE" width=180></el-table-column>
+                <el-table-column label="床位id" prop="beD_ID" width=150></el-table-column>
+                <el-table-column label="临床诊断" prop="diagnosis" width=270></el-table-column>
             </el-table>
 
             <!--        添加活动对话框-->
@@ -53,34 +40,39 @@
                 <!--            内容主体区域 放置一个表单-->
                 <!--绑定到addForm中，绑定验证规则对象addFormRules 表单校验项的引用为addFormRef-->
                 <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="150px"
-                         style="height:385px">
+                         style="height:495px">
                     <!-- prop属性指定验证规则-->
-                    <el-form-item label="住院单名称:" prop="name">
+                    <el-form-item label="住院单id:" prop="recipT_ID">
                         <!--v-model双向绑定-->
-                        <el-input style="width: 82%;" v-model="addForm.name"></el-input>
+                        <el-input style="width: 82%;" v-model="addForm.recipT_ID"></el-input>
                     </el-form-item>
-                    <el-form-item label="住院单介绍:" prop="description">
+                    <el-form-item label="病人id:" prop="patienT_ID">
+                        <!--v-model双向绑定-->
+                        <el-input style="width: 82%;" v-model="addForm.patienT_ID"></el-input>
+                    </el-form-item>
+                    <el-form-item label="医生id:" prop="doctoR_ID">
+                        <!--v-model双向绑定-->
+                        <el-input style="width: 82%;" v-model="addForm.doctoR_ID"></el-input>
+                    </el-form-item>
+                    <el-form-item label="床位id:" prop="beD_ID">
+                        <!--v-model双向绑定-->
+                        <el-input style="width: 82%;" v-model="addForm.beD_ID"></el-input>
+                    </el-form-item>
+                    <el-form-item label="临床诊断:" prop="diagnosis">
                         <el-input style="width: 82%;" type="textarea"
-                                  :autosize="{ minRows: 3, maxRows: 4}" v-model="addForm.description"></el-input>
+                                  :autosize="{ minRows: 3, maxRows: 4}" v-model="addForm.diagnosis"></el-input>
                     </el-form-item>
-                    <el-form-item label="费用总计:" prop="budget">
-                        <el-input style="width: 82%;" v-model="addForm.budget"></el-input>
-                    </el-form-item>
-                    <el-form-item label="开具科室：" prop="place">
-                        <el-select v-model="addForm.place" placeholder="请选择开具科室" style="width: 360px">
-                            <el-option label="科室a" value="科室a"></el-option>
-                            <el-option label="科室b" value="科室b"></el-option>
-                            <el-option label="科室c" value="科室c"></el-option>
-                            <el-option label="科室d" value="科室d"></el-option>
-                            <el-option label="科室e" value="科室e"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="开具时间:" prop="eventTime">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="addForm.eventTime"
+                    <el-form-item label="开具时间:" prop="sigN_DATE">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="addForm.sigN_DATE"
+                                        style="width: 360px"></el-date-picker>
+                                         </el-form-item>
+                    <el-form-item label="入院时间:" prop="admissioN_DATE">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="addForm.admissioN_DATE"
                                         style="width: 360px"></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="是否公开:" prop="isPublic">
-                        <el-switch v-model="addForm.isPublic"></el-switch>
+                    <el-form-item label="出院时间:" prop="aischargE_DATE">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="addForm.aischargE_DATE"
+                                        style="width: 360px"></el-date-picker>
                     </el-form-item>
                 </el-form>
                 <!--            底部区域-->
@@ -94,11 +86,11 @@
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="pageNumber"
+                    :current-page="currentPage"
                     :page-sizes="[1, 2, 5, 10]"
                     :page-size="pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                    :total="activityList.length">
             </el-pagination>
         </el-card>
     </div>
@@ -123,14 +115,12 @@
                 //获取活动列表参数对象
                 //查询到的当页活动
                 activityList: [],
-
-                query: '',
+            
                 //当前的页码
                 pageNumber: 1,
                 //每页显示的条数
+                currentPage:1,
                 pageSize: 5,
-                //总条数,用于分页的显示
-                totalCount: 0,
 
                 //添加,修改,展示活动对话框的显示与隐藏
                 addDialogVisible: false,
@@ -139,38 +129,70 @@
 
                 //添加活动表单数据
                 addForm: {
-                    name: "",
-                    description: "",
-                    budget: "",
-                    place: "",
-                    eventTime: "",
-                    isPublic: true
+                    recipT_ID:"",
+                    patienT_ID:"",
+                    doctoR_ID: "",
+                    beD_ID:"",
+                    diagnosis: "",
+                    sigN_DATE:"",
+                    admissioN_DATE: "",
+                    aischargE_DATE: "",
                 },
                 showForm: {},
-                editForm: {},
                 //添加活动的校验规则
                 addFormRules: {
-                    name: [
-                        {required: true, message: '请输入住院单名称', trigger: 'blur'},
-                        {min: 2, max: 10, message: '住院单名称必须在2-10字符之间', trigger: 'blur'}
+                    recipT_ID:[
+                        {required: true, message: '请输入住院单id', trigger: 'blur'},
+                        {min: 2, max: 10, message: '住院单id必须在2-10字符之间', trigger: 'blur'}
                     ],
-                    description: [
-                        {required: true, message: '请输入住院单描述', trigger: 'blur'}
+                    patienT_ID: [
+                        {required: true, message: '请输入病人id', trigger: 'blur'},
+                        {min: 2, max: 10, message: '病人id必须在2-10字符之间', trigger: 'blur'}
                     ],
-                    budget: [
-                        {required: true, message: '请输入费用总计', trigger: 'blur'},
-                        {validator: checkBudget, trigger: "blur"}
+                    doctoR_ID: [
+                        {required: true, message: '请输入医生id', trigger: 'blur'},
+                        {min: 2, max: 10, message: '医生id必须在2-10字符之间', trigger: 'blur'}
                     ],
-                    place: [
-                        {required: true, message: '请输入开具科室', trigger: 'blur'},
+                    beD_ID: [
+                        {required: true, message: '请输入床位id', trigger: 'blur'},
+                        {min: 2, max: 10, message: '床位id必须在2-10字符之间', trigger: 'blur'}
                     ],
-                    eventTime: [
-                        {required: true, message: '请输入开具时间', trigger: 'blur'},
+                    diagnosis: [
+                        {required: true, message: '请输入临床诊断', trigger: 'blur'}
+                    ],
+                    sigN_DATE: [
+                        {required: true, message: '请输入开具时间', trigger: 'blur'}
+                    ],
+                    admissioN_DATE: [
+                        {required: true, message: '请输入入院时间', trigger: 'blur'}
+                    ],
+                    aischargE_DATE: [
+                        {required: false, message: '请输入出院时间', trigger: 'blur'}
                     ]
                 }
             };
         },
+         //一开始就显示活动列表
+        created()
+        {
+           this.getActivityList();
+        },
+        computed:{
+        hospitalCurData:function(){
+        return this.activityList.slice((this.currentPage-1)*this.pageSize,Math.min(this.currentPage*this.pageSize,this.activityList.length));
+        }
+        },
         methods: {
+            async getActivityList()
+            {
+                let result = await this.$http.get("http://101.132.106.237:5050/recipt",
+                    {
+                        recipT_ID:123
+                    });
+
+                this.activityList = result.data.data;
+                totalCount=this.activityList.length;
+            },
             //监听pageSize改变的事件
             handleSizeChange(newSize)
             {
@@ -180,9 +202,17 @@
             //监听pageNum改变的事件
             handleCurrentChange(newPage)
             {
-                this.pageNumber = newPage;
+                this.currentPage = newPage;
                 this.getActivityList();
             },
+           /* countpages()
+            {
+                this.pageNumber= Math.ceil(this.data.length / this.pageSize) || 1;
+                for (let i = 0; i < this.pageNumber; i++) {
+                this.totalPage[i] = this.data.slice(this.pageSize * i, this.pageSize * (i + 1))
+                }
+                this.dataShow = this.totalPage[this.currentPage];
+            },*/
             //添加活动
             showAddActivity()
             {
@@ -193,12 +223,14 @@
                     this.$refs.addFormRef.resetFields();
                 });
 
-                this.addForm.name = "";
-                this.addForm.description = "";
-                this.addForm.budget = "";
-                this.addForm.place = "";
-                this.addForm.eventTime = '';
-                this.addForm.isPublic = true;
+                this.addForm.recipT_ID="";
+                this.addForm.patienT_ID = "";
+                this.addForm.doctoR_ID="";
+                this.addForm.beD_ID="";
+                this.addForm.diagnosis = "";
+                this.addForm.sigN_DATE = "";
+                this.addForm.admissioN_DATE = "";
+                this.addForm.aischargE_DATE="";
             },
             addActivity()
             {
@@ -206,15 +238,16 @@
                     async valid =>
                     {
                         if (!valid) return;
-                        let result = await this.$http.post(this.$api.PrincipalAddOneActivityUrl,
+                        let result = await this.$http.put("http://101.132.106.237:5050/recipt",
                             {
-                                activityId: 0,
-                                name: this.addForm.name,
-                                eventTime: this.addForm.eventTime,
-                                budget: parseFloat(this.addForm.budget),
-                                place: this.addForm.place,
-                                description: this.addForm.description,
-                                isPublic: this.addForm.isPublic
+                                recipeID: this.addForm.recipT_ID,
+                                patentID: this.addForm.patienT_ID,
+                                doctorID:this.addForm.doctoR_ID,
+                                bedID:this.addForm.beD_ID,
+                                sigN_DATE: this.addForm.sigN_DATE,
+                                admissioN_DATE: this.addForm.admissioN_DATE,
+                                aischargE_DATE: this.addForm.aischargE_DATE,
+                                diagnosis: this.addForm.diagnosis,
                             });
 
                         //隐藏添加活动对话框
