@@ -75,8 +75,8 @@
         <template slot-scope="scope">
             <!--修改负责病床按钮-->
           <!-- <el-tooltip effect="dark" content="修改病床号" placement="top" :enterable="false" > -->
-            <el-button v-show="scope.row.edi" type="success" @click="confirmEdit(scope.$index,scope.row)" size="small" icon="el-icon-circle-check"></el-button>
-            <el-button v-show="!scope.row.edi" type="primary" @click='test(scope.$index,scope.row)' size="small" icon="el-icon-edit"></el-button>
+            <el-button v-if="scope.row.edi" key="check" type="success" @click="confirmEdit(scope.$index,scope.row)" size="small" icon="el-icon-circle-check"></el-button>
+            <el-button v-else key="edit" type="primary" @click='test(scope.$index,scope.row)' size="small" icon="el-icon-edit"></el-button>
           <!-- </el-tooltip> -->
         </template>
       </el-table-column>
@@ -190,6 +190,7 @@ export default {
       row.edi=!row.edi;
       console.log(row.edi);
       console.log(this.nurselist);
+      this.$forceUpdate()
     },
     async getNurseList () {
     const {data: res } = await this.$http.get('onDate',{ params: this.queryInfo})
@@ -222,21 +223,24 @@ export default {
         },
 
     // 监听开关状态的改变
-    async nurseStateChanged (nurseInfo) {
-      console.log(nurseInfo)
-      const { data:res } = await this.$http.put('onDate',{
-        NURSE_ID: nurseInfo.nursE_ID,
-        BED_ID: nurseInfo.beD_ID,
-        STATE: nurseInfo.iS_ON_DATE
+     async nurseStateChanged (nurseInfo) {
+       console.log(nurseInfo)
+       const { data:res } = await this.$http.put('onDate',{
+         NURSE_ID: nurseInfo.nursE_ID,
+         BED_ID: nurseInfo.beD_ID,
+         STATE: nurseInfo.iS_ON_DATE
 
-      })
+       })
     
-    if(res.err_code !== "0000"){
-      nurseInfo.iS_ON_DATE = !nurseInfo.iS_ON_DATE
-      return this.$message.error('更新护士值班状态失败！')
-    }
-    this.$message.success('更新护士值班状态成功！')
-    },
+     if(res.err_code !== "0000"){
+       nurseInfo.iS_ON_DATE = !nurseInfo.iS_ON_DATE
+       return this.$message.error('更新护士值班状态失败！')
+     }
+     this.$message.success('更新护士值班状态成功！')
+     },
+
+    nurseStateChanged(){this.$message.success('更新护士值班状态成功！');},
+
     // 修改值班护士信息并提交
     submitForm (nurseInfo) {
       this.addDialogVisible = false
@@ -274,12 +278,15 @@ export default {
    async confirmEdit (index,row) {
      
       row.edi=false
+      this.$forceUpdate()
       console.log(row)
       const { data:res } = await this.$http.put('onDate',{
         NURSE_ID: row.nursE_ID,
         BED_ID: row.beD_ID,
         STATE: row.iS_ON_DATE
-      })
+      }
+      
+      )
     
     if(res.err_code !== "0000"){
       row.iS_ON_DATE = !row.iS_ON_DATE
