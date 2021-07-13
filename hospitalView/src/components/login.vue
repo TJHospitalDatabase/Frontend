@@ -242,7 +242,7 @@ import axios from 'axios'
 	.small-box{
 		width: 30%;
 		height: 100%;
-		background: linear-gradient(135deg,rgb(0, 179, 250),rgb(0, 183, 255));
+		background: linear-gradient(135deg,rgb(0, 179, 250),rgb(0, 132, 255));
 		position: absolute;
 		top: 0;
 		left: 0;
