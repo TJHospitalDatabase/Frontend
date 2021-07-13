@@ -22,8 +22,7 @@
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">
     <!-- 侧边栏 -->
         <el-aside width="200px" >
-            <el-menu router :default-openeds="['']">
-
+            <el-menu router  >
             <el-submenu index="1">
                 <template slot="title"><i class="el-icon-info"></i>门诊管理</template>
                 <el-menu-item-group>

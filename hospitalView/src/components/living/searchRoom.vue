@@ -8,14 +8,20 @@
                 <el-page-header @back="goBack" content="查询病房信息">
                 </el-page-header>
 
- <el-button type="primary"  @click="dialog = true" 
-              style="margin-top:20px; margin-bottom:20px;"
-              >高级搜索</el-button>
+            <el-input v-model="searchGoal"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+                        placeholder="请输入搜索信息" ></el-input>
+
+            <el-button icon="el-icon-search" circle @click="frontSearch" style="margin-left:20px;"></el-button>
+              <el-button type="primary" plain  @click="dialog = true" 
+              style="margin-top:20px; margin-bottom:20px; margin-left:20px;"
+              >高级筛选</el-button>
+
 
               <el-drawer
                   title="可选搜索依赖项"
                   :before-close="handleClose"
                   :visible.sync="dialog"
+                  :rules="searchRoomFormRules"
                   direction="ltr"
                   custom-class="demo-drawer"
                   ref="drawer"
@@ -23,25 +29,25 @@
                   <div class="demo-drawer__content">
                      <el-form ref="searchRef" :model="queryRoom"  label-width="0px" class="search_form">
                 <!-- 搜索框 -->
-                    <el-form-item >
+                    <el-form-item prop="nurse_name">
                       负责护士：
-                    <el-input v-model="queryRoom.nurse"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+                    <el-input v-model="queryRoom.nursE_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入负责护士姓名" ></el-input>
                     </el-form-item >
 
-                    <el-form-item >
+                    <el-form-item prop="dept_name">
                       所属科室：
-                    <el-input v-model="queryRoom.deptName"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+                    <el-input v-model="queryRoom.depT_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入科室名称" ></el-input>
                     </el-form-item>
 
-                    <el-form-item >
+                    <el-form-item prop="ub">
                       价格上限：
                     <el-input v-model="queryRoom.uB"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入最高价格" ></el-input>
                     </el-form-item>
 
-                    <el-form-item >
+                    <el-form-item prop="lb">
                       价格下限：
                     <el-input v-model="queryRoom.lB"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入最低价格" ></el-input>
@@ -49,27 +55,23 @@
                 </el-form>
                     <div class="demo-drawer__footer" style="margin-left:20px;">
                       <el-button @click="cancelForm">取 消</el-button>
-                      <el-button type="primary" @click="$refs.drawer.closeDrawer(),search()"  :loading="loading">提 交</el-button>
+                      <el-button type="primary" @click="$refs.drawer.closeDrawer()"  :loading="loading">提 交</el-button>
                     </div>
                   </div>
-                </el-drawer>
+              </el-drawer>   
 
-
-
-              
-
-                <el-table :data="roomList">
-                    <el-table-column prop="roomID" label="房间号">
+                <el-table :data="roomList.slice((currentPage-1)*pageSize,currentPage*pageSize)">
+                    <el-table-column prop="rooM_ID" label="房间号">
                     </el-table-column>
-                    <el-table-column prop="deptName" label="所属科室">
+                    <el-table-column prop="depT_NAME" label="所属科室">
                     </el-table-column>
-                    <el-table-column prop="nurse" label="负责护士">
+                    <el-table-column prop="nursE_NAME" label="负责护士">
                     </el-table-column>
-                    <el-table-column prop="allBed" label="总床位数">
+                    <el-table-column prop="capacity" label="总床位数">
                     </el-table-column>
-                    <el-table-column prop="remainBed" label="剩余床位数">
+                    <el-table-column prop="remaiN_CAPACITY" label="剩余床位数">
                     </el-table-column>
-                    <el-table-column prop="dailyCost" label="日均费用">
+                    <el-table-column prop="price" label="日均费用" >
                     </el-table-column>
                     <el-table-column label="操作">
                       <template slot-scope="scope">
@@ -78,41 +80,52 @@
                           icon="el-icon-edit"
                           size="mini"
                           circle
-                          @click="showEditDialog(scope.row.id)"
+                          @click="showEditDialog(scope.row)"
                         ></el-button>
                         </template>
                       </el-table-column>
                 </el-table>
+                <!-- 分页器 -->
+                <div class="block" style="margin-top:15px;">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+                    :current-page="currentPage" 
+                    :page-sizes="[2,5,10,20]" 
+                    :page-size="pageSize" 
+                    layout="total, sizes, prev, pager, next, jumper" 
+                    :total="roomList.length">
+                    </el-pagination>
+                </div>
             </el-main>
 
-           <!-- 修改病人的对话框 -->
-    <el-dialog
-      title="修改病人信息"
-      :visible.sync="editDialogVisible"
-      width="50%"
-      @close="editDialogClosed"
-    >
-      <!-- 内容主体 -->
-      <el-form
-        :model="editForm"
-        ref="editFormRef"
-        label-width="70px"
-      >
-        <el-form-item label="病人ID">
-          <el-input v-model="editForm.id" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="房号" >
-          <el-input v-model="editForm.room"></el-input>
-        </el-form-item>
-        <el-form-item label="出院日期">
-          <el-input v-model="editForm.outData"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editRoom">确 定</el-button>
-      </span>
-    </el-dialog>
+          <!-- 修改病房信息的对话框 -->
+          <el-dialog
+            title="修改病房信息"
+            :visible.sync="editDialogVisible"
+            width="50%"
+            @close="editDialogClosed"
+            :rules="editRoomFormRules"
+          >
+          <el-form
+            :model="editForm"
+            ref="editFormRef"
+            label-width="70px"
+            :rules="editRoomFormRules"
+          >
+            <el-form-item label="病房号" prop="rooM_ID">
+              <el-input v-model="editForm.rooM_ID" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="负责护士" prop="nursE_NAME">
+              <el-input v-model="editForm.nursE_NAME" @input="change($event)"></el-input>
+            </el-form-item>
+            <el-form-item label="日均费用" prop="price">
+              <el-input v-model.number="editForm.price" @input="change($event)"></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="editDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="editRoom">确 定</el-button>
+          </span>
+        </el-dialog>
           
     </el-container>
  </el-container> 
@@ -125,23 +138,59 @@
   export default {
     data() {
       return {
-      table: false,
-      dialog: false,
-      loading: false,
+        table: false,
+        dialog: false,
+        loading: false,
+        searchGoal:'',
 
-      formLabelWidth: '80px',
-      timer: null,
-  
+        currentPage: 1, // 当前页码（默认值）
+        total: 20, // 总条数（默认值）
+        pageSize: 2, // 每页的数据条数（默认值）
+
+        formLabelWidth: '80px',
+        timer: null,
+    
         roomList:[],
         queryRoom:{
-          nurse:'',
-          deptName:'',
-          uB:1000,
-          lB:0
-          },
+          rooM_ID:'222',
+          nursE_NAME:'222',
+          depT_NAME:'666',
+          uB:'222',
+          lB:'66',
+        },
 
         editDialogVisible: false,
         editForm: {},
+
+        //表单输入验证
+        searchRoomFormRules:{
+          nurse_name:[
+            { min: 2, max: 5, message: '请输入合法姓名', trigger: 'blur'},
+            { type:'string', message: '请输入合法姓名', trigger: 'blur'},
+          ],
+          dept_name:[
+            { min: 2, max: 6, message: '请输入合法的科室名称', trigger: 'blur'},
+            { type:'string', message: '请输入合法的科室名称', trigger: 'blur'},
+          ],
+          ub:[
+            { type:'number', message: '请输入数字', trigger: 'blur'},
+          ],
+          lB:[
+            { type:'number', message: '请输入数字', trigger: 'blur'},
+          ]
+        },
+
+        editRoomFormRules:{
+          nursE_NAME:[
+            { required: true, message: '请输入负责护士姓名', trigger: 'blur' },
+            { min: 2, max: 5, message: '请输入合法姓名', trigger: 'blur'},
+            { type:'string', message: '请输入合法姓名', trigger: 'blur'},
+          ],
+          price: [
+            { required: true, message: '请输入价格', trigger: 'blur' },
+            { type:'number', message: '请输入数字', trigger: 'blur'},
+          ],
+        },
       };
     },
 
@@ -151,6 +200,79 @@
     },  
 
     methods:{
+      // 模糊搜索
+      frontSearch () {
+        const searchGoal = this.searchGoal
+        if (searchGoal) {
+          // filter() 方法过滤
+          this.roomList = this.roomList.filter(data => {
+              return Object.keys(data).some(key => {
+              // indexOf() 返回某个指定的字符在某个字符串中首次出现的位置
+              return String(data[key]).toLowerCase().indexOf(searchGoal) > -1
+            })
+          })
+        }
+        console.log(this.roomList)
+      },
+
+        async getRoomList () {
+          this.queryRoom.uB=this.queryRoom.uB-0
+          this.queryRoom.lB=this.queryRoom.lB-0
+          const { data: res } =await this.$http.post('room', this.queryRoom)
+          //console.log(res.data)
+          this.roomList=res.data
+        },
+
+        search(){
+          console.log('请求数据的依赖参数queryRoom内容如下')
+          console.log(this.queryRoom)
+          this.getRoomList()
+        },
+
+        // 编辑病房信息
+        async showEditDialog (editSampleR) {
+          //const { data: res } = await this.$http.post('patientinhospital', {rooM_ID:editId})
+          this.editForm.rooM_ID = editSampleR.rooM_ID
+          this.editForm.nursE_NAME = editSampleR.nursE_NAME
+          this.editForm.price = editSampleR.price
+          //this.editForm.price = this.editForm.price-0
+          //console.log(editSampleR)
+          console.log('要编辑的病房的原信息为：')
+          console.log(this.editForm)
+          this.editDialogVisible = true
+        },
+        // 提交修改信息
+        async editRoom () {
+          this.editForm.price = this.editForm.price - 0
+          console.log('填写的新信息信息为：')
+          console.log(this.editForm)
+          const { data: res } = await this.$http.put('patientinhospital', this.editForm)
+          this.editDialogVisible = false         
+          this.$message.success('更新病房信息成功！')
+          this.getRoomList()
+          console.log('后端对此put请求的返回结果：')
+          console.log(res)
+        },
+
+        change(e){
+          this.$forceUpdate()
+        },
+        //每页条数改变时触发 选择一页显示多少行
+        handleSizeChange(val) {
+            //console.log(`每页 ${val} 条`);
+            this.currentPage = 1;
+            this.pageSize = val;
+        },
+        //当前页改变时触发 跳转其他页
+        handleCurrentChange(val) {
+            //console.log(`当前页: ${val}`);
+            this.currentPage = val;
+        },
+        // 监听修改对话框的关闭事件
+        editDialogClosed () {
+          this.editForm.price = this.editForm.price-0
+          this.$refs.editFormRef.resetFields()
+        },
         handleClose(done) {
           if (this.loading) {
             return;
@@ -165,48 +287,18 @@
                   this.loading = false;
                 }, 0);
               }, 0);
+            this.search();
             })
             .catch(_ => {});
         },
-
         cancelForm() {
           this.loading = false;
           this.dialog = false;
           clearTimeout(this.timer);
         },
-        
-        async getRoomList () {
-          const { data: res } =await this.$http.post('room', this.queryRoom)
-          console.log(res.data)
-          this.roomList=res.data
-        },
-        search(){
-            console.log(this.queryRoom)
-        },
         goBack() {
         this.$router.push("/home");
         },
-        
-        // 编辑病房信息
-        async showEditDialog (editId) {
-          const { data: res } = await this.$http.post('patientinhospital', {id:editId})
-          this.editForm = res.data
-          this.editDialogVisible = true
-        },
-
-
-    // 监听修改用户对话框的关闭事件
-    editDialogClosed () {
-      this.$refs.editFormRef.resetFields()
-    },
-    // 修改用户信息
-    async editRoom () {
-        //const { data: res } = await this.$http.put('patientinhospital', this.editForm )
-        // 隐藏添加用户对话框
-        this.editDialogVisible = false
-        this.$message.success('更新用户信息成功！')
-        this.getRoomList()
-      },
     }
   };
 </script>

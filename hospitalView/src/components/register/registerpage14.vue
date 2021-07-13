@@ -4,52 +4,46 @@
     <el-form ref="search11Ref" :model="registrationIDSearch" :rules="searchRules" label-width="0px" class="search_form">
                 <!-- 搜索框 -->
                     <el-form-item prop="name">
-                    <el-input v-model="registrationIDSearch.registrationID"   prefix-icon="el-icon-zoom-in" style="width:70%;"></el-input>
-                    <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>
-                    <el-button type="info" @click="reset">重置</el-button>               
+                    <el-input v-model="registrationIDSearch.REGISTRATION_ID"   prefix-icon="el-icon-zoom-in" style="width:70%;"></el-input>
+                    <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>            
                     </el-form-item>
                 </el-form>
   <el-table
     :data="patientData"
     style="width: 100%">
 
-    <el-table-column prop="registrationID"
+    <el-table-column prop="registratioN_ID"
       label="挂号单ID">
-      <template slot-scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>{{ scope.row.registrationID }}</p>
-        </el-popover>
+      <template #default="scope">
+          <p>{{ scope.row.registratioN_ID }}</p>
       </template>
     </el-table-column>
     
-    <el-table-column prop="patientID"
+    <el-table-column prop="patienT_ID"
       label="病人ID">
-      <template slot-scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>{{ scope.row.patientID }}</p>
-        </el-popover>
+      <template #default="scope">
+          <p>{{ scope.row.patienT_ID }}</p>
       </template>
     </el-table-column>
 
-    <el-table-column prop="departmentID"
+    <el-table-column prop="depT_NAME"
       label="科室">
-      <template slot-scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>{{ scope.row.departmentID }}</p>
-        </el-popover>
+      <template #default="scope">
+          <p>{{ scope.row.depT_NAME }}</p>
       </template>
     </el-table-column>
     
     <el-table-column prop="date"
       label="开具日期">
-      <template slot-scope="scope">
-        <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+      <template #default="scope">
+        <!-- <i class="el-icon-time"></i>
+        <span style="margin-left: 10px">{{ scope.row.date }}</span> -->
+        <p>{{ scope.row.date }}</p>
       </template>
     </el-table-column>
     
     <el-table-column label="操作">
-      <template slot-scope="scope">
+      <template #default="scope">
         <el-button
           size="mini"
           type="danger"
@@ -67,20 +61,14 @@
     data() {
       return {
         patientData: [{
-          registrationID: '1234567',
-          patientID: '7654321',
-          departmentID: '123',
-          date:'2016-05-02'
-        },
-        {
-          registrationID: '1234567',
-          patientID: '7654321',
-          departmentID: '123',
-          date:'2016-05-02'
-        },
+          registratioN_ID: '',
+          patienT_ID: '',
+          depT_NAME: '',
+          date:''
+        }
         ],
         registrationIDSearch:{
-            registrationID:''
+            REGISTRATION_ID:''
         },
         searchRules: {
                 name: [
@@ -92,10 +80,24 @@
     methods: {
       handleDelete(index, row) {
         console.log(index, row);
+      },
+      async search(){
+          const { data: res } =await this.$http.get('registration/find', { params: { REGISTRATION_ID: this.registrationIDSearch.REGISTRATION_ID}})
+            console.log(res.data)
+            // 将data属性重命名为res
+            this.patientData=res.data
+            // console.log(this.patientData)
+            },
+      async handleDelete(index, row)
+      {
+            const { data: res } = await this.$http.delete('registration',
+                {
+                  REGISTRATION_ID: this.registratioN_ID,
+                  }
+                )
+          console.log(res)
+          // 这里是返回的信息
       }
-      },
-      search(){
-            //this.$router.push("/home");
-      },
+    },
   }
 </script>
