@@ -38,17 +38,25 @@
           </span>
         </el-dialog>
 
-        <el-dialog title="开药单" :visible.sync="prescriptionVisible">
+        <el-dialog 
+          title="开药单" 
+          :visible.sync="prescriptionVisible">
           <el-dialog
             width="30%"
             title="药品信息"
             :visible.sync="drugDetailVisible"
+            :before-close="handleCloseConfirm"
             append-to-body>
             <el-table :data="drugDetail">
               <el-table-column property="drugID" label="药品编码" width="150"></el-table-column>
               <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
               <el-table-column property="shelvesID" label="货架" ></el-table-column>
             </el-table>
+
+            <div class="dialog-footer" style="margin-top:30px align-items:center">              
+              <el-button type="primary" size="medium" @click="deleteDrug">确认开药并删除药品</el-button>
+              <el-button  size="medium" @click="drugDetailVisible=false">取消操作</el-button>
+            </div>
           </el-dialog>
 
           <el-container direction="vertical">
@@ -57,7 +65,7 @@
               <p>姓名：{{prescription.patientName}}</p>
               <p>性别：{{prescription.gender}}</p>
               <p>年龄：{{prescription.age}}</p>
-              <p>诊断信息：</p>
+              <p>诊断信息：{{prescription.diagnose}}</p>
               <br/>
               <br/>
             </div>
@@ -69,8 +77,7 @@
               <el-table-column property="price" label="价格" ></el-table-column>
             </el-table>
 
-            <div class="dialog-footer" style="margin-top:30px align-items:center">
-              
+            <div class="dialog-footer" style="margin-top:30px align-items:center">              
               <el-button type="primary" size="medium" @click="queryForDrugInfo">开药</el-button>
             </div>
           </el-container>
@@ -131,7 +138,8 @@
           patientName:'',
           age:'',
           gender:'',
-
+          diagnose:'',
+          
           drugData:[{
               drugClassID: "00001",
               drugName: "一号药品",
@@ -176,8 +184,6 @@
     },
     methods:{
       queryForPrescription:function(){
-        console.log("test1");
-        
         axios
           .get("/drug/patient",{
             params:{
@@ -185,21 +191,23 @@
             }
           })
           .then((response)=>{
+            
             if(response.data.err_code==0){
-              console.log("test2");
-              console.log(response.data);
+              
 
-              this.prescription.patientID=response.data.data[0].patientID;
-              this.prescription.patientName=response.data.data[0].name;
+              this.prescription.patientID=response.data.data[0].patienT_ID;
+              this.prescription.patientName=response.data.data[0].patienT_NAME;
               this.prescription.age=response.data.data[0].age;
               this.prescription.gender=(response.data.data[0].gender=='M')?"男":"女";
+              this.prescription.diagnose=response.data.data[0].diagnosis;
               this.prescription.drugData=[];
-              for(let i = 0; i < response.data.data[0].giveDrug.length; ++i){
+              
+              for(let i = 0; i < response.data.data[0].givE_DRUG.length; ++i){
                 this.prescription.drugData.push({
-                  drugClassID: response.data.data[0].giveDrug[i].drugClassID,
-                  drugName: response.data.data[0].giveDrug[i].drugName,
-                  drugNum: response.data.data[0].giveDrug[i].number,
-                  price: response.data.data[0].giveDrug[i].price
+                  drugClassID: response.data.data[0].givE_DRUG[i].druG_CLASS_ID,
+                  drugName: response.data.data[0].givE_DRUG[i].druG_NAME,
+                  drugNum: response.data.data[0].givE_DRUG[i].number,
+                  price: response.data.data[0].givE_DRUG[i].price
                 })
               }
 
@@ -219,22 +227,27 @@
         let result=[];
         for(let i = 0; i < this.prescription.drugData.length; ++i){
           result.push({
-            drugClassID: this.prescription.drugData[i].drugClassID,
-            number: this.prescription.drugData[i].drugNum
+            DRUG_CLASS_ID: this.prescription.drugData[i].drugClassID,
+            NUMBER: this.prescription.drugData[i].drugNum
           })
         }
         return result;
       },
       queryForDrugInfo:function() {
-        console.log(this);
         axios
         .put("/drug/giveDrug",this.drugDataHandle())
         .then((response)=>{
           if(response.data.err_code==0){
-            console.log(this);
+            console.log('test1');
             this.drugDetailVisible=true;
-            this.drugDetail=response.data.data;
-            
+            this.drugDetail=[];
+            for(let i=0; i<response.data.data.length; ++i){
+              this.drugDetail.push({
+                drugID: response.data.data[i].druG_ID,
+                drugName: response.data.data[i].druG_NAME,
+                shelvesID: response.data.data[i].shelveS_ID
+                })
+            }
           }
           else{
 
@@ -243,6 +256,47 @@
         .catch((error)=>{
           
         })
+      },
+      deleteResultDrug(){
+        let res=[];
+        for(let i=0; i<this.drugDetail.length; ++i){
+          res.push({
+            DRUG_ID: this.drugDetail[i].drugID
+          })
+        }
+        return res;
+      },
+      deleteDrug(){
+        axios
+          .delete("/drug/deleteDrug",{
+            data:this.deleteResultDrug()
+          })
+          .then((response)=>{
+            this.drugDetailVisible=false;
+            if(response.data.data==true){
+                this.$message({
+                  showClose: true,
+                  message: '已删除所开药品',
+                  type: 'success'
+                });
+                this.prescriptionVisible=false;
+              }
+              else{
+                this.$message({
+                  showClose: true,
+                  message: '所开药品删除失败',
+                  type: 'error'
+                });
+              }
+          })
+      },
+      handleCloseConfirm(done){
+        this.$confirm('确认放弃开药操作？\n如已完成开完药请取消并点击"确认开药并删除药品"')
+            .then(_ => {
+              done();
+            })
+            .catch(_ => {            
+            });
       }
     }
 
