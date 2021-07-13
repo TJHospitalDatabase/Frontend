@@ -140,6 +140,7 @@ import axios from 'axios'
 								self.login();
 								break;
 							default:
+								alert("用户名重复，注册失败！");
 								self.existed = true;
 								break;
 						}
