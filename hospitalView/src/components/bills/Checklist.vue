@@ -14,38 +14,42 @@
             <!-- 搜索与添加区域 -->
             <el-row :gutter="20">
                 <el-col :span="8">
-                    <el-input placeholder="请输入病人姓名" v-model="queryInfo.PATIENT_NAME" clearable 
+                    <!-- <el-input placeholder="请输入病人姓名" v-model="queryInfo.PATIENT_NAME" clearable 
+                    @clear="getChecklist"> -->
+                    <!-- <el-button slot="append" icon="el-icon-search" @click="getChecklist"></el-button> 后端对接-->
+
+                    <!-- 前端搜索 -->
+                    <el-input placeholder="请输入搜索内容" v-model="searchgoal" clearable 
                     @clear="getChecklist">
-                    <el-button slot="append" icon="el-icon-search" @click="getChecklist"></el-button>
+                    <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
+
                     </el-input>  
                 </el-col>
             </el-row>
             
             <!-- 项目检查单列表区域 -->
-            <el-table :data="checklist_current" border style="width: 100%" stripe>
+            <el-table :data="checklist_current" border style="width: 100%" stripe >
 
                 <!-- 表头区域 -->
                 <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
-                <el-table-column prop="patienT_NAME" label="病人姓名" width="100"></el-table-column>
-                 <el-table-column prop="patienT_ID" label="病人ID" width="100"></el-table-column>
-                <el-table-column prop="examinatioN_NAME" label="项目检查单名称" width="150"></el-table-column>
-                <el-table-column prop="prescriptioN_ID" label="项目检查单ID" width="120"></el-table-column>
-                <el-table-column prop="examinatioN_DATE" label="开具日期" width="120"></el-table-column>               
-                <el-table-column prop="doctoR_NAME" label="医生姓名" width="100"></el-table-column>
-                <el-table-column prop="diagnosis" label="临床诊断" width="120"></el-table-column>    
+                <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" width="120"></el-table-column>
+                <el-table-column prop="examinatioN_NAME" label="检查项目名称" width="150"></el-table-column>
+                <el-table-column prop="examinatioN_DATE" label="检查日期" width="120"></el-table-column>  
+                <el-table-column prop="doctoR_NAME" label="医生姓名" width="120"></el-table-column>
+                <el-table-column prop="patienT_ID" label="病人ID" width="100"></el-table-column>
+                <el-table-column prop="patienT_NAME" label="病人姓名" width="120"></el-table-column>                  
+                <el-table-column prop="diagnosis" label="临床诊断" width="120"></el-table-column>
+                <el-table-column prop="depT_NAME" label="科室" width="120"></el-table-column>    
 
-                <!-- 修改和删除按钮区域 -->
-                <el-table-column  label="操作" width="150">
+                <!-- 修改按钮区域 -->
+                <el-table-column  label="执行状态" width="150" >
                    <template slot-scope="scope">
                        <!-- 修改 -->
-                         <el-button type="primary" icon="el-icon-edit" size="mini" circle @click="showeditdialog(scope.row)"></el-button>
-                         <!-- 删除 -->
-                         <el-button type="danger" icon="el-icon-delete" size="mini" circle  @click="deleteVisible(scope.row.prescriptioN_ID)"></el-button>
+                       <el-switch v-model="scope.row.state"  active-color="#13ce66" inactive-color="#ff4949" @change="editdialog(scope.row)"></el-switch>
+                    <!-- <el-button type="primary" icon="el-icon-edit" size="mini" circle @click="showeditdialog(scope.row)" ></el-button> -->
                    </template>
-                </el-table-column>
-           
-            </el-table>
-             
+                </el-table-column> 
+            </el-table>             
             <!-- 分页效果  -->
             <el-pagination
             :current-page.sync="queryInfo.PAGE_NUM"
@@ -54,146 +58,165 @@
             :total="checklist.length">
             </el-pagination>
 
-        </el-card>
+            <!-- 查看结果对话框 -->
+                <el-dialog title="检查结果" :visible.sync="emptyFormVisible" width="50%" >
+                <!-- 添加样本数据按钮 -->
+                <el-button type="primary" icon="el-icon-circle-plus-outline" @click="addsampleVisible=true"></el-button>
+                <!-- 检查单数据区域 -->                        
+                <el-table :data="datalist_current" border style="width: 100%">
+                <!-- 表头区域 -->
+                    <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
+                    <el-table-column prop="resulT_NAME" label="样本种类" width="150"></el-table-column>
+                    <el-table-column prop="resulT_NUM" label="检查结果" width="260"></el-table-column>
+                    <el-table-column prop="resulT_RANGE" label="参考范围" width="265"></el-table-column>                                      
+                </el-table>
+                <!--分页设置区域 -->
+                <el-pagination
+                    :current-page.sync="s_queryInfo.PAGE_NUM"
+                    :page-size="s_queryInfo.PAGE_SIZE"
+                    layout="total, prev, pager, next, jumper"
+                    :total="datalist.length">
+                </el-pagination>
+                <!-- 底部按钮区域 -->
+                <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="emptyFormVisible= false">确 定</el-button>
+                </span>
+                </el-dialog>
 
-        <!--修改项目检查单的对话框 -->
-        <el-dialog title="修改项目检查单" 
-        :visible.sync="editDialogVisible" width="50%" 
-        @close="editDialogClosed"
-        center>
+
+            <!-- 添加结果对话框 -->
+            <el-dialog title="结果添加" :visible.sync="addsampleVisible" width="50%" @closed="addsampleclosed">
+
+                <!-- 添加表单区域 -->
+                <el-form ref="addSampleRef" :model="addsampleform" :rules="addSampleRules" label-width="80px">
+                <el-form-item label="样本种类" prop="resulT_NAME">
+                <el-input v-model="addsampleform.resulT_NAME"></el-input>
+                </el-form-item>
+                 <el-form-item label="检查结果" prop="resulT_NUM">
+                <el-input v-model="addsampleform.resulT_NUM"></el-input>
+                </el-form-item>
+                 <el-form-item label="参考范围" prop="resulT_RANGE">
+                <el-input v-model="addsampleform.resulT_RANGE"></el-input>
+                </el-form-item>
+                </el-form>
+
+                <!-- 底部按钮区域 -->
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="addsampleVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addsample">确 定</el-button>
+                </span>
+            </el-dialog>
+
+        </el-card>
 
 <!-- ref是表单的引用 -->
 <!-- prop校验规则 -->
 <!-- model绑定数据 -->
-        <!--内容主体-->
-        <el-form
-        :model=" editChecklistForm"
-        ref="editChecklistFormRef"
-        :rules="editChecklistFormRules"
-        label-width="140px">
-        <el-form-item label="病人姓名" >
-          <el-input v-model="editChecklistForm.patienT_NAME" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="项目检查单ID" >
-          <el-input v-model="editChecklistForm.prescriptioN_ID" disabled></el-input>
-        </el-form-item>       
-         <el-form-item label="开具日期"  >
-          <el-input v-model="editChecklistForm.examinatioN_DATE" disabled></el-input>
-        </el-form-item>
-         <el-form-item label="病人ID" >
-          <el-input v-model="editChecklistForm.patienT_ID" disabled></el-input>
-        </el-form-item>
-         <el-form-item label="医生姓名" >
-          <el-input v-model="editChecklistForm.doctoR_NAME" disabled></el-input>
-        </el-form-item>
-         <el-form-item label="项目检查单名称" prop="examinatioN_NAME">
-          <el-input v-model="editChecklistForm.examinatioN_NAME" ></el-input>
-        </el-form-item>
-         <el-form-item label="临床诊断" prop="diagnosis">
-          <el-input v-model="editChecklistForm.diagnosis"></el-input>
-        </el-form-item>
-      </el-form>
-
-        <!-- 页脚 -->
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="editDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="editChecklist">确 定</el-button>
-        </span>
-        </el-dialog>
+        
     </div>
 </template>
 
+
+
 <script>
-export default {
+export default {   
     methods: {
-        // async promise
-        // get(地址 get请求参数)
         // 获取项目检查单列表接口
        async getChecklist(){
-           const{data:res}=await this.$http.get('examination/listPage',
-           {params:this.queryInfo})
-        // 打印
-        console.log(res.data)
-        console.log(res.data.totaL_PAGE)
-        console.log(res.data.data)        
+           const{data:res}=await this.$http.get('patient/examination',
+           {params:""})
+           console.log(res.err_code)
+            if (res.err_code != "0000") 
+            {this.$message.error('获取检查项目列表失败！')}
         // 返回数据
-        this.checklist=res.data.data
-        this.total=res.data.totaL_PAGE      
+        this.checklist=res.data
+        console.log(this.checklist)     
        },
 
+        addsample () {
+            console.log("test");
+            console.log(this.editChecklistForm);
+            // 提交请求前，表单预验证
+            this.$refs.addSampleRef.validate(async valid => {
+            // console.log(valid)
+            // 表单预校验失败
+            if (!valid) return
+            const { data: res } = await this.$http.post('result/addResult', 
+            {EXAMINATION_LIST_ID:this.editChecklistForm.examinatioN_LIST_ID,
+            RESULT_NAME:this.addsampleform.resulT_NAME,
+            RESULT_NUM:this.addsampleform.resulT_NUM,
+            RESULT_RANGE:this.addsampleform.resulT_RANGE})
+            if (res.data !=true ) {
+            this.$message.error('添加样本结果失败！')
+            }
+            console.log(res.data)
+            this.$message.success('添加样本结果成功！')
+        // 隐藏添加用户对话框
+            this.addsampleVisible = false
+            this.getDatalist(this.editChecklistForm)
+      })
+    },
 
-        // 编辑项目检查单 
-        // 只是一个查询
-        async showeditdialog(editSample){
-             this.editDialogVisible=true
-            //console.log(examinatioN_LIST_ID)
-            const{data:res}=await this.$http.get('patient/examination/', { EXAMINATION_LIST_ID: editSample.examinatioN_LIST_ID})
-            // 打印
-            //console.log(res.data)
-            //console.log(this.editChecklistForm)
+        // 模糊搜索
+        frontSearch(){
+            const searchgoal=this.searchgoal
+            if(searchgoal){
+                this.checklist=this.checklist.filter(data=>{
+                    return Object.keys(data).some(key=>{
+                        return String(data[key]).toLowerCase().indexOf(searchgoal)>-1
+                    })
+                })
+            }
+        },
+       
+        // 编辑项目检查状态
+        async editdialog(editSample){
+            this.emptyFormVisible=true
+            // consloe.log(res.data.STATE)
+            const{data:res}=await this.$http.put('patient/examinationPage/', 
+            {EXAMINATION_LIST_ID: editSample.examinatioN_LIST_ID,
+            STATE:editSample.state})
+            console.log(res.data)
+            if (res.err_code != "0000") 
+            {this.$message.error('更新项目执行情况失败！')}
+            this.$message.success('更新项目执行情况成功！')
             this.editChecklistForm = editSample
-            //console.log(res)
-            //console.log(this.editChecklistForm)
+            console.log(this.editChecklistForm)
+            this.getDatalist(this.editChecklistForm)
         },
-
-
-        // 修改信息并提交
-        editChecklist(){
-            // 提交请求之前表单预验证
-            this.$refs.editChecklistFormRef.validate(async valid=>{
-                //consloe.log(valid)
-                // 校验失败
-               // if(!valid)return
-                // 发起修改检查单信息请求
-                const{data:res}=await this.$http.put(
-                    'patient/examinationPage/',
-                    // 修改的信息
-                    {
-                        examinatioN_NAME:this.editChecklistForm.examinatioN_NAME,
-                        diagnosis:this.editChecklistForm.diagnosis
-                    }
-                )
-                // 隐藏添加检查项目对话框
-                this.editDialogVisible=false
-                this.$message.success('更新用户信息成功')
-                this.getChecklist()
-            })
-        },
-
-        // 删除检查项目
-        async deleteVisible(prescriptionID){
-             const confirmResult=await this.$confirm('此操作将永久删除该检查项目, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-                }).catch(err=>err)
-                // 点击确定 返回值为confirm
-                // 点击取消 返回值为cancel
-                if(confirmResult!=='confirm'){
-                    return this.$message.info('已取消删除')
-                }
-                const {data :res}=await this.$http.delete('patient/examination',
-                {prescriptioN_ID}
-                )
-                this.$$message.success('删除用户成功')
-                this.getChecklist()
-        },
-
         
-        // 监听修改用户对话框的直接关闭事件
-        editDialogClosed(){
-            this.$refs.editChecklistFormRef.resetFields()
+        // 获得项目检查结果
+        async getDatalist(editSample){                      
+            const{data:res}=await this.$http.get('examination/result/listPage',
+            {
+                params:{EXAMINATION_LIST_ID:editSample.examinatioN_LIST_ID}                          
+            })
+            // 验证
+           if (res.err_code != "0000") 
+            {this.$message.error('获得项目检查结果失败！')}
+            this.datalist=res.data.data
+            // 打印res
+            console.log(res.data)
         },
+
+        // 监听添加样本弹框的关闭事件
+        addsampleclosed(){
+            this.$refs.addSampleRef.resetFields()
+        }
 
     },
 
     created(){
         this.getChecklist()
     },
+
     // 分页函数
     computed:{
         checklist_current:function(){
             return this.checklist.slice((this.queryInfo.PAGE_NUM-1)*this.queryInfo.PAGE_SIZE,Math.min(this.queryInfo.PAGE_NUM*this.queryInfo.PAGE_SIZE,this.checklist.length));
+        },
+         datalist_current:function(){
+            return this.datalist.slice((this.s_queryInfo.PAGE_NUM-1)*this.s_queryInfo.PAGE_SIZE,Math.min(this.s_queryInfo.PAGE_NUM*this.s_queryInfo.PAGE_SIZE,this.datalist.length));
         }
     },
 
@@ -208,27 +231,45 @@ export default {
             // 当前每页显示多少条数据
             PAGE_SIZE:2
         },
+        // 获取样本结果列表的参数对象
+        s_queryInfo:{
+            EXAMINATION_LIST_ID:'',
+            // 当前的页数
+            PAGE_NUM:1,
+            // 当前每页显示多少条数据
+            PAGE_SIZE:2
+        },
         //总页面
         total:0,
-
+        // 模糊搜索
+        searchgoal:'',
         //用户列表
         checklist: [],
+        datalist:[],
+        // 空表的显示
+        emptyFormVisible:false,
 
-        // 控制修改对话框的显示与隐藏
-        editDialogVisible:false,
+        state:"",
 
         // 查询到的用户信息
         editChecklistForm:{},
 
-        // 编辑用户表单验证
-        editChecklistFormRules:{
-            examinatioN_NAME:[
-            {required: true, message: '请输入检查项目名称', trigger: 'blur'},
+        // 添加结果
+        addsampleform:{
+            resulT_NAME:'',
+            resulT_NUM:'',
+            resulT_RANGE:''
+        },
+        addsampleVisible:false,
+
+        // 添加表单验证
+        addSampleRules:{
+            resulT_NAME:[
+                { required: true, message: '请输入样本名称', trigger: 'blur' }],
+            resulT_NUM:[
+                { required: true, message: '请输入检查结果', trigger: 'blur' },
             ],
-            diagnosis:[
-            { required: true, message: '请输入临床诊断信息', trigger: 'blur' },
-            ]
-        }
+        },
       }
     }
 }

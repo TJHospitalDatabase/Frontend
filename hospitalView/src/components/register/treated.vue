@@ -1,5 +1,4 @@
 <template>
-<!-- 问诊信息 -->
     <div>
         <!--面包屑导航区-->
      <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -12,77 +11,78 @@
      <el-card>
          <el-row>
              <el-col :span="6">
-              <el-date-picker
-                v-model="value1"
-                type="date"
-                placeholder="选择日期">
-              </el-date-picker>
-             </el-col>
-             <el-col :span="6">
-               <el-autocomplete
-                class="inline-input"
-                v-model="state1"
-                :fetch-suggestions="querySearch"
-                placeholder="请输入科室"
-                @select="handleSelect"
-               ></el-autocomplete>
-             </el-col>
-             <el-col :span="6">
-             <el-input
+               <div>患者ID：
+              <el-input
               size="large"
               placeholder="请输入患者ID"
-              v-model="input2" label="患者ID">
+              v-model="queryInfo.PATIENT_ID" 
+              clearable
+              @clear="getTreatList">
               </el-input>
-             </el-col>
-             <el-col span="2">
-              <el-button type="primary" icon="el-icon-search">搜 索</el-button>
+              <el-button type="primary" icon="el-icon-search" @click="getTreatList">搜 索</el-button><!--事件还未定义-->
+               </div>
              </el-col>
          </el-row>
 
-         <!--问诊信息列表-->
+         <!--问诊信息列表(表单内容待根据postman中内容进行更改)-->
          <el-table
-      :data="tableData"
-      style="width: 100%" border stript>
-      <el-table-column type="index"></el-table-column>
-      <el-table-column
-        prop="pID"
-        label="患者ID">
-      </el-table-column>
-      <el-table-column
-        prop="pName"
-        label="患者姓名">
-      </el-table-column>
-      <el-table-column
-        prop="dName"
-        label="医生姓名">
-      </el-table-column>
-      <el-table-column
-        prop="content"
-        label="问诊内容">
-      </el-table-column>
-      <el-table-column
-        prop="price"
-        label="问诊费用">
-      </el-table-column>
-      <el-table-column
-        label="缴费状态">
-        <template slot-scope="scope">
-            <el-switch v-model="scope.row.state" @change="stateChanged(scope.row)">
-            </el-switch>
-        </template>
-      </el-table-column>
+            :data="treatlist.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+            style="width: 100%" border stript>
+            <el-table-column type="index"></el-table-column>
+            <el-table-column
+              prop="patienD_NAME"
+              label="患者姓名">
+            </el-table-column>
+            <el-table-column
+              prop="gender"
+              label="性别">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="prescriptioN_ID"
+              label="处方单ID">
+            </el-table-column>
+            <el-table-column
+              prop="depT_NAME"
+              label="科室">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="sigN_DATE"
+              label="开具日期">
+            </el-table-column>
+            <el-table-column
+              prop="doctoR_ID"
+              label="医生ID">
+            </el-table-column>
+            <el-table-column
+              prop="doctoR_NAME"
+              label="医生姓名">
+            </el-table-column>
+            <el-table-column
+              prop="toprice"
+              label="问诊费用(元)">
+            </el-table-column>
+            <el-table-column
+              sortable
+              label="缴费状态">
+              <template slot-scope="scope">
+                  <el-switch v-model="scope.row.state" @change="stateChanged(scope.row)">
+                  </el-switch>
+              </template>
+            </el-table-column>
          </el-table>
-
-         <!--分页区域-->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="queryInfo.pagenum"
-      :page-sizes="[1,2,5, 10, 50]"
-      :page-size="queryInfo.pagesize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="treat.length">
-    </el-pagination>
+         
+<!-- 分页器 -->
+        <div class="block" style="margin-top:15px;">
+            <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+            :current-page="currentPage" 
+            :page-sizes="[2,5,10,20]" 
+            :page-size="pageSize" 
+            layout="total, sizes, prev, pager, next, jumper" 
+            :total="total">
+            </el-pagination>
+        </div>
      </el-card>
 
     </div>
@@ -92,72 +92,68 @@
 export default {
   data () {
     return {
+        
+        currentPage: 1, // 当前页码
+        total: 0, // 总条数
+        pageSize: 2, // 每页的数据条数
+
       queryInfo: {
-        query: '',
-        // 当前的页数
-        pagenum: 1,
-        // 当前每页显示多少数据
-        pagesize: 2
+        //查询对象
+        PATIENT_ID: '',
       },
-      department: [],
-      treat: [{
-        pID: '',
-        pName: '',
-        dID: '',
-        dName: '',
-        price: '',
-        content: '',
-        date: '',
-        state: ''
-      }]
+      
+      //问诊信息列表
+      treatlist:[]
     }
   },
+  created(){
+  this.getTreatList() 
+   },
+
+
   methods: {
-    getTreatList () {
-      return this.treat
+    //获取问诊历史数据
+    async getTreatList () {
+    const {data: res } = await this.$http.get('findPrescription',{ params: this.queryInfo})
+    
+    if(res.err_code !== "0000"){
+       return this.$message.error('获取问诊信息失败！')
+     }
+    this.$message.success('获取问诊信息成功！')
+    console.log(res.data)
+      this.treatlist = res.data.data
+    // 为总数据条数赋值
+     this.total = res.data.totaL_PAGE
     },
-    querySearch (queryString, cb) {
-      var departments = this.department
-      var results = queryString ? departments.filter(this.createFilter(queryString)) : departments
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createFilter (queryString) {
-      return (department) => {
-        return (department.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-      }
-    },
-    loadAll () {
-      return [
-        { value: '骨科' },
-        { value: '眼科' },
-        { value: '妇科' },
-        { value: '神经科' }
-      ]
-    },
-    handleSelect (item) {
-      console.log(item)
-    },
-    mounted () {
-      this.departments = this.loadAll()
-    },
+
+
     // 监听开关状态的改变
-    stateChanged (Info) {
+    async stateChanged (Info) {
       console.log(Info)
-      this.$set(this.tableData[Info.index], 'state', Info.state)
-    },
-    // 监听page size改变的事件
-    handleSizeChange (newSize) {
-      console.log(newSize)
-      this.queryInfo.pagesize = newSize
-      this.getTreatList()
-    },
-    // 监听页码值改变的事件
-    handleCurrentChange (newPage) {
-      console.log(newPage)
-      this.queryInfo.pagenum = newPage
-      this.getTreatList()
+      const {data:res} = await this.$http.put('findPrescription',{
+        PRESCRIPTION_ID: Info.prescriptioN_ID,
+        STATE: Info.state
+      })
+    
+    if(res.err_code !== "0000"){
+      Info.state = !Info.state
+      return this.$message.error('更新支付状态失败！')
     }
+    this.$message.success('更新支付状态成功！')
+    },
+
+            //每页条数改变时触发 选择一页显示多少行
+        handleSizeChange(val) {
+            //console.log(`每页 ${val} 条`);
+            this.currentPage = 1;
+            this.pageSize = val;
+        },
+        //当前页改变时触发 跳转其他页
+        handleCurrentChange(val) {
+            //console.log(`当前页: ${val}`);
+            this.currentPage = val;
+        },
+    
   }
 }
 </script>

@@ -29,25 +29,25 @@
                   <div class="demo-drawer__content">
                      <el-form ref="searchRef" :model="queryRoom"  label-width="0px" class="search_form">
                 <!-- 搜索框 -->
-                    <el-form-item prop="nurse_name">
+                    <el-form-item prop="nursE_NAME">
                       负责护士：
                     <el-input v-model="queryRoom.nursE_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入负责护士姓名" ></el-input>
                     </el-form-item >
 
-                    <el-form-item prop="dept_name">
+                    <el-form-item prop="depT_NAME">
                       所属科室：
                     <el-input v-model="queryRoom.depT_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入科室名称" ></el-input>
                     </el-form-item>
 
-                    <el-form-item prop="ub">
+                    <el-form-item prop="uB">
                       价格上限：
                     <el-input v-model="queryRoom.uB"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入最高价格" ></el-input>
                     </el-form-item>
 
-                    <el-form-item prop="lb">
+                    <el-form-item prop="lB">
                       价格下限：
                     <el-input v-model="queryRoom.lB"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入最低价格" ></el-input>
@@ -152,11 +152,11 @@
     
         roomList:[],
         queryRoom:{
-          rooM_ID:'222',
-          nursE_NAME:'222',
-          depT_NAME:'666',
-          uB:'222',
-          lB:'66',
+          rooM_ID:'',
+          nursE_NAME:'',
+          depT_NAME:'',
+          uB:'',
+          lB:'',
         },
 
         editDialogVisible: false,
@@ -164,15 +164,15 @@
 
         //表单输入验证
         searchRoomFormRules:{
-          nurse_name:[
+          nursE_NAME:[
             { min: 2, max: 5, message: '请输入合法姓名', trigger: 'blur'},
             { type:'string', message: '请输入合法姓名', trigger: 'blur'},
           ],
-          dept_name:[
+          depT_NAME:[
             { min: 2, max: 6, message: '请输入合法的科室名称', trigger: 'blur'},
             { type:'string', message: '请输入合法的科室名称', trigger: 'blur'},
           ],
-          ub:[
+          uB:[
             { type:'number', message: '请输入数字', trigger: 'blur'},
           ],
           lB:[
@@ -232,21 +232,26 @@
         // 编辑病房信息
         async showEditDialog (editSampleR) {
           //const { data: res } = await this.$http.post('patientinhospital', {rooM_ID:editId})
-          this.editForm.rooM_ID = editSampleR.rooM_ID
-          this.editForm.nursE_NAME = editSampleR.nursE_NAME
-          this.editForm.price = editSampleR.price
-          //this.editForm.price = this.editForm.price-0
-          //console.log(editSampleR)
+          this.editForm = editSampleR
+
           console.log('要编辑的病房的原信息为：')
           console.log(this.editForm)
+
           this.editDialogVisible = true
         },
+
         // 提交修改信息
         async editRoom () {
           this.editForm.price = this.editForm.price - 0
-          console.log('填写的新信息信息为：')
-          console.log(this.editForm)
-          const { data: res } = await this.$http.put('patientinhospital', this.editForm)
+
+          console.log('填写的put修改请求参数为（房间号，护士姓名，价格）：')
+          console.log(this.editForm.rooM_ID,this.editForm.nursE_NAME,this.editForm.price)
+
+          const { data: res } = await this.$http.put('patientinhospital', {
+            ROOM_ID:this.editForm.rooM_ID,
+            NURSE_NAME:this.editForm.nursE_NAME,
+            PRICE:this.editForm.price
+          })
           this.editDialogVisible = false         
           this.$message.success('更新病房信息成功！')
           this.getRoomList()
