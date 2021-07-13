@@ -14,7 +14,7 @@
           <el-dropdown-item @click.native="logout"><i class="el-icon-switch-button"></i>退出账号</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span style="font-size: 15px">张国庆</span>
+      <span style="font-size: 15px">{{name}}</span>
        </div>
     </el-header>
 
