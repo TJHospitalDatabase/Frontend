@@ -1,10 +1,10 @@
 <template>
-<!-- 药品库管理 -->
-
-  <el-container style="height: 95%; border: 1px solid #eee">   
+<!--药品库管理-->
+  <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+    <el-main>
     
     <!--面包屑导航区 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-top:30px;margin-left:20px;">
+        <el-breadcrumb separator-class="el-icon-arrow-right" >
         <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>药品管理</el-breadcrumb-item>
         <el-breadcrumb-item>药品库管理</el-breadcrumb-item>
@@ -159,7 +159,7 @@
         </el-container>
       </el-footer>
 
-      
+        </el-main>  
   </el-container>
 
 

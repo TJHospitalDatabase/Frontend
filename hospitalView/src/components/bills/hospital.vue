@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+        <el-main>
         <!--        面包屑-->
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
@@ -82,7 +83,8 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="activityList.length">
             </el-pagination>
-    </div>
+        </el-main>
+    </el-container>
 </template>
 
 <script>

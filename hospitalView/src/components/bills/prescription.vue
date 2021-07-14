@@ -2,8 +2,7 @@
     <el-container>
     <!-- 主体部分 -->
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <!-- 数据表单 -->
-            <el-main>
+        <el-main>
         <!--        面包屑-->
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>

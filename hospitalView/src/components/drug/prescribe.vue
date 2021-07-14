@@ -1,12 +1,12 @@
 <template>
 <!-- 开药查询 -->
-  <el-container style="height: 942px; border: 1px solid #eee">
-    
-    <el-container>
+  <!-- 主体部分 -->
+    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+    <el-main>
       
-      <el-main>
+      
         <!--面包屑导航区 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-top:10px;margin-left:10px;">
+        <el-breadcrumb separator-class="el-icon-arrow-right" >
         <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>药品管理</el-breadcrumb-item>
         <el-breadcrumb-item>开药查询</el-breadcrumb-item>
@@ -96,10 +96,8 @@
         </el-dialog>
   
       </el-main>
+      
     </el-container>
-    
-    
-  </el-container>
 </template>
 
 
