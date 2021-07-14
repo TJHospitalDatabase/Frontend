@@ -1,33 +1,30 @@
 <template>
-<!-- 查询病房信息 -->
+<!-- 查询病床信息 -->
 <el-container>
     <!-- 主体部分 -->
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">
     <!-- 数据表单 -->
             <el-main>
-                <el-page-header @back="goBack" content="查询病房信息">
+                <el-page-header @back="goBack" content="查询病床信息">
                 </el-page-header>
 
             <el-input v-model="searchGoal"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入搜索信息" ></el-input>
-
             <el-button icon="el-icon-search" circle @click="frontSearch" style="margin-left:20px;"></el-button>
               <el-button type="primary" plain  @click="dialog = true" 
               style="margin-top:20px; margin-bottom:20px; margin-left:20px;"
               >高级筛选</el-button>
 
-
               <el-drawer
                   title="可选搜索依赖项"
                   :before-close="handleClose"
                   :visible.sync="dialog"
-                  :rules="searchRoomFormRules"
                   direction="ltr"
                   custom-class="demo-drawer"
                   ref="drawer"
                   >
                   <div class="demo-drawer__content">
-                     <el-form ref="searchRef" :model="queryRoom"  label-width="0px" class="search_form">
+                     <el-form ref="searchRef" :model="queryRoom"  :rules="searchRoomFormRules" label-width="0px" class="search_form">
                 <!-- 搜索框 -->
                     <el-form-item prop="nursE_NAME">
                       负责护士：
@@ -54,14 +51,14 @@
                     </el-form-item> 
                 </el-form>
                     <div class="demo-drawer__footer" style="margin-left:20px;">
-                      <el-button @click="cancelForm">取 消</el-button>
-                      <el-button type="primary" @click="$refs.drawer.closeDrawer()"  :loading="loading">提 交</el-button>
+                      <el-button @click="cancelForm()">取 消</el-button>
+                      <el-button type="primary" @click="search()"  :loading="loading">提 交</el-button>
                     </div>
                   </div>
               </el-drawer>   
 
                 <el-table :data="roomList.slice((currentPage-1)*pageSize,currentPage*pageSize)">
-                    <el-table-column prop="rooM_ID" label="房间号">
+                    <el-table-column prop="beD_ID" label="床号">
                     </el-table-column>
                     <el-table-column prop="depT_NAME" label="所属科室">
                     </el-table-column>
@@ -97,9 +94,9 @@
                 </div>
             </el-main>
 
-          <!-- 修改病房信息的对话框 -->
+          <!-- 修改病床信息的对话框 -->
           <el-dialog
-            title="修改病房信息"
+            title="修改病床信息"
             :visible.sync="editDialogVisible"
             width="50%"
             @close="editDialogClosed"
@@ -111,8 +108,8 @@
             label-width="70px"
             :rules="editRoomFormRules"
           >
-            <el-form-item label="病房号" prop="rooM_ID">
-              <el-input v-model="editForm.rooM_ID" disabled></el-input>
+            <el-form-item label="病床号" prop="beD_ID">
+              <el-input v-model="editForm.beD_ID" disabled></el-input>
             </el-form-item>
             <el-form-item label="负责护士" prop="nursE_NAME">
               <el-input v-model="editForm.nursE_NAME" @input="change($event)"></el-input>
@@ -132,12 +129,20 @@
 </template>
 
 
-
-
 <script>
   export default {
     data() {
-      return {
+       // 自定义手机号规则
+      var checkDept = (rule, value, callback) => {
+        const nameReg = /(.+(?=[科]$))/
+        if (nameReg.test(value)) {
+          return callback()
+        }
+        // 返回一个错误提示
+        callback(new Error('请输入正确的科室名称'))
+      }
+
+      return {      
         table: false,
         dialog: false,
         loading: false,
@@ -152,7 +157,7 @@
     
         roomList:[],
         queryRoom:{
-          rooM_ID:'',
+          beD_ID:'',
           nursE_NAME:'',
           depT_NAME:'',
           uB:'',
@@ -165,12 +170,13 @@
         //表单输入验证
         searchRoomFormRules:{
           nursE_NAME:[
-            { min: 2, max: 5, message: '请输入合法姓名', trigger: 'blur'},
+            { min: 2, max: 4, message: '请输入合法姓名', trigger: 'blur'},
             { type:'string', message: '请输入合法姓名', trigger: 'blur'},
           ],
           depT_NAME:[
             { min: 2, max: 6, message: '请输入合法的科室名称', trigger: 'blur'},
             { type:'string', message: '请输入合法的科室名称', trigger: 'blur'},
+            { validator: checkDept, trigger: 'blur' }
           ],
           uB:[
             { type:'number', message: '请输入数字', trigger: 'blur'},
@@ -183,7 +189,7 @@
         editRoomFormRules:{
           nursE_NAME:[
             { required: true, message: '请输入负责护士姓名', trigger: 'blur' },
-            { min: 2, max: 5, message: '请输入合法姓名', trigger: 'blur'},
+            { min: 2, max: 4, message: '请输入合法姓名', trigger: 'blur'},
             { type:'string', message: '请输入合法姓名', trigger: 'blur'},
           ],
           price: [
@@ -200,7 +206,7 @@
     },  
 
     methods:{
-      // 模糊搜索
+       // 模糊搜索
       frontSearch () {
         const searchGoal = this.searchGoal
         if (searchGoal) {
@@ -226,37 +232,53 @@
         search(){
           console.log('请求数据的依赖参数queryRoom内容如下')
           console.log(this.queryRoom)
-          this.getRoomList()
+          this.$refs.searchRef.validate( valid => {
+            if (!valid){ 
+              this.$message.warning('请填写正确的信息！')
+              return}
+            this.getRoomList()
+            this.$refs.drawer.closeDrawer()
+           })              
         },
 
-        // 编辑病房信息
+        // 编辑病床信息
         async showEditDialog (editSampleR) {
-          //const { data: res } = await this.$http.post('patientinhospital', {rooM_ID:editId})
+          //const { data: res } = await this.$http.post('patientinhospital', {beD_ID:editId})
           this.editForm = editSampleR
 
-          console.log('要编辑的病房的原信息为：')
+          console.log('要编辑的病床的原信息为：')
           console.log(this.editForm)
 
           this.editDialogVisible = true
         },
 
         // 提交修改信息
-        async editRoom () {
+        editRoom () {
           this.editForm.price = this.editForm.price - 0
 
-          console.log('填写的put修改请求参数为（房间号，护士姓名，价格）：')
-          console.log(this.editForm.rooM_ID,this.editForm.nursE_NAME,this.editForm.price)
+          console.log('填写的put修改请求参数为（床号，护士姓名，价格）：')
+          console.log(this.editForm.beD_ID,this.editForm.nursE_NAME,this.editForm.price)      
+          
+          this.$refs.editFormRef.validate(async valid => {
+            if (!valid) {
+              this.$message.warning('请填写正确的信息！')
+              return}
 
-          const { data: res } = await this.$http.put('patientinhospital', {
-            ROOM_ID:this.editForm.rooM_ID,
-            NURSE_NAME:this.editForm.nursE_NAME,
-            PRICE:this.editForm.price
-          })
-          this.editDialogVisible = false         
-          this.$message.success('更新病房信息成功！')
-          this.getRoomList()
-          console.log('后端对此put请求的返回结果：')
-          console.log(res)
+           const { data: res } = await this.$http.put('patientinhospital', {
+              BED_ID:this.editForm.beD_ID,
+              NURSE_NAME:this.editForm.nursE_NAME,
+              PRICE:this.editForm.price 
+            })
+
+            this.editDialogVisible = false         
+            this.$message.success('更新病床信息成功！')
+            this.getRoomList()
+            console.log('后端对此put请求的返回结果：')
+            console.log(res)
+         })      
+
+
+
         },
 
         change(e){
@@ -273,7 +295,7 @@
             //console.log(`当前页: ${val}`);
             this.currentPage = val;
         },
-        // 监听修改对话框的关闭事件
+        //监听修改对话框的关闭事件
         editDialogClosed () {
           this.editForm.price = this.editForm.price-0
           this.$refs.editFormRef.resetFields()

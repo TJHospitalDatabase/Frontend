@@ -3,11 +3,11 @@
 <el-container style="height: 500px; height:100%; border: 1px solid #eee">
   <!-- 数据表单 -->
       <el-main>
-          <el-page-header @back="goBack" content="查询病人信息">
-          </el-page-header>
+        <el-page-header @back="goBack" content="查询病人信息">
+        </el-page-header>
         <el-input v-model="searchGoal"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                   placeholder="请输入搜索信息" ></el-input>
-      <el-button icon="el-icon-search" circle @click="frontSearch" style="margin-left:20px;"></el-button>
+        <el-button icon="el-icon-search" circle @click="frontSearch" style="margin-left:20px;"></el-button>
         <el-button type="primary" plain  @click="dialog = true" 
         style="margin-top:20px; margin-bottom:20px; margin-left:20px;"
         >高级筛选</el-button>
@@ -25,12 +25,6 @@
             :rules="searchPatientFormRules"
             label-width="0px" class="search_form">
           <!-- 搜索框 -->
-            <el-form-item prop="patienT_NAME">
-            病人姓名：
-            <el-input v-model="queryPatient.patienT_NAME"   prefix-icon="el-icon-zoom-in"  
-                placeholder="请输入病人姓名" ></el-input>
-            </el-form-item>
-
             <el-form-item prop="nursE_NAME">
             护士姓名：
             <el-input v-model="queryPatient.nursE_NAME"   prefix-icon="el-icon-zoom-in" 
@@ -43,27 +37,22 @@
                 placeholder="请输入医生姓名"></el-input>
             </el-form-item>
 
-            <el-form-item prop="rooM_ID">
-            所属病房：
-            <el-input v-model="queryPatient.rooM_ID"   prefix-icon="el-icon-zoom-in" 
-                placeholder="请输入房间号" ></el-input>
-            </el-form-item>
         </el-form>
             <div class="demo-drawer__footer" style="margin-left:20px;">
               <el-button @click="cancelForm">取 消</el-button>
-              <el-button type="primary" @click="$refs.drawer.closeDrawer()"  :loading="loading">提 交</el-button>
+              <el-button type="primary" @click="search"  :loading="loading">提 交</el-button>
             </div>
           </div>
         </el-drawer>
 
       <el-table :data="patientList.slice((currentPage-1)*pageSize,currentPage*pageSize)">
-          <el-table-column prop="patienT_ID" label="编号" width="140">
+          <el-table-column prop="patienT_ID" label="编号" width="100">
           </el-table-column> 
-          <el-table-column prop="patienT_NAME" label="病人姓名" width="120">
+          <el-table-column prop="patienT_NAME" label="病人姓名" width="100">
           </el-table-column>
-          <el-table-column prop="phone" label="联系方式">
+          <el-table-column prop="phone" label="联系方式" width="140">
           </el-table-column>
-          <el-table-column prop="rooM_ID" label="房间号">
+          <el-table-column prop="beD_ID" label="床号">
           </el-table-column>
           <el-table-column prop="doctoR_NAME" label="主治医师">
           </el-table-column>
@@ -120,16 +109,11 @@
         <el-form-item label="编号" prop="patienT_ID">
           <el-input v-model="editForm.patienT_ID" disabled></el-input>
         </el-form-item>
-        <el-form-item label="房号" prop="rooM_ID">
-          <el-input v-model="editForm.rooM_ID" @input="change($event)"></el-input>
+        <el-form-item label="床号" prop="beD_ID">
+          <el-input v-model="editForm.beD_ID" @input="change($event)"></el-input>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
           <el-input v-model="editForm.phone" @input="change($event)"></el-input>
-        </el-form-item>
-        <el-form-item label="出院日期" prop="aischargE_DATE">
-          <el-date-picker type="date" placeholder="选择日期" @input="change($event)"
-           v-model="editForm.aischargE_DATE"   value-format="yyyy-MM-dd"
-          style="width: 100%;"></el-date-picker>
         </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -152,7 +136,7 @@
         }
         // 返回一个错误提示
         callback(new Error('请输入合法的手机号码'))
-      }  
+      }
 
       return {
         fmt:'',
@@ -170,10 +154,8 @@
 
         queryPatient:{
             patienT_ID:'',
-            patienT_NAME:'',
             doctoR_NAME:'',
             nursE_NAME:'',
-            rooM_ID:'',
         },
       
         patientList:[],
@@ -182,28 +164,20 @@
 
         //表单输入验证
         searchPatientFormRules:{
-          patienT_NAME:[
-            { min: 2, max: 5, message: '请输入合法姓名', trigger: 'blur'},
-            { type:'string', message: '请输入合法姓名', trigger: 'blur'},
-          ],
           nursE_NAME:[
-            { min: 2, max: 5, message: '请输入合法姓名', trigger: 'blur'},
+            { min: 2, max: 4, message: '请输入合法姓名', trigger: 'blur'},
             { type:'string', message: '请输入合法姓名', trigger: 'blur'},
           ],
           doctoR_NAME:[
-            { min: 2, max: 5, message: '请输入合法姓名', trigger: 'blur'},
+            { min: 2, max: 4, message: '请输入合法姓名', trigger: 'blur'},
             { type:'string', message: '请输入合法姓名', trigger: 'blur'},
           ],
-          rooM_ID:[
-            { min: 2, max: 4, message: '请输入正确的房间号', trigger: 'blur'},
-            { type:'number', message: '请输入数字', trigger: 'blur'},
-          ]
         },
 
         editPatientFormRules:{
-          rooM_ID:[
-            { required: true, message: '请输入房间号', trigger: 'blur' },
-            { min: 2, max: 4, message: '请输入正确的房间号', trigger: 'blur'},
+          beD_ID:[
+            { required: true, message: '请输入床号', trigger: 'blur' },
+            { min: 4, max: 4, message: '请输入正确的床号', trigger: 'blur'},
           ],
           phone: [
             { required: true, message: '请输入手机号码', trigger: 'blur' },
@@ -216,7 +190,7 @@
 
     created () {
       this.getPatientList()
-      },  
+    },  
 
     methods:{
         // 模糊搜索
@@ -233,52 +207,52 @@
           }
           console.log(this.patientList)
         },
-
         async getPatientList () {
           const { data: res } =await this.$http.post('patientinhospital', this.queryPatient)
           //console.log(res.data)
           this.patientList=res.data
         },
-
         search(){
           console.log('搜索病人的依赖项为：')
-            console.log(this.queryPatient)
+          console.log(this.queryPatient)
+           this.$refs.searchRef.validate( valid => {
+            if (!valid){ 
+              this.$message.warning('请填写正确的信息！')
+              return}
+
             this.getPatientList()
-        },
-       
+            this.$refs.drawer.closeDrawer()
+           })         
+        }, 
         // 出现编辑信息的对话框，展示要编辑的病人信息
         async showEditDialog (editSampleP) {
-          //const { data: res } = await this.$http.post('patientinhospital', {patienT_ID: editID})
           this.editDialogVisible = true
-          // this.editForm.patienT_ID = editSampleP.patienT_ID
-          // this.editForm.phone = editSampleP.phone
-          // this.editForm.rooM_ID = editSampleP.rooM_ID
-          // this.editForm.aischargE_DATE = editSampleP.aischargE_DATE
           this.editForm = editSampleP
           console.log('要编辑的病人的原信息为：')
           console.log(this.editForm)      
         },
-
         // 填写后修改信息
-        async editPatient () {
-          console.log('填写的put修改请求参数为（id，电话，房间号，出院日期）：')
-          console.log(this.editForm.patienT_ID,this.editForm.phone,this.editForm.rooM_ID,this.editForm.aischargE_DATE)
+        editPatient () {
+          console.log('填写的put修改请求参数为（id，电话，床号）：')
+          console.log(this.editForm.patienT_ID,this.editForm.phone,this.editForm.beD_ID)
 
+          this.$refs.editFormRef.validate(async valid => {
+            if (!valid) {
+              this.$message.warning('请填写正确的信息！')
+              return}
 
-          const { data: res } = await this.$http.put('patientinhospital', {
+            const { data: res } = await this.$http.put('patientinhospital', {
             PATIENT_ID:this.editForm.patienT_ID,
             PHONE:this.editForm.phone,
-            ROOM_ID:this.editForm.rooM_ID,
-            AISCHARGE_DATE:this.editForm.aischargE_DATE
-          })
-
-          console.log('后端对此put请求的返回结果：')
-          console.log(res)              
-          this.editDialogVisible = false
-          this.$message.success('更新病人信息成功！')
-          this.getPatientList()
+            BED_ID:this.editForm.beD_ID,
+            })
+            console.log('后端对此put请求的返回结果：')
+            console.log(res)              
+            this.editDialogVisible = false
+            this.$message.success('更新病人信息成功！')
+            this.getPatientList()
+         })         
         },
-
         async removePatient (removeId) {
             const confirmResult = await this.$confirm(
               '此操作将永久删除该病人, 是否继续?',
@@ -302,7 +276,6 @@
             // if (res.meta.status !== 0000) return this.$message.error('删除病人失败！')
             this.$message.success('删除病人成功！')
         },
-
         change(e){
           this.$forceUpdate()
         },
@@ -317,10 +290,10 @@
             //console.log(`当前页: ${val}`);
             this.currentPage = val;
         },
-        // 监听修改对话框的关闭事件
+        //监听修改对话框的关闭事件
         editDialogClosed () {
-          //this.$refs.editFormRef.resetFields()
-        },     
+          this.$refs.editFormRef.resetFields()
+        },
         handleClose(done) {
           if (this.loading) {
             return;
@@ -343,7 +316,7 @@
           this.loading = false;
           this.dialog = false;
           clearTimeout(this.timer);
-        },        
+        },
         goBack() {
         this.$router.push("/home");
         },
