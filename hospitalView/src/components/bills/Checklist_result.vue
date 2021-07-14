@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="width: 100%">
         <!--面包屑导航区 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/checklisthome' }">首页</el-breadcrumb-item>
@@ -13,10 +13,10 @@
             <el-row :gutter="20" >
                 <el-col :span="8">
                     <el-input placeholder="请输入搜索内容" v-model="searchgoal" clearable 
-                    @clear="getCheckresultlist">
+                    @clear="getCheckresultlist"  @keyup.enter.native="frontSearch">
                     <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
 
-                    <!-- <el-input placeholder="请输入搜索内容"  v-model="r_queryInfo.PATIENT_NAME" clearable @clear="getCheckresultlist">
+                    <!-- <el-input placeholder="请输入搜索内容"  v-model="r_queryInfo.EXAMINATION_LIST_ID" clearable @clear="getCheckresultlist">
                     <el-button slot="append" icon="el-icon-search" @click="getCheckresultlist"></el-button> -->
                     </el-input>  
                 </el-col>
@@ -102,7 +102,7 @@ export default {
         // 获得检查项目
         async getCheckresultlist(){
             const{data:res}=await this.$http.get('patient/examination',
-            {params:""}
+            {params:{EXAMINATION_LIST_ID:this.r_queryInfo.EXAMINATION_LIST_ID}}
             )
             //过滤数据
             this.checkresultlist=res.data
@@ -147,7 +147,7 @@ export default {
         return{
         //获取检查结果列表的参数对象
         r_queryInfo:{
-            PATIENT_NAME:'',
+            EXAMINATION_LIST_ID:'',
             // 当前的页数
             PAGE_NUM:1,
             // 当前每页显示多少条数据
