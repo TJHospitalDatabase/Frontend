@@ -1,8 +1,7 @@
-//搜索框可以去掉                                             
+                                            
 <template>
 <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <el-main>
-    <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>     
+    <el-main>   
   <el-table
     :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
     style="width: 100%">
@@ -89,6 +88,9 @@ const axios = require('axios');
 
         }
       };
+    },
+    created(){
+      this.search()
     },
     methods: {
         async search(){
