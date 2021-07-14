@@ -361,8 +361,7 @@
           manufactor: row.manufactor,
           shelvesID: row.shelvesID
         })
-        this.drugData.splice(index + (this.curDrugPage - 1) * this.drugPageSize,
-          index + (this.curDrugPage - 1) * this.drugPageSize+1)
+        this.drugData.splice(index + (this.curDrugPage - 1) * this.drugPageSize,1)
         console.log('test');
       },
       deleteResultDrug(){
