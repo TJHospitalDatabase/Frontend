@@ -14,7 +14,7 @@
           <el-dropdown-item @click.native="logout"><i class="el-icon-switch-button"></i>退出账号</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span style="font-size: 15px">{{name}}</span>
+      <span style="font-size: 15px">{{this.$route.query.name}}</span>
        </div>
     </el-header>
 
@@ -60,14 +60,7 @@
             <el-submenu index="4" v-if="(tokenStr-0)&32">
                 <template slot="title" v-if="(tokenStr-0)&32"><i class="el-icon-s-home"></i>住院管理</template>
                 <el-menu-item index :route='{path:"searchPatient", query:{id:id,name:name}}' v-if="(tokenStr-0)&32">住院病人信息查询</el-menu-item>
-                <!-- <el-menu-item index="1-1" >通过姓名查询</el-menu-item>
-                <el-menu-item index="1-2" >通过房间号查询</el-menu-item>
-                <el-menu-item index="1-3" >通过医生查询</el-menu-item>
-                <el-menu-item index="1-4" >通过负责护士查询</el-menu-item> -->
                 <el-menu-item index :route='{path:"searchRoom", query:{id:id,name:name}}' v-if="(tokenStr-0)&32">病房信息查询</el-menu-item>
-                <!-- <el-menu-item index="2-1" >通过科室查询</el-menu-item>
-                <el-menu-item index="2-3" >通过负责护士查询</el-menu-item>
-                <el-menu-item index="2-4" >通过日均费用查询</el-menu-item> -->
                 <el-menu-item index :route='{path:"nurse_on_duty", query:{id:id,name:name}}' v-if="(tokenStr-0)&32">住院护士值班信息</el-menu-item>
             </el-submenu>
 
