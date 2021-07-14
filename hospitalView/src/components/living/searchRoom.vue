@@ -11,7 +11,7 @@
             <el-breadcrumb-item>住院管理</el-breadcrumb-item>
             <el-breadcrumb-item>病床信息查询</el-breadcrumb-item>
             </el-breadcrumb>
-
+            <el-card>
             <el-input v-model="searchGoal"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入搜索信息" ></el-input>
             <el-button icon="el-icon-search" circle @click="frontSearch" style="margin-left:20px;"></el-button>
@@ -96,6 +96,7 @@
                     :total="roomList.length">
                     </el-pagination>
                 </div>
+            </el-card>
             </el-main>
 
           <!-- 修改病床信息的对话框 -->

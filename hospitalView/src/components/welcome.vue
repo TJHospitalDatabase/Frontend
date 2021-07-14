@@ -2,23 +2,24 @@
 
 
         <!-- 主体部分 -->
-    <el-container style="height: 500px; height:100%; border: 1px solid #eee">      
+    <el-container style="height: 550px; height:100%; border: 1px solid #eee">      
     <!-- 数据表单 -->
             <el-main>
-              <h2 class="newtext"> 欢迎来到医院管理系统！</h2>
-
-            <el-card class="info-card">
-              <div slot="header" class="clearfix">
+              <div>
+              <h2 class="newtext" style="margin-top:0px"> 欢迎来到医院管理系统！</h2></div>
+            <div>
+            <el-card class="info-card" style="height:180px">
+              <div slot="header" class="clearfix" style="margin-left:10px">
                 <span class="newtext">个人信息</span>
                 <el-button style="float: right; padding: 3px 0" type="text" @click="logout">退出登录</el-button>
               </div>
               <!-- 以下为具体内容 -->
-              <div>
-                <div class="avatar_box" style="float:left;">
+              <div style="margin-left:10px">
+                <div class="avatar_box" style="float:left;width:75px;height:75px" >
                   <img class="avatar_img" src="../assets/avatar.jpg" >
                 </div>
 
-                <div  style="width:400px;  margin-left:180px; color: rgb(65, 86, 145);">
+                <div  style="width:400px;  margin-left:150px; color: rgb(65, 86, 145);">
                     <div style="margin-bottom:10px;">用户名: {{this.$route.query.name}}</div>
                     <div style="margin-bottom:10px;">工号：{{this.$route.query.id}}</div>
                     <!-- <div style="margin-bottom:10px;">所属科室： 神经外科</div> -->
@@ -26,10 +27,11 @@
                 </div>
               </div>
               </el-card>
+            </div>
 
 
-              <div>
-                <el-carousel indicator-position="outside" style="float:left; width:50%">
+              <div >
+                <el-carousel indicator-position="outside" style="float:left; width:45%;height:350px">
                    <el-carousel-item >
                        <img src='../assets/doctor.jpg' style="height: 100%; width:100%">
                     </el-carousel-item>
@@ -44,7 +46,7 @@
                     </el-carousel-item>  
                 </el-carousel>
            
-                <el-card class="box-card" style="float:right; width:45%; " >
+                <el-card class="box-card" style="float:right; width:50%; margin-bottom: 5px;" >
                   <div slot="header" class="clearfix">
                     <span style="color: rgb(65, 86, 145);"><i class="el-icon-info" ></i> 公告栏</span>
                   </div>
@@ -202,7 +204,7 @@
     height: 100px;
     border: 1px solid #eee;
     border-radius: 50%;
-    padding: 10px;
+    padding: 5px;
     box-shadow: 0 0 10px #ddd;
     background-color: #fff;
     margin-bottom: 15px;

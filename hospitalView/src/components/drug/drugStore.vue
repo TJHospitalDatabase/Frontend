@@ -11,6 +11,7 @@
         </el-breadcrumb>
 
       <el-main style="height:100%">
+        <el-card>
         <el-table
           :data="drugClassCurData"
           style="width: 100%"
@@ -139,7 +140,7 @@
             <el-button type="danger" size="small" @click="deleteAllPastDrug">删除所有过期药品</el-button>
           </div>
         </el-dialog>
-        
+        </el-card>
       </el-main>
 
       <el-footer style="margin-top:0.5%">

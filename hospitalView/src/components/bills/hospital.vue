@@ -8,20 +8,15 @@
             <el-breadcrumb-item>住院单开具</el-breadcrumb-item>
         </el-breadcrumb>
 
-        <el-divider></el-divider>
-        <!--        卡片-->
-            <!--            搜索与添加-->
-            <el-row :gutter="1100">
-                <el-col :span="12">
-                    <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
-                    <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query">
-                        <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
-                    </el-input>
-                </el-col>
-                <el-col :span="4">
-                    <el-button type="primary" @click="showAddActivity">添加住院单</el-button>
-                </el-col>
-            </el-row>
+       <!--  搜索与添加-->
+        <div>
+            <!-- 搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
+            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%">
+            <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
+            </el-input>
+            <el-button type="primary" @click="showAddActivity" style="width:10%">添加住院单</el-button>
+        </div>
+       
             <el-table :data="hospitalCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border stripe>
                 <el-table-column type="index" label="序号" width=100></el-table-column>
                 <el-table-column label="住院单id" prop="recipT_ID" width=140></el-table-column>

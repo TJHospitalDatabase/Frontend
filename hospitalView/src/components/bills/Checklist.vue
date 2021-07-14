@@ -32,18 +32,18 @@
             </el-row>
             
             <!-- 项目检查单列表区域 -->
-            <el-table :data="checklist_current" border style="width: 100%" stripe >
+            <el-table :data="checklist_current" style="width: 100%" stripe >
 
                 <!-- 表头区域 -->
                 <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
-                <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" width="120"></el-table-column>
+                <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" width="100"></el-table-column>
                 <el-table-column prop="examinatioN_NAME" label="检查项目名称" width="150"></el-table-column>
-                <el-table-column prop="examinatioN_DATE" label="检查日期" width="120"></el-table-column>  
-                <el-table-column prop="doctoR_NAME" label="医生姓名" width="120"></el-table-column>
+                <el-table-column prop="examinatioN_DATE" label="检查日期" width="200"></el-table-column>  
+                <el-table-column prop="doctoR_NAME" label="医生姓名" width="100"></el-table-column>
                 <el-table-column prop="patienT_ID" label="病人ID" width="100"></el-table-column>
-                <el-table-column prop="patienT_NAME" label="病人姓名" width="120"></el-table-column>                  
-                <el-table-column prop="diagnosis" label="临床诊断" width="120"></el-table-column>
-                <el-table-column prop="depT_NAME" label="科室" width="120"></el-table-column>    
+                <el-table-column prop="patienT_NAME" label="病人姓名" width="100"></el-table-column>                  
+                <el-table-column prop="diagnosis" label="临床诊断" width="150"></el-table-column>
+                <el-table-column prop="depT_NAME" label="科室" width="150"></el-table-column>    
 
                 <!-- 修改按钮区域 -->
                 <el-table-column  label="执行状态" width="150" >
