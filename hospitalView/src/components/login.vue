@@ -6,20 +6,21 @@
 				<div class="big-contain" v-if="!isLogin">
 					<div class="btitle">账户登录</div>
 					<div class="bform">
-						<input type="username" placeholder="用户名" v-model="form.username">
-						<span class="errTips" v-if="emailError">* 用户名不存在 *</span>
-						<input type="password" placeholder="密码" v-model="form.userpwd">
-						<span class="errTips" v-if="emailError">* 密码填写错误 *</span>
+						<input type="user_id" placeholder="用户名" v-model="form.user_id" maxlength="7">
+						<span class="errTips" v-if="existed">* 用户名不存在 *</span>
+						<input type="password" placeholder="密码" v-model="form.userpwd" maxlength="16">
+						<span class="errTips" v-if="passwordError">* 密码填写错误 *</span>
 					</div>
 					<button class="bbutton" @click="login">登录</button>
 				</div>
 				<div class="big-contain" v-else>
 					<div class="btitle">创建账户</div>
 					<div class="bform">
-						<input type="text" placeholder="用户名" v-model="form.username">
+						<input type="text" placeholder="用户名" v-model="form.user_id" maxlength="7">
 						<span class="errTips" v-if="existed">* 用户名已经存在！ *</span>
+						<input type="username" placeholder="账号" v-model="form.username" maxlength="7">
 						<input type="email" placeholder="邮箱" v-model="form.useremail">
-						<input type="password" placeholder="密码" v-model="form.userpwd">
+						<input type="password" placeholder="密码" v-model="form.userpwd" maxlength="16">
 					</div>
 					<div class="bselect">
 					<el-select v-model="form.value" clearable placeholder="角色选择" style="width:350px">
@@ -62,6 +63,7 @@ import axios from 'axios'
 				passwordError: false,
 				existed: false,
 				form:{
+					user_id:'',
 					username:'',
 					useremail:'',
 					userpwd:'',
@@ -69,19 +71,19 @@ import axios from 'axios'
 				},
 				options: [
 		{
-		  value: '1',
+		  value: '000011',
           label: '挂号部'
 						},{
-          value: '2',
+          value: '000110',
           label: '门诊部'
         }, {
-          value: '3',
+          value: '100000',
           label: '住院部',
         }, {
-          value: '4',
+          value: '001000',
           label: '药品管理部'
         }, {
-          value: '5',
+          value: '010000',
           label: '检查管理部'
         }],
         value: ''
@@ -90,6 +92,7 @@ import axios from 'axios'
 		methods:{
 			changeType() {
 				this.isLogin = !this.isLogin
+				this.form.user_id = ''
 				this.form.username = ''
 				this.form.useremail = ''
 				this.form.userpwd = ''
@@ -97,8 +100,8 @@ import axios from 'axios'
 			},
 			login() {
 				const self = this;
-				if (self.form.username != "" && self.form.userpwd != "") {
-                    axios.get('/logIn', {params:{user_id: self.form.username,
+				if (self.form.user_id != "" && self.form.userpwd != "") {
+                    axios.get('/logIn', {params:{user_id: self.form.user_id,
                         password: self.form.userpwd}          
                     })
 					.then(function(res) {
@@ -108,7 +111,7 @@ import axios from 'axios'
 							{
                                 alert("登录成功！");
 								window.sessionStorage.setItem("token",role)
-								self.$router.push({path:'/welcome'});
+								self.$router.push({path:'/welcome', query:{id:res.data.data.user_id}});
 								break;
 							}								
 							default:
@@ -129,9 +132,9 @@ import axios from 'axios'
 			},
 			register(){
 				const self = this;
-				if(self.form.username != "" && self.form.useremail != "" && self.form.userpwd != ""&& self.form.value != ""){
+				if(self.form.username != "" && self.form.useremail != "" && self.form.userpwd != ""&& self.form.value != ""&&self.form.user_id != ""){
                     axios.post('/signUp', {params:{password:self.form.userpwd,
-                        user_id:self.form.username,
+                        user_id:self.form.user_id,
 						email:self.form.useremail,
 						role:self.form.value}  })
 					.then(function(res){
