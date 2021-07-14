@@ -6,8 +6,8 @@
     <!--面包屑导航区 -->
         <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-top:30px;margin-left:20px;">
         <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>单目管理</el-breadcrumb-item>
-        <el-breadcrumb-item>项目检查结果单</el-breadcrumb-item>
+        <el-breadcrumb-item>药品管理</el-breadcrumb-item>
+        <el-breadcrumb-item>药品库管理</el-breadcrumb-item>
         </el-breadcrumb>
 
       <el-main style="height:100%">
