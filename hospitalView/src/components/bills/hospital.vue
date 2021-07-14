@@ -9,13 +9,12 @@
 
         <el-divider></el-divider>
         <!--        卡片-->
-        <el-card class="box-card">
             <!--            搜索与添加-->
             <el-row :gutter="1100">
                 <el-col :span="12">
                     <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
                     <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query">
-                        <el-button slot="append" icon="el-icon-search" @click="getActivityList"></el-button>
+                        <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
@@ -23,7 +22,7 @@
                 </el-col>
             </el-row>
             <el-table :data="hospitalCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border stripe>
-                <el-table-column type="index" width=100></el-table-column>
+                <el-table-column type="index" label="序号" width=100></el-table-column>
                 <el-table-column label="住院单id" prop="recipT_ID" width=140></el-table-column>
                 <el-table-column label="病人id" prop="patienT_ID" width=140></el-table-column>
                 <el-table-column label="医生id" prop="doctoR_ID" width=140></el-table-column>
@@ -40,12 +39,7 @@
                 <!--            内容主体区域 放置一个表单-->
                 <!--绑定到addForm中，绑定验证规则对象addFormRules 表单校验项的引用为addFormRef-->
                 <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="150px"
-                         style="height:495px">
-                    <!-- prop属性指定验证规则-->
-                    <el-form-item label="住院单id:" prop="recipT_ID">
-                        <!--v-model双向绑定-->
-                        <el-input style="width: 82%;" v-model="addForm.recipT_ID"></el-input>
-                    </el-form-item>
+                         style="height:470px">
                     <el-form-item label="病人id:" prop="patienT_ID">
                         <!--v-model双向绑定-->
                         <el-input style="width: 82%;" v-model="addForm.patienT_ID"></el-input>
@@ -62,10 +56,6 @@
                         <el-input style="width: 82%;" type="textarea"
                                   :autosize="{ minRows: 3, maxRows: 4}" v-model="addForm.diagnosis"></el-input>
                     </el-form-item>
-                    <el-form-item label="开具时间:" prop="sigN_DATE">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="addForm.sigN_DATE"
-                                        style="width: 360px"></el-date-picker>
-                                         </el-form-item>
                     <el-form-item label="入院时间:" prop="admissioN_DATE">
                         <el-date-picker type="date" placeholder="选择日期" v-model="addForm.admissioN_DATE"
                                         style="width: 360px"></el-date-picker>
@@ -87,12 +77,11 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
-                    :page-sizes="[1, 2, 5, 10]"
+                    :page-sizes="[ 2, 5, 10]"
                     :page-size="pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="activityList.length">
             </el-pagination>
-        </el-card>
     </div>
 </template>
 
@@ -129,22 +118,16 @@
 
                 //添加活动表单数据
                 addForm: {
-                    recipT_ID:"",
                     patienT_ID:"",
                     doctoR_ID: "",
                     beD_ID:"",
                     diagnosis: "",
-                    sigN_DATE:"",
                     admissioN_DATE: "",
                     aischargE_DATE: "",
                 },
                 showForm: {},
                 //添加活动的校验规则
                 addFormRules: {
-                    recipT_ID:[
-                        {required: true, message: '请输入住院单id', trigger: 'blur'},
-                        {min: 2, max: 10, message: '住院单id必须在2-10字符之间', trigger: 'blur'}
-                    ],
                     patienT_ID: [
                         {required: true, message: '请输入病人id', trigger: 'blur'},
                         {min: 2, max: 10, message: '病人id必须在2-10字符之间', trigger: 'blur'}
@@ -159,9 +142,6 @@
                     ],
                     diagnosis: [
                         {required: true, message: '请输入临床诊断', trigger: 'blur'}
-                    ],
-                    sigN_DATE: [
-                        {required: true, message: '请输入开具时间', trigger: 'blur'}
                     ],
                     admissioN_DATE: [
                         {required: true, message: '请输入入院时间', trigger: 'blur'}
@@ -193,6 +173,17 @@
                 this.activityList = result.data.data;
                 totalCount=this.activityList.length;
             },
+            frontSearch(){
+            const query=this.query
+            if(query){
+            this.activityList=this.activityList.filter(data=>{
+                return Object.keys(data).some(key=>{
+                    return String(data[key]).toLowerCase().indexOf(query)>-1
+                })
+            })
+            }
+            console.log(this.activityList)
+            },
             //监听pageSize改变的事件
             handleSizeChange(newSize)
             {
@@ -223,12 +214,10 @@
                     this.$refs.addFormRef.resetFields();
                 });
 
-                this.addForm.recipT_ID="";
                 this.addForm.patienT_ID = "";
                 this.addForm.doctoR_ID="";
                 this.addForm.beD_ID="";
                 this.addForm.diagnosis = "";
-                this.addForm.sigN_DATE = "";
                 this.addForm.admissioN_DATE = "";
                 this.addForm.aischargE_DATE="";
             },
@@ -238,13 +227,21 @@
                     async valid =>
                     {
                         if (!valid) return;
+                        let nowDate = new Date();
+                        let date = {
+                        year: nowDate.getFullYear(),
+                        month: nowDate.getMonth() + 1,
+                        date: nowDate.getDate(),
+                        }
+                        console.log(date);
+                        let systemDate = date.year + '-' + 0 + date.month + '-' + 0 + date.date;
                         let result = await this.$http.put("http://101.132.106.237:5050/recipt",
                             {
-                                recipeID: this.addForm.recipT_ID,
+
                                 patentID: this.addForm.patienT_ID,
                                 doctorID:this.addForm.doctoR_ID,
                                 bedID:this.addForm.beD_ID,
-                                sigN_DATE: this.addForm.sigN_DATE,
+                                sigN_DATE: systemDate,
                                 admissioN_DATE: this.addForm.admissioN_DATE,
                                 aischargE_DATE: this.addForm.aischargE_DATE,
                                 diagnosis: this.addForm.diagnosis,
