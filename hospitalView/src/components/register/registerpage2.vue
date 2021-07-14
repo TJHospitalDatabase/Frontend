@@ -1,3 +1,4 @@
+//搜索框可以去掉                                             
 <template>
 <el-container style="height: 500px; height:100%; border: 1px solid #eee">
     <el-main>
@@ -9,7 +10,7 @@
                     </el-form-item>
                 </el-form>
   <el-table
-    :data="patientData"
+    :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
     style="width: 100%">
 
     <el-table-column prop="registratioN_ID"
@@ -49,6 +50,16 @@
       </template>
     </el-table-column>
   </el-table>
+        <div class="block" style="margin-top:15px;">
+          <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+            :current-page="currentPage" 
+            :page-sizes="[1,2,5,10,20]" 
+            :page-size="pageSize" 
+            layout="total, sizes, prev, pager, next, jumper" 
+            :total="patientData.length">
+          </el-pagination>
+        </div>
+
 
     </el-main>
 </el-container>
@@ -62,6 +73,9 @@ const axios = require('axios');
   export default {
     data() {
       return {
+        currentPage: 1, // 当前页码
+        total: 20, // 总条数
+        pageSize: 5, // 每页的数据条数
         departmentIDSearch:{
               DEPT_NAME:''
             },
@@ -90,6 +104,17 @@ const axios = require('axios');
             this.patientData=res.data
             // console.log(this.patientData)
             },
+        //每页条数改变时触发 选择一页显示多少行
+        handleSizeChange(val) {
+            //console.log(`每页 ${val} 条`);
+            this.currentPage = 1;
+            this.pageSize = val;
+        },
+        //当前页改变时触发 跳转其他页
+        handleCurrentChange(val) {
+            //console.log(`当前页: ${val}`);
+            this.currentPage = val;
+        },
         async select_this(index, row) {
           console.log(index, row);
           this.temp.registratioN_ID=row.registratioN_ID
