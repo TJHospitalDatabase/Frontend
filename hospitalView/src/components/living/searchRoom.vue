@@ -208,7 +208,12 @@
     methods:{
        // 模糊搜索
       frontSearch () {
-        this.getRoomList()
+         this.queryRoom.uB=this.queryRoom.uB-0
+          this.queryRoom.lB=this.queryRoom.lB-0
+          const { data: res } =await this.$http.post('room', this.queryRoom)
+          //console.log(res.data)
+          this.roomList=res.data
+          
         const searchGoal = this.searchGoal
         if (searchGoal) {
           // filter() 方法过滤
