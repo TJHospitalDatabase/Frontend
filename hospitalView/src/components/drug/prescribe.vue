@@ -11,17 +11,18 @@
           border-radius: 5px;
           margin: 85px 250px">
           <el-form :model="queryForm" 
-          ref="ruleForm" 
+          :rules="rules"
+          ref="queryFormRef" 
           label-width="100px" 
           class="demo-ruleForm"
           style="margin: 120px 150px"
           >
-            <el-form-item label="病人ID">
+            <el-form-item label="病人ID" prop="patientID">
               <el-input v-model="queryForm.patientID" ></el-input>
             </el-form-item>
-            <el-form-item label="病人姓名">
+            <!-- <el-form-item label="病人姓名">
               <el-input v-model="queryForm.patientName"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
               <el-button type="primary" @click="queryForPrescription">查询</el-button>
             </el-form-item>
@@ -53,7 +54,7 @@
               <el-table-column property="shelvesID" label="货架" ></el-table-column>
             </el-table>
 
-            <div class="dialog-footer" style="margin-top:30px align-items:center">              
+            <div slot="footer" class="dialog-footer">            
               <el-button type="primary" size="medium" @click="deleteDrug">确认开药并删除药品</el-button>
               <el-button  size="medium" @click="drugDetailVisible=false">取消操作</el-button>
             </div>
@@ -75,12 +76,12 @@
               <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
               <el-table-column property="drugNum" label="药品盒数" width="150"></el-table-column>
               <el-table-column property="price" label="价格" ></el-table-column>
-            </el-table>
-
-            <div class="dialog-footer" style="margin-top:30px align-items:center">              
-              <el-button type="primary" size="medium" @click="queryForDrugInfo">开药</el-button>
-            </div>
+            </el-table>            
           </el-container>
+
+          <div slot="footer" class="dialog-footer">          
+            <el-button type="primary" size="medium" @click="queryForDrugInfo">开药</el-button>
+          </div>
           
         </el-dialog>
   
@@ -128,6 +129,11 @@
         queryForm:{
           patientID:'',
           patientName:''
+        },
+        rules: {
+          patientID: [
+            { required: true, message: '请输入病人ID', trigger: 'blur' }
+          ]
         },
         prescriptionVisible:false,
         drugDetailVisible:false,
@@ -184,44 +190,51 @@
     },
     methods:{
       queryForPrescription:function(){
-        axios
-          .get("/drug/patient",{
-            params:{
-              patientID: this.queryForm.patientID
-            }
-          })
-          .then((response)=>{
-            
-            if(response.data.err_code==0){
-              
+        this.$refs.queryFormRef.validate((valid) => {
+          if (valid) {
+            axios
+              .get("/drug/patient",{
+                params:{
+                  patientID: this.queryForm.patientID
+                }
+              })
+              .then((response)=>{
+                
+                if(response.data.err_code==0){
+                  
 
-              this.prescription.patientID=response.data.data[0].patienT_ID;
-              this.prescription.patientName=response.data.data[0].patienT_NAME;
-              this.prescription.age=response.data.data[0].age;
-              this.prescription.gender=(response.data.data[0].gender=='M')?"男":"女";
-              this.prescription.diagnose=response.data.data[0].diagnosis;
-              this.prescription.drugData=[];
-              
-              for(let i = 0; i < response.data.data[0].givE_DRUG.length; ++i){
-                this.prescription.drugData.push({
-                  drugClassID: response.data.data[0].givE_DRUG[i].druG_CLASS_ID,
-                  drugName: response.data.data[0].givE_DRUG[i].druG_NAME,
-                  drugNum: response.data.data[0].givE_DRUG[i].number,
-                  price: response.data.data[0].givE_DRUG[i].price
-                })
-              }
+                  this.prescription.patientID=response.data.data[0].patienT_ID;
+                  this.prescription.patientName=response.data.data[0].patienT_NAME;
+                  this.prescription.age=response.data.data[0].age;
+                  this.prescription.gender=(response.data.data[0].gender=='M')?"男":"女";
+                  this.prescription.diagnose=response.data.data[0].diagnosis;
+                  this.prescription.drugData=[];
+                  
+                  for(let i = 0; i < response.data.data[0].givE_DRUG.length; ++i){
+                    this.prescription.drugData.push({
+                      drugClassID: response.data.data[0].givE_DRUG[i].druG_CLASS_ID,
+                      drugName: response.data.data[0].givE_DRUG[i].druG_NAME,
+                      drugNum: response.data.data[0].givE_DRUG[i].number,
+                      price: response.data.data[0].givE_DRUG[i].price
+                    })
+                  }
 
-              this.prescriptionVisible=true;
-            }
-            else{
-              this.errorVisible=true;
-              this.errorMes=response.data.err_desc;
-            }
-          })
-          .catch((error)=>{
-            this.errorVisible=true;
-            this.errorMes=response.data.err_desc;
-          })
+                  this.prescriptionVisible=true;
+                }
+                else{
+                  this.errorVisible=true;
+                  this.errorMes=response.data.err_desc;
+                }
+              })
+              .catch((error)=>{
+                this.errorVisible=true;
+                this.errorMes=response.data.err_desc;
+              })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
       drugDataHandle:function(){
         let result=[];
