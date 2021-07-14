@@ -9,7 +9,6 @@
 
         <el-divider></el-divider>
         <!--        卡片-->
-        <el-card class="box-card">
             <!--            搜索与添加-->
             <el-row :gutter="1000">
                 <el-col :span="12">
@@ -24,12 +23,12 @@
             </el-row>
             <!--            活动列表 只展示一些活动信息,详细信息可在详情查看-->
             <el-table :data="prescriptionCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border stripe>
-                <el-table-column type="index"></el-table-column>
-                <el-table-column label="处方单id" prop="prescriptioN_ID" width=200></el-table-column>
-                <el-table-column label="病人id" prop="patienT_ID" width=200></el-table-column>
-                <el-table-column label="医生id" prop="doctoR_ID" width=200></el-table-column>
-                <el-table-column label="开具时间" prop="sigN_DATE" width=240></el-table-column>
-                <el-table-column label="临床诊断" prop="diagnosis" width=340></el-table-column>
+                <el-table-column type="index"  label="序号" width=100></el-table-column>
+                <el-table-column label="处方单id" prop="prescriptioN_ID" width=240></el-table-column>
+                <el-table-column label="病人id" prop="patienT_ID" width=240></el-table-column>
+                <el-table-column label="医生id" prop="doctoR_ID" width=240></el-table-column>
+                <el-table-column label="开具时间" prop="sigN_DATE" width=280></el-table-column>
+                <el-table-column label="临床诊断" prop="diagnosis" width=380></el-table-column>
             </el-table>
 
             <!--        添加活动对话框-->
@@ -38,12 +37,7 @@
                 <!--            内容主体区域 放置一个表单-->
                 <!--绑定到addForm中，绑定验证规则对象addFormRules 表单校验项的引用为addFormRef-->
                 <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="150px"
-                         style="height:370px">
-                     <!-- prop属性指定验证规则-->
-                    <el-form-item label="处方单id:" prop="prescriptioN_ID">
-                        <!--v-model双向绑定-->
-                        <el-input style="width: 82%;" v-model="addForm.prescriptioN_ID"></el-input>
-                    </el-form-item>
+                         style="height:270px">
                     <el-form-item label="病人id:" prop="patienT_ID">
                         <!--v-model双向绑定-->
                         <el-input style="width: 82%;" v-model="addForm.patienT_ID"></el-input>
@@ -55,13 +49,6 @@
                     <el-form-item label="临床诊断:" prop="diagnosis">
                         <el-input style="width: 82%;" type="textarea"
                                   :autosize="{ minRows: 3, maxRows: 4}" v-model="addForm.diagnosis"></el-input>
-                    </el-form-item>
-                    <el-form-item label="开具时间:" prop="sigN_DATE">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="addForm.sigN_DATE"
-                                        style="width: 360px"></el-date-picker>
-                                                            </el-form-item>
-                    <el-form-item label="处方单状态:" prop="state">
-                        <el-switch v-model="addForm.state"></el-switch>
                     </el-form-item>
                 </el-form>
                 <!--            底部区域-->
@@ -76,12 +63,11 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
-                    :page-sizes="[1, 2, 5, 10]"
+                    :page-sizes="[ 2, 5, 10]"
                     :page-size="pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="activityList.length">
             </el-pagination>
-        </el-card>
     </div>
 </template>
 
@@ -98,7 +84,6 @@
                     return cb();
                 }
                 cb(new Error("费用总计必须是数字,且小于一千万!"));
-
             };
             return {
                 //获取活动列表参数对象
@@ -112,6 +97,8 @@
                 currentPage:1,
                 pageSize: 5,
 
+                systemDate:'',
+
                 //添加,修改,展示活动对话框的显示与隐藏
                 addDialogVisible: false,
                 editDialogVisible: false,
@@ -119,7 +106,6 @@
 
                 //添加活动表单数据
                 addForm: {
-                    prescriptioN_ID:"",
                     patienT_ID: "",
                     doctoR_ID: "",
                     sigN_DATE: "",
@@ -129,10 +115,6 @@
                 showForm: {},
                 //添加活动的校验规则
                 addFormRules: {
-                    prescriptioN_ID:[
-                        {required: true, message: '请输入处方单id', trigger: 'blur'},
-                        {min: 2, max: 10, message: '处方单id必须在2-10字符之间', trigger: 'blur'}
-                    ],
                     patienT_ID: [
                         {required: true, message: '请输入病人id', trigger: 'blur'},
                         {min: 2, max: 10, message: '病人姓名必须在2-10字符之间', trigger: 'blur'}
@@ -144,9 +126,6 @@
                         {required: true, message: '请输入医生id', trigger: 'blur'},
                         {min: 2, max: 10, message: '医生姓名必须在2-10字符之间', trigger: 'blur'}
                     ],
-                    sigN_DATE: [
-                        {required: true, message: '请输入开具日期', trigger: 'blur'},
-                    ]
                 }
             };
         },
@@ -154,6 +133,14 @@
         created()
         {
            this.getActivityList();
+            let nowDate = new Date();
+                        let date = {
+                        year: nowDate.getFullYear(),
+                        month: nowDate.getMonth() + 1,
+                        date: nowDate.getDate(),
+                        }
+                        console.log(date);
+                        let systemDate = date.year + '-' + 0 + date.month + '-' + 0 + date.date;
         },
         computed:{
         prescriptionCurData:function(){
@@ -170,6 +157,17 @@
 
                 this.activityList = result.data.data;
 
+            },
+            frontSearch(){
+            const query=this.query
+            if(query){
+            this.activityList=this.activityList.filter(data=>{
+                return Object.keys(data).some(key=>{
+                    return String(data[key]).toLowerCase().indexOf(query)>-1
+                })
+            })
+            }
+            console.log(this.activityList)
             },
             //监听pageSize改变的事件
             handleSizeChange(newSize)
@@ -196,9 +194,7 @@
                 this.addForm.prescriptioN_ID="";
                 this.addForm.patienT_ID = "";
                 this.addForm.doctoR_ID = "";
-                this.addForm.sigN_DATE = "";
                 this.addForm.diagnosis = "";
-                this.addForm.state="";
 
             },
             addActivity()
@@ -207,17 +203,24 @@
                     async valid =>
                     {
                         if (!valid) return;
+                         let nowDate = new Date();
+                        let date = {
+                        year: nowDate.getFullYear(),
+                        month: nowDate.getMonth() + 1,
+                        date: nowDate.getDate(),
+                        }
+                        console.log(date);
+                        let systemDate = date.year + '-' + 0 + date.month + '-' + date.date;
                         let result = await this.$http.put("http://101.132.106.237:5050/prescription",
                             {data:
-                            {prescriptioN_ID:  this.addForm.prescriptioN_ID,
+                            {
                                 patienT_ID: this.addForm.patienT_ID,
                                 doctoR_ID: this.addForm.doctoR_ID,
-                                sigN_DATE: this.addForm.sigN_DATE,
+                                sigN_DATE: systemDate,
                                 diagnosis: this.addForm.diagnosis,
-                                state: false}
-                                
+                                state: false}                            
                             });
-
+                        console.log(systemDate);
                         //隐藏添加活动对话框
                         this.addDialogVisible = false;
                         this.getActivityList();

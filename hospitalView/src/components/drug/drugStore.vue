@@ -105,18 +105,49 @@
           </div>
         </el-dialog>
 
+        <el-dialog title="过期药品详情" 
+        :visible.sync="drugPastVisible" width=60%>
+          <el-table :data="drugPastCurData">
+            <el-table-column property="drugClassID" label="药品类别码" width="120"></el-table-column>
+            <el-table-column property="drugName" label="药品名称" width="120"></el-table-column>
+            <el-table-column property="drugID" label="药品编码" width="120"></el-table-column>
+            <el-table-column property="productionDate" label="生产日期" width="120"></el-table-column>
+            <el-table-column property="validUntil" label="有效期至" width="120"></el-table-column>
+            <el-table-column property="manufactor" label="生产企业" width="120"></el-table-column>
+            <el-table-column property="shelvesID" label="货架号"></el-table-column>
+            <el-table-column
+            align="right"
+            width='250'>
+          </el-table-column>
+          </el-table>
+          <el-pagination
+            :current-page.sync="curDrugPastPage"
+            :page-size="drugPastPageSize"
+            layout="total, prev, pager, next, jumper"
+            :total="drugPast.length">
+          </el-pagination>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="danger" size="small" @click="deleteAllPastDrug">删除所有过期药品</el-button>
+          </div>
+        </el-dialog>
         
       </el-main>
 
       <el-footer style="margin-top:0.5%">
-        <div class="block">
-          <el-pagination
-            :current-page.sync="curPage"
-            :page-size="pageSize"
-            layout="total, prev, pager, next, jumper"
-            :total="drugClassSearchData.length">
-          </el-pagination>
-        </div>
+        <el-container width="100%">
+          <div class="block">
+            <el-pagination
+              :current-page.sync="curPage"
+              :page-size="pageSize"
+              layout="total, prev, pager, next, jumper"
+              :total="drugClassSearchData.length">
+            </el-pagination>
+          </div>
+          <div  class='right'>
+            <el-button type="danger" size="small" @click="pastDrug">过期药品统计</el-button>
+          </div>
+          
+        </el-container>
       </el-footer>
 
       
@@ -212,6 +243,13 @@
         deletedDrug:[
         ],
         drugVisible: false,
+
+        drugPast:[],
+        curDrugPastPage: 1,
+        drugPastPageSize: 10,
+        deletedPastDrug:[
+        ],
+        drugPastVisible: false,
       }
     },
     computed:{
@@ -230,6 +268,10 @@
       drugCurData:function(){
         return this.drugSearchData.slice((this.curDrugPage - 1) * this.drugPageSize,
         Math.min(this.curDrugPage * this.drugPageSize, this.drugSearchData.length));     
+      },
+      drugPastCurData:function(){
+        return this.drugPast.slice((this.curDrugPastPage - 1) * this.drugPastPageSize,
+        Math.min(this.curDrugPastPage * this.drugPastPageSize, this.drugPast.length));
       }
     },
     methods: {
@@ -240,15 +282,15 @@
       complishEditPrice(index, row) {
         row.show=false;        
         if(!(row.price==this.tempPrice)){
-          console.log("test1");
           axios
-            .post("/drugclass",{
+            .get("/drugclass",{
               params:{
                 DRUG_CLASS_ID:row.drugClassID,
-                PRICE:row.price
+                PRICE:row.price-0
               }
             })
             .then((response)=>{
+              console.log(response);
               if(response.data.data==true){
                 this.$message({
                     showClose: true,
@@ -287,7 +329,7 @@
         axios
           .get("/drug/drugclass",{
             params:{
-              drugClassID:row.drugClassID
+              drug_Class_ID:row.drugClassID
               }
           })
           .then((response)=>{
@@ -333,6 +375,7 @@
         return res;
       },
       deleteAllDrug() {
+        console.log(this.deleteResultDrug());
         this.drugVisible = false;
         if(!(this.deletedDrug.length==0)){
           axios
@@ -358,7 +401,64 @@
           this.deletedDrug=[];
         }
 
-      }
+      },
+      pastDrug(){
+        this.drugPastVisible=true;
+        axios 
+          .get("drug/pastDue")
+          .then((response)=>{
+            if(response.data.err_code==0){
+              this.drugPast=[];
+              this.deletedPastDrug=[];
+              for(let i=0; i<response.data.data.length; ++i){
+                this.drugPast.push({
+                  drugClassID:response.data.data[i].druG_CLASS_ID,
+                  drugName:response.data.data[i].druG_NAME,
+                  drugID:response.data.data[i].druG_ID,
+                  productionDate:response.data.data[i].productioN_DATE,
+                  validUntil:response.data.data[i].valiD_UNTIL,
+                  manufactor:response.data.data[i].manufactor,
+                  shelvesID:response.data.data[i].shelveS_ID
+                })
+                this.deletedPastDrug.push({
+                  DRUG_ID:response.data.data[i].druG_ID
+                })
+              }
+            }
+          })
+
+      },
+      deleteAllPastDrug() {
+        this.drugPastVisible = false;
+        if(!(this.deletedPastDrug.length==0)){
+          axios
+            .delete("/drug/deleteDrug",{
+              data:this.deletedPastDrug
+            })
+            .then((response)=>{
+              console.log(response);
+              if(response.data.data==true){
+                this.$message({
+                  showClose: true,
+                  message: '所有过期药品删除成功！',
+                  type: 'success'
+                });
+              }
+              else{
+                this.$message({
+                  showClose: true,
+                  message: '过期药品删除失败',
+                  type: 'error'
+                });
+              }
+            })
+            .catch((error)=>{
+              console.log(error)
+            })          
+          this.deletedPastDrug=[];
+        }
+
+      },
     },
     mounted(){
       axios
@@ -393,5 +493,12 @@
   .el-aside {
     color: #333;
   }
+
+  .right {
+    padding: 1% 0;
+    /* margin-left: 66%; */
+    position: absolute;
+    left: 89%;
+}
 </style>
 

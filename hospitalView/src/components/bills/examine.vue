@@ -9,13 +9,12 @@
 
         <el-divider></el-divider>
         <!--        卡片-->
-        <el-card class="box-card">
             <!--            搜索与添加-->
             <el-row :gutter="1000">
                 <el-col :span="12">
                     <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
                     <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query">
-                        <el-button slot="append" icon="el-icon-search" @click="getActivityList"></el-button>
+                        <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
@@ -29,7 +28,7 @@
                 <el-table-column fixed type="index" label="序号" width="100"></el-table-column>
                 <el-table-column prop="patienT_NAME" label="病人姓名" width="170"></el-table-column>
                 <el-table-column prop="examinatioN_LIST_ID" label="项目检查单ID" width="180"></el-table-column>
-                <el-table-column prop="examinatioN_NAME" label="项目检查单名称" width="200"></el-table-column>
+                <el-table-column prop="examinatioN_NAME" label="检查项目名称" width="200"></el-table-column>
                 <el-table-column prop="examinatioN_DATE" label="开具日期" width="190"></el-table-column>
                 <el-table-column prop="patienT_ID" label="病人ID" width="180"></el-table-column>
                 <el-table-column prop="doctoR_NAME" label="医生姓名" width="170"></el-table-column>
@@ -38,16 +37,11 @@
 
             <!--        添加活动对话框-->
             <el-dialog title="添加检查单" :visible.sync="addDialogVisible"
-                       width="660px" top="60px" center>
+                       width="630px" top="60px" center>
                 <!--            内容主体区域 放置一个表单-->
                 <!--绑定到addForm中，绑定验证规则对象addFormRules 表单校验项的引用为addFormRef-->
                 <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="150px"
-                         style="height:435px">
-                    <!-- prop属性指定验证规则-->
-                     <el-form-item label="检查单id:" prop="examinatioN_LIST_ID">
-                        <!--v-model双向绑定-->
-                        <el-input style="width: 82%;" v-model="addForm.examinatioN_LIST_ID"></el-input>
-                        </el-form-item>
+                         style="height:455px">
                         <el-form-item label="病人id:" prop="patienT_ID">
                         <!--v-model双向绑定-->
                         <el-input style="width: 82%;" v-model="addForm.patienT_ID"></el-input>
@@ -60,17 +54,21 @@
                         <!--v-model双向绑定-->
                         <el-input style="width: 82%;" v-model="addForm.doctoR_NAME"></el-input>
                     </el-form-item>
-                    <el-form-item label="检查单名称:" prop="examinatioN_NAME">
-                        <!--v-model双向绑定-->
-                        <el-input style="width: 82%;" v-model="addForm.examinatioN_NAME"></el-input>
+                    <el-form-item label="检查项目名称:" prop="examinatioN_NAME">
+                        <el-select v-model="addForm.examinatioN_NAME" placeholder="请选择检查项目" style="width: 82%;">
+                            <el-option label="项目a" value="项目a"></el-option>
+                            <el-option label="项目b" value="项目b"></el-option>
+                            <el-option label="项目c" value="项目c"></el-option>
+                            <el-option label="项目d" value="项目d"></el-option>
+                            <el-option label="项目e" value="项目e"></el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="检查单介绍:" prop="diagnosis">
+                    <el-form-item label="临床诊断:" prop="diagnosis">
                         <el-input style="width: 82%;" type="textarea"
                                   :autosize="{ minRows: 3, maxRows: 4}" v-model="addForm.diagnosis"></el-input>
                     </el-form-item>
-                    <el-form-item label="开具时间:" prop="examinatioN_DATE">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="addForm.examinatioN_DATE"
-                                        style="width: 360px"></el-date-picker>
+                    <el-form-item label="开具日期:">
+                        <el-input style="width: 82%;" v-model="currentTime" disabled></el-input>
                     </el-form-item>
                 </el-form>
                 <!--            底部区域-->
@@ -85,12 +83,11 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
-                    :page-sizes="[1, 2, 5, 10]"
+                    :page-sizes="[2, 5, 10]"
                     :page-size="pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="activityList.length">
             </el-pagination>
-        </el-card>
     </div>
 </template>
 
@@ -114,11 +111,14 @@
                 //查询到的当页活动
                 activityList: [],
 
+                query:'',
                 //当前的页码
                 pageNumber: 1,
                 //每页显示的条数
                 currentPage:1,
                 pageSize: 5,
+                systemDate:'',
+                currentTime:'',
 
                 //添加,展示活动对话框的显示与隐藏
                 addDialogVisible: false,
@@ -127,7 +127,6 @@
                 //添加活动表单数据
                 addForm: {
                     patienT_NAME: "",
-                    examinatioN_LIST_ID: "",
                     examinatioN_NAME: "",
                     examinatioN_DATE: "",
                     patienT_ID: "",
@@ -142,7 +141,7 @@
                         {min: 2, max: 10, message: '检查单名称必须在2-10字符之间', trigger: 'blur'}
                     ],
                     diagnosis: [
-                        {required: true, message: '请输入检查单介绍', trigger: 'blur'}
+                        {required: true, message: '请输入临床诊断', trigger: 'blur'}
                     ],
                     patienT_NAME: [
                         {required: true, message: '请输入病人姓名', trigger: 'blur'},
@@ -152,17 +151,9 @@
                         {required: true, message: '请输入病人id', trigger: 'blur'},
                         {min: 2, max: 10, message: '病人id必须在2-10字符之间', trigger: 'blur'}
                     ],
-
-                    examinatioN_LIST_ID: [
-                        {required: true, message: '请输入检查单id', trigger: 'blur'},
-                        {min: 2, max: 10, message: '检查单id必须在2-10字符之间', trigger: 'blur'}
-                    ],
                     doctoR_NAME: [
                         {required: true, message: '请输入医生姓名', trigger: 'blur'},
                         {min: 2, max: 10, message: '医生姓名必须在2-10字符之间', trigger: 'blur'}
-                    ],
-                    examinatioN_DATE: [
-                        {required: true, message: '请输入开具时间', trigger: 'blur'},
                     ]
                 }
             };
@@ -171,11 +162,19 @@
         created()
         {
            this.getActivityList();
+           let nowDate = new Date();
+                        let date = {
+                        year: nowDate.getFullYear(),
+                        month: nowDate.getMonth() + 1,
+                        date: nowDate.getDate(),
+                        }
+                        console.log(date);
+            currentTime = date.year + '-' + 0 + date.month + '-' + 0 + date.date;
         },
         computed:{
         examineCurData:function(){
         return this.activityList.slice((this.currentPage-1)*this.pageSize,Math.min(this.currentPage*this.pageSize,this.activityList.length));
-        }
+        },
         },
         methods: {      
             //获取活动列表
@@ -189,9 +188,20 @@
                         status: true*/
                         patienT_NAME:""
                     });
-
+                
                 this.activityList = result.data.data;
                 console.log(this.activityList);
+            },
+            frontSearch(){
+            const query=this.query
+            if(query){
+            this.activityList=this.activityList.filter(data=>{
+                return Object.keys(data).some(key=>{
+                    return String(data[key]).toLowerCase().indexOf(query)>-1
+                })
+            })
+            }
+            console.log(this.activityList)
             },
             //监听pageSize改变的事件
             handleSizeChange(newSize)
@@ -216,9 +226,7 @@
                 });
 
                 this.addForm.patienT_NAME= "";
-                this.addForm.examinatioN_LIST_ID= "";
                 this.addForm.examinatioN_NAME="";
-                this.addForm.examinatioN_DATE= "";
                 this.addForm.patienT_ID= "";
                 this.addForm.doctoR_NAME= "";
                 this.addForm.diagnosis="";
@@ -229,12 +237,20 @@
                     async valid =>
                     {
                         if (!valid) return;
+                        let nowDate = new Date();
+                        let date = {
+                        year: nowDate.getFullYear(),
+                        month: nowDate.getMonth() + 1,
+                        date: nowDate.getDate(),
+                        }
+                        console.log(date);
+                        let systemDate = date.year + '-' + 0 + date.month + '-' + 0 + date.date;
                         let result = await this.$http.put("http://101.132.106.237:5050/examination/add",
                             {
+                                
                                 patienT_NAME:this.addForm.patienT_NAME,
-                                examinatioN_LIST_ID: this.addForm.examinatioN_LIST_ID,
                                 examinatioN_NAME: this.addForm.examinatioN_NAME,
-                                examinatioN_DATE: this.addForm.examinatioN_DATE,
+                                examinatioN_DATE: systemDate,
                                 patienT_ID: this.addForm.patienT_ID,
                                 doctoR_NAME: this.addForm.doctoR_NAME,
                                 diagnosis:this.addForm.diagnosis
