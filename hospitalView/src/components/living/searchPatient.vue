@@ -194,7 +194,7 @@
 
     methods:{
         // 模糊搜索
-        frontSearch () {
+        async frontSearch () {
           const { data: res } =await this.$http.post('patientinhospital', this.queryPatient)
           //console.log(res.data)
           this.patientList=res.data

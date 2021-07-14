@@ -207,7 +207,7 @@
 
     methods:{
        // 模糊搜索
-      frontSearch () {
+      async frontSearch () {
          this.queryRoom.uB=this.queryRoom.uB-0
           this.queryRoom.lB=this.queryRoom.lB-0
           const { data: res } =await this.$http.post('room', this.queryRoom)
