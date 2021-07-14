@@ -1,10 +1,19 @@
                                             
 <template>
-<el-container style="height: 500px; height:100%; border: 1px solid #eee">
+
+<el-container style=" height:100%; width: 100%; border: 1px solid #eee">
     <el-main>   
+      <div>
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+     <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
+     <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
+     <el-breadcrumb-item>挂号信息查询</el-breadcrumb-item>
+    </el-breadcrumb>
+      </div>
+  <el-card>
   <el-table
     :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-    style="width: 100%">
+    style="width: 100%;">
 
     <el-table-column prop="registratioN_ID"
       label="挂号单ID">
@@ -52,8 +61,7 @@
             :total="patientData.length">
           </el-pagination>
         </div>
-
-
+  </el-card>
     </el-main>
 </el-container>
 
@@ -121,8 +129,15 @@ const axios = require('axios');
                   }
                 )
           console.log(res.data[0])
+          alert("选中操作成功")
           // 这里是返回的信息
         }
           },
         }
 </script>
+
+<style lang="less" scoped>
+.el-table{
+  width:100%;
+}
+</style>

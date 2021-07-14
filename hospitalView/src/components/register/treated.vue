@@ -1,5 +1,9 @@
 <template>
-    <div>
+<el-container>
+    <!-- 主体部分 -->
+    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+    <!-- 数据表单 -->
+            <el-main>
         <!--面包屑导航区-->
      <el-breadcrumb separator-class="el-icon-arrow-right">
      <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
@@ -8,22 +12,20 @@
      </el-breadcrumb>
 
      <!--卡片视图区-->
-     <el-card>
-         <el-row>
-             <el-col :span="6">
-               <div>患者ID：
-              <el-input
-              size="large"
-              placeholder="请输入患者ID"
-              v-model="queryInfo.PATIENT_ID" 
-              clearable
-              @clear="getTreatList">
-              </el-input>
+     <el-card>      
+            <div>
+              <div  style="margin-bottom: 10px;">患者ID：</div>
+                <el-input
+                style="width: 20%"
+                size="large"
+                placeholder="请输入患者ID"
+                v-model="queryInfo.PATIENT_ID" 
+                clearable
+                @clear="getTreatList">
+                </el-input>
               <el-button type="primary" icon="el-icon-search" @click="getTreatList">搜 索</el-button><!--事件还未定义-->
-               </div>
-             </el-col>
-         </el-row>
-
+            </div>
+          
          <!--问诊信息列表(表单内容待根据postman中内容进行更改)-->
          <el-table
             :data="treatlist.slice((currentPage-1)*pageSize,currentPage*pageSize)"
@@ -85,7 +87,9 @@
         </div>
      </el-card>
 
-    </div>
+            </el-main>
+    </el-container>
+</el-container>
 </template>
 
 <script>

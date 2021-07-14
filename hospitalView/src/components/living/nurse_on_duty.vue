@@ -1,88 +1,92 @@
 <template>
-<div>
+<el-container>
+    <!-- 主体部分 -->
+    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+    <!-- 数据表单 -->
+    <el-main>
     <!--面包屑导航区-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-     <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
-     <el-breadcrumb-item>护士值班信息</el-breadcrumb-item>
-     <el-breadcrumb-item>值班信息列表</el-breadcrumb-item>
+     <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+     <el-breadcrumb-item>住院管理</el-breadcrumb-item>
+     <el-breadcrumb-item>住院护士值班信息</el-breadcrumb-item>
     </el-breadcrumb>
 
-    <!--卡片视图区域-->
-  <el-card>
-   <!--搜索与添加区域-->
-   <el-row :gutter="20">
-     <el-col :span="7">
-       <el-input placeholder="请输入科室"
-       v-model="queryInfo.DEPT_NAME" clearable @clear="getNurseList">
-       <el-button slot="append" icon="el-icon-search" @click="getNurseList"></el-button>
-       </el-input>
-     </el-col>
-   </el-row >
-   <el-row :gutter="20">
-     <el-col :span="7">
-       <el-input placeholder="请输入护士ID"
-       v-model="queryInfo.NURSE_ID" clearable @clear="getNurseList">
-       <el-button slot="append" icon="el-icon-search" @click="getNurseList"></el-button>
-       </el-input>
-     </el-col>
-     <el-col :span="4">
-         <el-button type="primary" @click="addDialogVisible=true">添加值班护士</el-button>
-     </el-col>
-   </el-row>
+      <!--卡片视图区域-->
+        <el-card>
+        <!--搜索与添加区域-->
+        <el-row :gutter="20">
+          <el-col :span="7">
+            <el-input placeholder="请输入科室"
+            v-model="queryInfo.DEPT_NAME" clearable @clear="getNurseList">
+            <el-button slot="append" icon="el-icon-search" @click="getNurseList"></el-button>
+            </el-input>
+          </el-col>
+        </el-row >
+        <el-row :gutter="20">
+          <el-col :span="7">
+            <el-input placeholder="请输入护士ID"
+            v-model="queryInfo.NURSE_ID" clearable @clear="getNurseList">
+            <el-button slot="append" icon="el-icon-search" @click="getNurseList"></el-button>
+            </el-input>
+          </el-col>
+          <el-col :span="4">
+              <el-button type="primary" @click="addDialogVisible=true">添加值班护士</el-button>
+          </el-col>
+        </el-row>
 
-   <!--值班护士信息区域-->
-   <el-table
-      :data="nurselist.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-      style="width: 100%" border stript>
-      <el-table-column type="index"></el-table-column>
-      <el-table-column
-        sortable
-        prop="nursE_ID"
-        label="护士ID">
-      </el-table-column>
-      <el-table-column
-        prop="nursE_NAME"
-        label="姓名">
-      </el-table-column>
-       <el-table-column
-        prop="depT_NAME"
-        label="科室">
-      </el-table-column>
-      <el-table-column
-        sortable
-        prop="nursE_LEVEL"
-        label="级别">
-      </el-table-column>
-      <el-table-column
-        label="值班状态">
-        <template slot-scope="scope">
-            <el-switch v-model="scope.row.iS_ON_DATE" @change="nurseStateChanged(scope.row)">
-            </el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="beD_ID"
-        label="负责病床号">
-        <template slot-scope="scope">
-         <template v-if="scope.row.edi">
-          <el-input class="edit-input" size="small" v-model="scope.row.beD_ID"></el-input>
-         </template>
-      <span v-else>{{ scope.row.beD_ID }}</span>
-      </template>
-      </el-table-column>
-       <el-table-column
-        label="操作" width="180px">
-        <template slot-scope="scope">
-            <!--修改负责病床按钮-->
-          <!-- <el-tooltip effect="dark" content="修改病床号" placement="top" :enterable="false" > -->
-            <el-button v-if="scope.row.edi" key="check" type="success" @click="confirmEdit(scope.$index,scope.row)" size="small" icon="el-icon-circle-check"></el-button>
-            <el-button v-else key="edit" type="primary" @click='test(scope.$index,scope.row)' size="small" icon="el-icon-edit"></el-button>
-          <!-- </el-tooltip> -->
-        </template>
-      </el-table-column>
-    </el-table>
+        <!--值班护士信息区域-->
+        <el-table
+            :data="nurselist.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+            style="width: 100%" border stript>
+            <el-table-column type="index"></el-table-column>
+            <el-table-column
+              sortable
+              prop="nursE_ID"
+              label="护士ID">
+            </el-table-column>
+            <el-table-column
+              prop="nursE_NAME"
+              label="姓名">
+            </el-table-column>
+            <el-table-column
+              prop="depT_NAME"
+              label="科室">
+            </el-table-column>
+            <el-table-column
+              sortable
+              prop="nursE_LEVEL"
+              label="级别">
+            </el-table-column>
+            <el-table-column
+              label="值班状态">
+              <template slot-scope="scope">
+                  <el-switch v-model="scope.row.iS_ON_DATE" @change="nurseStateChanged(scope.row)">
+                  </el-switch>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="beD_ID"
+              label="负责病床号">
+              <template slot-scope="scope">
+              <template v-if="scope.row.edi">
+                <el-input class="edit-input" size="small" v-model="scope.row.beD_ID"></el-input>
+              </template>
+            <span v-else>{{ scope.row.beD_ID }}</span>
+            </template>
+            </el-table-column>
+            <el-table-column
+              label="操作" width="180px">
+              <template slot-scope="scope">
+                  <!--修改负责病床按钮-->
+                <!-- <el-tooltip effect="dark" content="修改病床号" placement="top" :enterable="false" > -->
+                  <el-button v-if="scope.row.edi" key="check" type="success" @click="confirmEdit(scope.$index,scope.row)" size="small" icon="el-icon-circle-check"></el-button>
+                  <el-button v-else key="edit" type="primary" @click='test(scope.$index,scope.row)' size="small" icon="el-icon-edit"></el-button>
+                <!-- </el-tooltip> -->
+              </template>
+            </el-table-column>
+          </el-table>
 
-   <!-- 分页器 -->
+        <!-- 分页器 -->
         <div class="block" style="margin-top:15px;">
             <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
             :current-page="currentPage" 
@@ -92,35 +96,36 @@
             :total="total">
             </el-pagination>
         </div>
-  </el-card>
+        </el-card>
+    </el-main>
+        <!--添加值班护士的对话框-->
+        <!--！！！！待进一步修正！！！！-->
+        <el-dialog
+          title="添加值班护士"
+          :visible.sync="addDialogVisible"
+          width="30%" @close="addDialogClosed">
+          <!--内容主体区-->
+          <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="70px">
+          <el-form-item prop="nurseID" label="护士ID">
+          <el-input v-model="addForm.nurseID"></el-input>
+          </el-form-item>
+          <el-form-item prop="bedNum" label="病床号">
+          <el-input v-model="addForm.bedNum"></el-input>
+          </el-form-item>
+          <el-form-item prop="state" label="值班状态">
+          <el-switch v-model="addForm.state"></el-switch>
+          </el-form-item>
+          </el-form>
+          <!--底部区域-->
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="resetForm">重 置</el-button>
+            <el-button @click="addDialogVisible=false">取 消</el-button>
+            <el-button type="primary" @click="submitForm">确 定</el-button>
+          </span>
+        </el-dialog>
 
-<!--添加值班护士的对话框-->
-<!--！！！！待进一步修正！！！！-->
-  <el-dialog
-  title="添加值班护士"
-  :visible.sync="addDialogVisible"
-  width="30%" @close="addDialogClosed">
-  <!--内容主体区-->
-  <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="70px">
-  <el-form-item prop="nurseID" label="护士ID">
-  <el-input v-model="addForm.nurseID"></el-input>
-  </el-form-item>
-  <el-form-item prop="bedNum" label="病床号">
-  <el-input v-model="addForm.bedNum"></el-input>
-  </el-form-item>
-  <el-form-item prop="state" label="值班状态">
-   <el-switch v-model="addForm.state"></el-switch>
-  </el-form-item>
-  </el-form>
-  <!--底部区域-->
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="resetForm">重 置</el-button>
-    <el-button @click="addDialogVisible=false">取 消</el-button>
-    <el-button type="primary" @click="submitForm">确 定</el-button>
-  </span>
-</el-dialog>
-
-</div>
+ </el-container>
+ </el-container> 
 </template>
 
 <script>

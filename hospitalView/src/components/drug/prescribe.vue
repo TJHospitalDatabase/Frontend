@@ -1,9 +1,17 @@
 <template>
 <!-- 开药查询 -->
-  <el-container style="height: 942px; border: 1px solid #eee">
-    
-    <el-container>
-      <el-main>
+  <!-- 主体部分 -->
+    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+    <el-main>
+      
+      
+        <!--面包屑导航区 -->
+        <el-breadcrumb separator-class="el-icon-arrow-right" >
+        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>药品管理</el-breadcrumb-item>
+        <el-breadcrumb-item>开药查询</el-breadcrumb-item>
+        </el-breadcrumb>
+
         <el-container 
         style="height: 450px; 
           width: 750px; 
@@ -17,6 +25,8 @@
           class="demo-ruleForm"
           style="margin: 120px 150px"
           >
+
+
             <el-form-item label="病人ID" prop="patientID">
               <el-input v-model="queryForm.patientID" ></el-input>
             </el-form-item>
@@ -86,10 +96,8 @@
         </el-dialog>
   
       </el-main>
+      
     </el-container>
-    
-    
-  </el-container>
 </template>
 
 

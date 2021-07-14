@@ -1,7 +1,17 @@
 <template>
-<!-- 药品库管理 -->
-  <el-container style="height: 95%; border: 1px solid #eee">   
+<!--药品库管理-->
+  <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+    <el-main>
+    
+    <!--面包屑导航区 -->
+        <el-breadcrumb separator-class="el-icon-arrow-right" >
+        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>药品管理</el-breadcrumb-item>
+        <el-breadcrumb-item>药品库管理</el-breadcrumb-item>
+        </el-breadcrumb>
+
       <el-main style="height:100%">
+        <el-card>
         <el-table
           :data="drugClassCurData"
           style="width: 100%"
@@ -36,7 +46,7 @@
           <el-table-column
             align="right"
             width="350">
-            <template slot="header" slot-scope="scope" >
+            <template slot="header" >
               <el-input
                 v-model="searchDrugClassID"
                 size="mini"
@@ -75,7 +85,7 @@
             <el-table-column
             align="right"
             width='250'>
-            <template slot="header" slot-scope="scope">
+            <template slot="header" >
               <el-input
                 v-model="searchDrugID"
                 size="mini"
@@ -130,7 +140,7 @@
             <el-button type="danger" size="small" @click="deleteAllPastDrug">删除所有过期药品</el-button>
           </div>
         </el-dialog>
-        
+        </el-card>
       </el-main>
 
       <el-footer style="margin-top:0.5%">
@@ -150,7 +160,7 @@
         </el-container>
       </el-footer>
 
-      
+        </el-main>  
   </el-container>
 
 

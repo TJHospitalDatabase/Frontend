@@ -3,8 +3,13 @@
 <el-container style="height: 500px; height:100%; border: 1px solid #eee">
   <!-- 数据表单 -->
       <el-main>
-        <el-page-header @back="goBack" content="查询病人信息">
-        </el-page-header>
+        <!--面包屑导航区-->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+     <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+     <el-breadcrumb-item>住院管理</el-breadcrumb-item>
+     <el-breadcrumb-item>住院病人信息查询</el-breadcrumb-item>
+    </el-breadcrumb>
+        <el-card>
         <el-input v-model="searchGoal"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                   placeholder="请输入搜索信息" ></el-input>
         <el-button icon="el-icon-search" circle @click="frontSearch" style="margin-left:20px;"></el-button>
@@ -91,6 +96,7 @@
           :total="patientList.length">
           </el-pagination>
         </div>
+        </el-card>
     </el-main>
 
     <!-- 修改病人的对话框 -->

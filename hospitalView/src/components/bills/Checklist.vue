@@ -1,6 +1,8 @@
 <template>
-    <div style="width: 100%">
-
+    <!-- 主体部分 -->
+    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+    <!-- 数据表单 -->
+    <el-main>
         <!--面包屑导航区 -->
         <el-breadcrumb separator-class="el-icon-arrow-right" >
         <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
@@ -117,8 +119,9 @@
 <!-- ref是表单的引用 -->
 <!-- prop校验规则 -->
 <!-- model绑定数据 -->
-        
-    </div>
+        </el-main>
+    </el-container>
+    
 </template>
 
 
