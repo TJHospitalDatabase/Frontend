@@ -6,7 +6,8 @@
           <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
           <el-breadcrumb-item>挂号单处理</el-breadcrumb-item>
           </el-breadcrumb>
-    <el-form ref="search11Ref" :model="registrationIDSearch" :rules="searchRules" label-width="0px" class="search_form">
+          <el-card>
+          <el-form ref="search11Ref" :model="registrationIDSearch" :rules="searchRules" label-width="0px" class="search_form">
                 <!-- 搜索框 -->
                     <el-form-item prop="name">
                     <el-input v-model="registrationIDSearch.patienT_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;"></el-input>
@@ -72,7 +73,7 @@
                 :total="patientData.length">
               </el-pagination>
             </div>
-
+          </el-card>
 
         <el-dialog
             title="提示"

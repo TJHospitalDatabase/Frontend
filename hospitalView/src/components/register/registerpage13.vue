@@ -3,11 +3,13 @@
 <el-container>
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">
         <el-main>
+          
           <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
           <el-breadcrumb-item>挂号</el-breadcrumb-item>
           </el-breadcrumb>
+          <el-card>
             <el-form ref="search11Ref" :model="patientNameSearch" :rules="searchRules" label-width="0px" class="search_form">
                         <!-- 搜索框 -->
                             <el-form-item prop="name">
@@ -72,7 +74,7 @@
                 :total="patientData.length">
               </el-pagination>
             </div>
-
+          </el-card>
         </el-main>
 
          <el-dialog

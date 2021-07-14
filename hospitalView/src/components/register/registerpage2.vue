@@ -10,6 +10,7 @@
      <el-breadcrumb-item>挂号信息查询</el-breadcrumb-item>
     </el-breadcrumb>
       </div>
+  <el-card>
   <el-table
     :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
     style="width: 100%;">
@@ -60,6 +61,7 @@
             :total="patientData.length">
           </el-pagination>
         </div>
+  </el-card>
     </el-main>
 </el-container>
 
