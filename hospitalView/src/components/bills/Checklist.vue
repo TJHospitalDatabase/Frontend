@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="width: 100%">
 
         <!--面包屑导航区 -->
         <el-breadcrumb separator-class="el-icon-arrow-right" >
@@ -14,13 +14,15 @@
             <!-- 搜索与添加区域 -->
             <el-row :gutter="20">
                 <el-col :span="8">
-                    <!-- <el-input placeholder="请输入病人姓名" v-model="queryInfo.PATIENT_NAME" clearable 
+                    <!-- 后端搜索 -->
+                    <!-- <el-input placeholder="请输入项目检查单编号" v-model="this.queryInfo.EXAMINATION_LIST_ID" clearable 
                     @clear="getChecklist"> -->
-                    <!-- <el-button slot="append" icon="el-icon-search" @click="getChecklist"></el-button> 后端对接-->
+                    <el-button slot="append" icon="el-icon-search" @click="getChecklist"></el-button>
 
                     <!-- 前端搜索 -->
                     <el-input placeholder="请输入搜索内容" v-model="searchgoal" clearable 
-                    @clear="getChecklist">
+                    @clear="getChecklist"
+                    @keyup.enter.native="frontSearch">
                     <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
 
                     </el-input>  
@@ -45,7 +47,10 @@
                 <el-table-column  label="执行状态" width="150" >
                    <template slot-scope="scope">
                        <!-- 修改 -->
-                       <el-switch v-model="scope.row.state"  active-color="#13ce66" inactive-color="#ff4949" @change="editdialog(scope.row)"></el-switch>
+                        <el-switch v-model="scope.row.state"  active-color="#13ce66" inactive-color="#ff4949" @change="editdialog(scope.row)
+                        ">
+
+                       </el-switch>
                     <!-- <el-button type="primary" icon="el-icon-edit" size="mini" circle @click="showeditdialog(scope.row)" ></el-button> -->
                    </template>
                 </el-table-column> 
@@ -123,8 +128,10 @@ export default {
     methods: {
         // 获取项目检查单列表接口
        async getChecklist(){
-           const{data:res}=await this.$http.get('patient/examination',
-           {params:""})
+           const{data:res}=await this.$http.get('patient/examination/',
+           {
+               params:{EXAMINATION_LIST_ID:this.queryInfo.EXAMINATION_LIST_ID}
+               })
            console.log(res.err_code)
             if (res.err_code != "0000") 
             {this.$message.error('获取检查项目列表失败！')}
@@ -146,6 +153,7 @@ export default {
             RESULT_NAME:this.addsampleform.resulT_NAME,
             RESULT_NUM:this.addsampleform.resulT_NUM,
             RESULT_RANGE:this.addsampleform.resulT_RANGE})
+            console.log(this.addsampleform)
             if (res.data !=true ) {
             this.$message.error('添加样本结果失败！')
             }
@@ -171,11 +179,14 @@ export default {
        
         // 编辑项目检查状态
         async editdialog(editSample){
-            this.emptyFormVisible=true
-            // consloe.log(res.data.STATE)
-            const{data:res}=await this.$http.put('patient/examinationPage/', 
+            if(editSample.state==false){return this.$message.error('更新项目执行情况失败！')}
+            console.log(editSample.state)
+
+            const{data:res}=await this.$http.get('patient/examinationPage', 
+            {params:
             {EXAMINATION_LIST_ID: editSample.examinatioN_LIST_ID,
-            STATE:editSample.state})
+            STATE:editSample.state}})
+
             console.log(res.data)
             if (res.err_code != "0000") 
             {this.$message.error('更新项目执行情况失败！')}
@@ -183,6 +194,7 @@ export default {
             this.editChecklistForm = editSample
             console.log(this.editChecklistForm)
             this.getDatalist(this.editChecklistForm)
+            this.emptyFormVisible=true
         },
         
         // 获得项目检查结果
@@ -192,6 +204,7 @@ export default {
                 params:{EXAMINATION_LIST_ID:editSample.examinatioN_LIST_ID}                          
             })
             // 验证
+
            if (res.err_code != "0000") 
             {this.$message.error('获得项目检查结果失败！')}
             this.datalist=res.data.data
@@ -202,7 +215,16 @@ export default {
         // 监听添加样本弹框的关闭事件
         addsampleclosed(){
             this.$refs.addSampleRef.resetFields()
-        }
+        },
+
+        // 回车搜索
+        //  searchEnterFun (e){
+        //     var keyCode = window.event ? e.keyCode : e.which;
+        //     console.log("回车搜索", keyCode, e);
+        //     if (keyCode == 13) {
+        //     this.frontSearch()
+  
+ 
 
     },
 
@@ -225,12 +247,13 @@ export default {
       return {
         //获取用户列表的参数对象
         queryInfo:{
-            PATIENT_NAME:'',
+            EXAMINATION_LIST_ID:'',
             // 当前的页数
             PAGE_NUM:1,
             // 当前每页显示多少条数据
             PAGE_SIZE:2
         },
+
         // 获取样本结果列表的参数对象
         s_queryInfo:{
             EXAMINATION_LIST_ID:'',
