@@ -12,10 +12,10 @@
     请在下方录入病人信息
   </h3>
   <el-form-item label="姓名" prop="PATIENT_NAME" >
-    <el-input v-model="forme.PATIENT_NAME"></el-input>
+    <el-input v-model="forme.PATIENT_NAME" ></el-input>
   </el-form-item>
-  <el-form-item label="性别" prop="GENDER">
-    <el-select v-model="forme.GENDER" placeholder="请选择性别">
+  <el-form-item label="性别" prop="GENDER" >
+    <el-select v-model="forme.GENDER" placeholder="请选择性别" >
       <el-option label="男" value="M"></el-option>
       <el-option label="女" value="FM"></el-option>
     </el-select>

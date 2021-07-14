@@ -7,26 +7,26 @@
             <el-breadcrumb-item >单目开具</el-breadcrumb-item>
             <el-breadcrumb-item>住院单开具</el-breadcrumb-item>
         </el-breadcrumb>
-
+<el-card>
        <!--  搜索与添加-->
         <div>
             <!-- 搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
-            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%">
+            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%;">
             <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
             </el-input>
             <el-button type="primary" @click="showAddActivity" style="width:10%">添加住院单</el-button>
         </div>
        
             <el-table :data="hospitalCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border stripe>
-                <el-table-column type="index" label="序号" width=100></el-table-column>
-                <el-table-column label="住院单id" prop="recipT_ID" width=140></el-table-column>
-                <el-table-column label="病人id" prop="patienT_ID" width=140></el-table-column>
-                <el-table-column label="医生id" prop="doctoR_ID" width=140></el-table-column>
-                <el-table-column label="入院时间" prop="admissioN_DATE" width=180></el-table-column>
-                <el-table-column label="出院时间" prop="aischargE_DATE" width=180></el-table-column>
-                <el-table-column label="开具时间" prop="sigN_DATE" width=180></el-table-column>
-                <el-table-column label="床位id" prop="beD_ID" width=150></el-table-column>
-                <el-table-column label="临床诊断" prop="diagnosis" width=270></el-table-column>
+                <el-table-column type="index" label="序号" width=80px></el-table-column>
+                <el-table-column label="住院单id" prop="recipT_ID" ></el-table-column>
+                <el-table-column label="病人id" prop="patienT_ID" ></el-table-column>
+                <el-table-column label="医生id" prop="doctoR_ID" ></el-table-column>
+                <el-table-column label="入院时间" prop="admissioN_DATE" ></el-table-column>
+                <el-table-column label="出院时间" prop="aischargE_DATE" ></el-table-column>
+                <el-table-column label="开具时间" prop="sigN_DATE" ></el-table-column>
+                <el-table-column label="床位id" prop="beD_ID" ></el-table-column>
+                <el-table-column label="临床诊断" prop="diagnosis" ></el-table-column>
             </el-table>
 
             <!--        添加活动对话框-->
@@ -78,6 +78,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="activityList.length">
             </el-pagination>
+            </el-card>
         </el-main>
     </el-container>
 </template>

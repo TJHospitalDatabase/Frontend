@@ -8,10 +8,11 @@
             <el-breadcrumb-item>检查单开具</el-breadcrumb-item>
 	    
         </el-breadcrumb>
+        <el-card>
  	<!--  搜索与添加-->
         <div>
             <!-- 搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
-            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%">
+            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%;">
             <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
             </el-input>
             <el-button type="primary" @click="showAddActivity" style="width:10%">添加检查单</el-button>
@@ -21,14 +22,14 @@
             <el-table :data="examineCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" 
                 border style="width: 100%" stripe>
                 <!-- 项目检查单列表区域 -->
-                <el-table-column fixed type="index" label="序号" width="100"></el-table-column>
-                <el-table-column prop="patienT_NAME" label="病人姓名" width="170"></el-table-column>
-                <el-table-column prop="examinatioN_LIST_ID" label="项目检查单ID" width="180"></el-table-column>
-                <el-table-column prop="examinatioN_NAME" label="检查项目名称" width="200"></el-table-column>
-                <el-table-column prop="examinatioN_DATE" label="开具日期" width="190"></el-table-column>
-                <el-table-column prop="patienT_ID" label="病人ID" width="180"></el-table-column>
-                <el-table-column prop="doctoR_NAME" label="医生姓名" width="170"></el-table-column>
-                <el-table-column prop="diagnosis" label="临床诊断" width="200"></el-table-column>    
+                <el-table-column fixed type="index" label="序号" width=80px ></el-table-column>
+                <el-table-column prop="patienT_NAME" label="病人姓名" ></el-table-column>
+                <el-table-column prop="examinatioN_LIST_ID" label="项目检查单ID" ></el-table-column>
+                <el-table-column prop="examinatioN_NAME" label="检查项目名称" ></el-table-column>
+                <el-table-column prop="examinatioN_DATE" label="开具日期" ></el-table-column>
+                <el-table-column prop="patienT_ID" label="病人ID" ></el-table-column>
+                <el-table-column prop="doctoR_NAME" label="医生姓名" ></el-table-column>
+                <el-table-column prop="diagnosis" label="临床诊断" ></el-table-column>    
             </el-table>
 
             <!--        添加活动对话框-->
@@ -84,6 +85,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="activityList.length">
             </el-pagination>
+        </el-card>
         </el-main>
     </el-container>
 </template>

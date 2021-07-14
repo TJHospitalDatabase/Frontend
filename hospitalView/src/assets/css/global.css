@@ -13,12 +13,12 @@ body,
 }
 
 .el-card{
-    margin-bottom: 15px;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.15) !important;
+    /* margin-bottom: 15px; */
+    box-shadow: 0 0px 5px rgba(71, 71, 71, 0.15) !important;
 }
 
 .el-table{
-    margin-top: 15px;
+    /* margin-top: 15px; */
     font-size: 12px;
 }
 
@@ -27,7 +27,8 @@ body,
 }
 
 .el-input{
-    margin-bottom: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: auto;
     margin-right: 40px;
 }
@@ -39,3 +40,28 @@ body,
 .el-button{
     margin-left: 15px;
 }
+
+.el-container{
+    box-shadow: 0 0px 10px rgba(68, 68, 68, 0.15)
+}
+
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+   will-change: transform;
+  transition: all 500ms;
+  position: absolute;
+}.slide-right-enter {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+ }.slide-right-leave-active {
+   opacity: 0;
+   transform: translate3d(100%, 0, 0);
+ }.slide-left-enter {
+  opacity: 0;
+   transform: translate3d(100%, 0, 0);
+ }.slide-left-leave-active {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+ }

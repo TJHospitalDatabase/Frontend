@@ -9,11 +9,11 @@
             <el-breadcrumb-item >单目管理</el-breadcrumb-item>
             <el-breadcrumb-item>处方单开具</el-breadcrumb-item>
         </el-breadcrumb>
-
+<el-card>
        <!--  搜索与添加-->
         <div>
             <!-- 搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
-            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%">
+            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%;">
             <el-button slot="append" icon="el-icon-search" @click="getActivityList"></el-button>
             </el-input>
             <el-button type="primary" @click="showAddActivity" style="width:10%">添加处方单</el-button>
@@ -21,13 +21,24 @@
        
             <!--            活动列表 只展示一些活动信息,详细信息可在详情查看-->
             <el-table :data="prescriptionCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border stripe>
-                <el-table-column type="index"  label="序号" width=100></el-table-column>
-                <el-table-column label="处方单id" prop="prescriptioN_ID" width=240></el-table-column>
-                <el-table-column label="病人id" prop="patienT_ID" width=240></el-table-column>
-                <el-table-column label="医生id" prop="doctoR_ID" width=240></el-table-column>
-                <el-table-column label="开具时间" prop="sigN_DATE" width=280></el-table-column>
-                <el-table-column label="临床诊断" prop="diagnosis" width=380></el-table-column>
+                <el-table-column type="index"  label="序号" width=80></el-table-column>
+                <el-table-column label="处方单id" prop="prescriptioN_ID" ></el-table-column>
+                <el-table-column label="病人id" prop="patienT_ID" ></el-table-column>
+                <el-table-column label="医生id" prop="doctoR_ID" ></el-table-column>
+                <el-table-column label="开具时间" prop="sigN_DATE" ></el-table-column>
+                <el-table-column label="临床诊断" prop="diagnosis" ></el-table-column>
             </el-table>
+                <!--            分页区域-->
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[ 2, 5, 10]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="activityList.length">
+            </el-pagination>
+</el-card>
 </el-main>
             <!--        添加活动对话框-->
             <el-dialog title="添加处方单" :visible.sync="addDialogVisible"
@@ -56,16 +67,7 @@
             </span>
             </el-dialog>
 			<br>
-            <!--            分页区域-->
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="currentPage"
-                    :page-sizes="[ 2, 5, 10]"
-                    :page-size="pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="activityList.length">
-            </el-pagination>
+        
     </el-container>
     </el-container>
 </template>

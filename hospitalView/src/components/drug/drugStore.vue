@@ -12,6 +12,12 @@
 
       <el-main style="height:100%">
         <el-card>
+          <template slot="header" >
+              <el-input
+                v-model="searchDrugClassID"
+                size="mini"
+                placeholder="输入药品类别码搜索"/>
+            </template>
         <el-table
           :data="drugClassCurData"
           style="width: 100%"
@@ -19,39 +25,31 @@
           height='100%'>
           <el-table-column
             label="药品类别码"
-            width="180"
+            
             prop="drugClassID">
           </el-table-column>
           <el-table-column
             label="药品名称"
-            width="180"
+           width=300
             prop="drugName">
           </el-table-column>
           <el-table-column
             label="药品库存"
-            width="180"
+            
             prop="inventory">
           </el-table-column>
           <el-table-column
             label="价格"
-            width="130">
+            >
             <template slot-scope="scope">
               <el-input  placeholder="请输入内容" v-show="scope.row.show" v-model="scope.row.price"></el-input>
               <span v-show="!scope.row.show">{{scope.row.price}}</span>
             </template>
           </el-table-column>
-          <el-table-column>
-          </el-table-column>
           
           <el-table-column
             align="right"
-            width="350">
-            <template slot="header" >
-              <el-input
-                v-model="searchDrugClassID"
-                size="mini"
-                placeholder="输入药品类别码搜索"/>
-            </template>
+            >
             <template slot-scope="scope">
               <el-button
                 type="primary"
