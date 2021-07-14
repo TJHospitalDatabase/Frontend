@@ -2,9 +2,9 @@
     <div style="width: 100%">
         <!--面包屑导航区 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/checklisthome' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>病人相关信息查询</el-breadcrumb-item>
-        <el-breadcrumb-item>项目检查结果单</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>单目管理</el-breadcrumb-item>
+        <el-breadcrumb-item>检查单结果管理</el-breadcrumb-item>
         </el-breadcrumb>
 
         <!-- 卡片区域 -->
@@ -22,18 +22,18 @@
                 </el-col>
             </el-row>
             <!-- 检查单表格区域 -->
-            <el-table :data="checkresultlist_current" border style="width: 100%" stripe>
+            <el-table :data="checkresultlist_current" style="width: 100%" stripe>
 
                 <!-- 表头区域 -->
                 <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
-                <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" width="120"></el-table-column>
+                <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" width="100"></el-table-column>
                 <el-table-column prop="examinatioN_NAME" label="检查项目名称" width="150"></el-table-column>
-                 <el-table-column prop="examinatioN_DATE" label="检查日期" width="120"></el-table-column>
-                <el-table-column prop="doctoR_NAME" label="医生姓名" width="120"></el-table-column>
+                 <el-table-column prop="examinatioN_DATE" label="检查日期" width="200"></el-table-column>
+                <el-table-column prop="doctoR_NAME" label="医生姓名" width="100"></el-table-column>
                 <el-table-column prop="patienT_ID" label="病人ID" width="100"></el-table-column>
-                <el-table-column prop="patienT_NAME" label="病人姓名" width="120"></el-table-column> 
-                 <el-table-column prop="diagnosis" label="临床诊断" width="120"></el-table-column>
-                <el-table-column prop="depT_NAME" label="科室" width="120"></el-table-column>
+                <el-table-column prop="patienT_NAME" label="病人姓名" width="100"></el-table-column> 
+                 <el-table-column prop="diagnosis" label="临床诊断" width="150"></el-table-column>
+                <el-table-column prop="depT_NAME" label="科室" width="150"></el-table-column>
 
                 <!-- 项目检查单按钮区域 -->
                 <el-table-column  label="项目检查结果" width="150">
