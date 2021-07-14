@@ -70,7 +70,7 @@
         </el-aside>
     <!-- 数据表单 -->
             <el-main >
-              <el-container  style="height: 500px; height:100%; border: 1px solid #eee">
+              <el-container  style="height: 500px; height:100%; width:100%; border: 1px solid #eee">
             <!--路由占位符-->
             <router-view></router-view>
               </el-container>
