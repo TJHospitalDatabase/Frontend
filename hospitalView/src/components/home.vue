@@ -43,13 +43,13 @@
             </el-submenu>
 
             <el-submenu index="2" v-if="(tokenStr-0)&8">
-                <template slot="title" v-if="(tokenStr-0)&8"><i class="el-icon-info"></i>药品管理</template>
+                <template slot="title" v-if="(tokenStr-0)&8"><i class="el-icon-s-cooperation"></i>药品管理</template>
                 <el-menu-item index :route='{path:"drugStore", query:{id:id,name:name}}' v-if="(tokenStr-0)&8">药品库管理</el-menu-item>
                 <el-menu-item index :route='{path:"prescribe", query:{id:id,name:name}}' v-if="(tokenStr-0)&8">开药查询</el-menu-item>
             </el-submenu>
 
             <el-submenu index="3" v-if="(tokenStr-0)&20">
-                <template slot="title" v-if="(tokenStr-0)&20"><i class="el-icon-info"></i>单目管理</template>
+                <template slot="title" v-if="(tokenStr-0)&20"><i class="el-icon-s-order"></i>单目管理</template>
                 <el-menu-item index :route='{path:"Checklist", query:{id:id,name:name}}' v-if="(tokenStr-0)&16">检查单管理</el-menu-item>
                 <el-menu-item index :route='{path:"Checklist_result", query:{id:id,name:name}}' v-if="(tokenStr-0)&16">检查单结果管理</el-menu-item>
                 <el-menu-item index :route='{path:"prescription", query:{id:id,name:name}}' v-if="(tokenStr-0)&4">处方单开具</el-menu-item>
@@ -58,7 +58,7 @@
             </el-submenu>
 
             <el-submenu index="4" v-if="(tokenStr-0)&32">
-                <template slot="title" v-if="(tokenStr-0)&32"><i class="el-icon-info"></i>住院管理</template>
+                <template slot="title" v-if="(tokenStr-0)&32"><i class="el-icon-s-home"></i>住院管理</template>
                 <el-menu-item index :route='{path:"searchPatient", query:{id:id,name:name}}' v-if="(tokenStr-0)&32">住院病人信息查询</el-menu-item>
                 <!-- <el-menu-item index="1-1" >通过姓名查询</el-menu-item>
                 <el-menu-item index="1-2" >通过房间号查询</el-menu-item>
