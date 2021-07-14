@@ -22,9 +22,10 @@
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">
     <!-- 侧边栏 -->
         <el-aside width="200px" >
-            <el-menu router  >
-            <el-submenu index="1" v-if="(tokenStr-0)&7">
-                <template slot="title" v-if="(tokenStr-0)&7"><i class="el-icon-info"></i>门诊管理</template>
+            <el-menu router >
+
+            <el-submenu index="1">
+                <template slot="title"><i class="el-icon-info"></i>门诊管理</template>
                 <el-menu-item-group>
                     <template slot="title" v-if="(tokenStr-0)&2">挂号信息</template>
                     <el-menu-item index="registerpage11" v-if="(tokenStr-0)&2">病人信息录入</el-menu-item>
@@ -69,7 +70,7 @@
         </el-aside>
     <!-- 数据表单 -->
             <el-main >
-              <el-container  style="height: 500px; height:100%; border: 1px solid #eee">
+              <el-container  style="height: 500px; height:100%; width:100%; border: 1px solid #eee">
             <!--路由占位符-->
             <router-view></router-view>
               </el-container>
