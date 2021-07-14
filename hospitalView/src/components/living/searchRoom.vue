@@ -208,6 +208,7 @@
     methods:{
        // 模糊搜索
       frontSearch () {
+        this.getRoomList()
         const searchGoal = this.searchGoal
         if (searchGoal) {
           // filter() 方法过滤

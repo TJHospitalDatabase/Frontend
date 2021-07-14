@@ -195,6 +195,7 @@
     methods:{
         // 模糊搜索
         frontSearch () {
+          this.getPatientList()
           const searchGoal = this.searchGoal
           if (searchGoal) {
             // filter() 方法过滤
