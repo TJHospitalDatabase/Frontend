@@ -2,13 +2,7 @@
 <template>
 <el-container style="height: 500px; height:100%; border: 1px solid #eee">
     <el-main>
-    <el-form ref="search11Ref" :model="departmentIDSearch" :rules="searchRules" label-width="0px" class="search_form">
-                <!-- 搜索框 -->
-                    <el-form-item prop="name">
-                    <el-input v-model="departmentIDSearch.DEPT_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;"></el-input>
-                    <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>          
-                    </el-form-item>
-                </el-form>
+    <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>     
   <el-table
     :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
     style="width: 100%">
@@ -98,7 +92,7 @@ const axios = require('axios');
     },
     methods: {
         async search(){
-          const { data: res } =await this.$http.get('registration', { params: { DEPT_NAME: this.departmentIDSearch.DEPT_NAME}})
+          const { data: res } =await this.$http.get('registration', { params: { DEPT_NAME: this.$route.query.dept_name}})
             console.log(res.data)
             // 将data属性重命名为res
             this.patientData=res.data
@@ -121,7 +115,7 @@ const axios = require('axios');
           const { data: res } = await this.$http.post('registration',
                 {
                   REGISTRATION_ID: this.temp.registratioN_ID,
-                  DOCTOR_ID: "ls"
+                  DOCTOR_ID: this.$route.query.id
                   }
                 )
           console.log(res.data[0])
