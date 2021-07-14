@@ -1,6 +1,15 @@
 <template>
 <!-- 药品库管理 -->
+
   <el-container style="height: 95%; border: 1px solid #eee">   
+    
+    <!--面包屑导航区 -->
+        <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-top:30px;margin-left:20px;">
+        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>单目管理</el-breadcrumb-item>
+        <el-breadcrumb-item>项目检查结果单</el-breadcrumb-item>
+        </el-breadcrumb>
+
       <el-main style="height:100%">
         <el-table
           :data="drugClassCurData"
@@ -36,7 +45,7 @@
           <el-table-column
             align="right"
             width="350">
-            <template slot="header" slot-scope="scope" >
+            <template slot="header" >
               <el-input
                 v-model="searchDrugClassID"
                 size="mini"
@@ -75,7 +84,7 @@
             <el-table-column
             align="right"
             width='250'>
-            <template slot="header" slot-scope="scope">
+            <template slot="header" >
               <el-input
                 v-model="searchDrugID"
                 size="mini"

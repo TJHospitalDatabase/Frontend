@@ -60,7 +60,7 @@
             <el-submenu index="4" v-if="(tokenStr-0)&32">
                 <template slot="title" v-if="(tokenStr-0)&32"><i class="el-icon-s-home"></i>住院管理</template>
                 <el-menu-item index="searchPatient" v-if="(tokenStr-0)&32">住院病人信息查询</el-menu-item>
-                <el-menu-item index="searchRoom" v-if="(tokenStr-0)&32">病房信息查询</el-menu-item>
+                <el-menu-item index="searchRoom" v-if="(tokenStr-0)&32">病床信息查询</el-menu-item>
                 <el-menu-item index="nurse_on_duty" v-if="(tokenStr-0)&32">住院护士值班信息</el-menu-item>
             </el-submenu>
 

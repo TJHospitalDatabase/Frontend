@@ -2,9 +2,9 @@
     <div>
         <!--        面包屑-->
         <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/' }">单目管理</el-breadcrumb-item>
-            <el-breadcrumb-item>检查单管理</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item >单目管理</el-breadcrumb-item>
+            <el-breadcrumb-item>检查单开具</el-breadcrumb-item>
         </el-breadcrumb>
 
         <el-divider></el-divider>

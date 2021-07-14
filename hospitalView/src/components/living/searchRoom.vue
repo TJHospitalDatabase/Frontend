@@ -5,8 +5,12 @@
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">
     <!-- 数据表单 -->
             <el-main>
-                <el-page-header @back="goBack" content="查询病床信息">
-                </el-page-header>
+              <!--面包屑导航区-->
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>住院管理</el-breadcrumb-item>
+            <el-breadcrumb-item>病床信息查询</el-breadcrumb-item>
+            </el-breadcrumb>
 
             <el-input v-model="searchGoal"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入搜索信息" ></el-input>

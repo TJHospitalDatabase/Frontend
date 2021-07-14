@@ -2,8 +2,8 @@
     <div style="width: 100%">
         <!--面包屑导航区 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/checklisthome' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>病人相关信息查询</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>单目管理</el-breadcrumb-item>
         <el-breadcrumb-item>项目检查结果单</el-breadcrumb-item>
         </el-breadcrumb>
 

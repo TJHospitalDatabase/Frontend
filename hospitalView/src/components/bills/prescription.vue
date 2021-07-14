@@ -1,10 +1,14 @@
 <template>
-    <div>
+    <el-container>
+    <!-- 主体部分 -->
+    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+    <!-- 数据表单 -->
+            <el-main>
         <!--        面包屑-->
         <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/' }">单目管理</el-breadcrumb-item>
-            <el-breadcrumb-item>处方单管理</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item >单目管理</el-breadcrumb-item>
+            <el-breadcrumb-item>处方单开具</el-breadcrumb-item>
         </el-breadcrumb>
 
         <el-divider></el-divider>
@@ -30,7 +34,7 @@
                 <el-table-column label="开具时间" prop="sigN_DATE" width=280></el-table-column>
                 <el-table-column label="临床诊断" prop="diagnosis" width=380></el-table-column>
             </el-table>
-
+</el-main>
             <!--        添加活动对话框-->
             <el-dialog title="添加处方单" :visible.sync="addDialogVisible"
                        width="630px" top="60px" center>
@@ -68,7 +72,8 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="activityList.length">
             </el-pagination>
-    </div>
+    </el-container>
+    </el-container>
 </template>
 
 <script>

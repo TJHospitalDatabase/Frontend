@@ -3,7 +3,15 @@
   <el-container style="height: 942px; border: 1px solid #eee">
     
     <el-container>
+      
       <el-main>
+        <!--面包屑导航区 -->
+        <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-top:10px;margin-left:10px;">
+        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>单目管理</el-breadcrumb-item>
+        <el-breadcrumb-item>项目检查结果单</el-breadcrumb-item>
+        </el-breadcrumb>
+
         <el-container 
         style="height: 450px; 
           width: 750px; 
@@ -17,6 +25,8 @@
           class="demo-ruleForm"
           style="margin: 120px 150px"
           >
+
+
             <el-form-item label="病人ID" prop="patientID">
               <el-input v-model="queryForm.patientID" ></el-input>
             </el-form-item>
