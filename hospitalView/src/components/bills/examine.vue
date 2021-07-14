@@ -7,21 +7,17 @@
             <el-breadcrumb-item >单目管理</el-breadcrumb-item>
             <el-breadcrumb-item>检查单开具</el-breadcrumb-item>
         </el-breadcrumb>
+        
+            <!--  搜索与添加-->
+        <div>
+            <!-- 搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
+            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%">
+            <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
+            </el-input>
+            <el-button type="primary" @click="showAddActivity" style="width:10%">添加检查单</el-button>
+        </div>
 
-        <el-divider></el-divider>
-        <!--        卡片-->
-            <!--            搜索与添加-->
-            <el-row :gutter="1000">
-                <el-col :span="12">
-                    <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
-                    <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query">
-                        <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
-                    </el-input>
-                </el-col>
-                <el-col :span="4">
-                    <el-button type="primary" @click="showAddActivity">添加检查单</el-button>
-                </el-col>
-            </el-row>
+
             <!--            活动列表 只展示一些活动信息,详细信息可在详情查看-->
             <el-table :data="examineCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" 
                 border style="width: 100%" stripe>

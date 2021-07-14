@@ -10,20 +10,16 @@
             <el-breadcrumb-item>处方单开具</el-breadcrumb-item>
         </el-breadcrumb>
 
-        <el-divider></el-divider>
-        <!--        卡片-->
-            <!--            搜索与添加-->
-            <el-row :gutter="1000">
-                <el-col :span="12">
-                    <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
-                    <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query">
-                        <el-button slot="append" icon="el-icon-search" @click="getActivityList"></el-button>
-                    </el-input>
-                </el-col>
-                <el-col :span="4">
-                    <el-button type="primary" @click="showAddActivity">添加处方单</el-button>
-                </el-col>
-            </el-row>
+      
+    <!--  搜索与添加-->
+        <div>
+            <!-- 搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
+            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%">
+            <el-button slot="append" icon="el-icon-search" @click="getActivityList"></el-button>
+            </el-input>
+            <el-button type="primary" @click="showAddActivity" style="width:10%">添加处方单</el-button>
+        </div>
+
             <!--            活动列表 只展示一些活动信息,详细信息可在详情查看-->
             <el-table :data="prescriptionCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border stripe>
                 <el-table-column type="index"  label="序号" width=100></el-table-column>
@@ -33,7 +29,7 @@
                 <el-table-column label="开具时间" prop="sigN_DATE" width=280></el-table-column>
                 <el-table-column label="临床诊断" prop="diagnosis" width=380></el-table-column>
             </el-table>
-</el-main>
+
             <!--        添加活动对话框-->
             <el-dialog title="添加处方单" :visible.sync="addDialogVisible"
                        width="630px" top="60px" center>
@@ -71,6 +67,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="activityList.length">
             </el-pagination>
+            </el-main>
     </el-container>
     </el-container>
 </template>
