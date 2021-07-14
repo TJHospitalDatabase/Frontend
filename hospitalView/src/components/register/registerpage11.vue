@@ -6,6 +6,7 @@
      <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
      <el-breadcrumb-item>病人信息录入</el-breadcrumb-item>
     </el-breadcrumb>
+<el-card style = "width:50% !important">
 <el-form ref="ruleForm" :rules="rules" :model="forme" id="forme" label-width="80px">
   <h3>
     请在下方录入病人信息
@@ -26,10 +27,10 @@
     <el-input v-model="forme.PHONE"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="submit" @click="onSubmit">提交</el-button>
+    <el-button type="primary" @click="onSubmit">提交</el-button>
   </el-form-item>
-
 </el-form>
+</el-card>
   </el-main>
 </el-container>
 </template>
