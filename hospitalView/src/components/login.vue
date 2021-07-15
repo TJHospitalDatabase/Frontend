@@ -104,10 +104,6 @@ import axios from 'axios'
 			},
 			login() {
 				const self = this;
-				/*if(login_existed==true)
-				login_existed=false;
-				if(passwordError==true)
-				passwordError=false;*/
 				if (self.form.user_id != "" && self.form.userpwd != "") {
                     axios.get('/logIn', {params:{user_id: self.form.user_id,
                         password: self.form.userpwd,
