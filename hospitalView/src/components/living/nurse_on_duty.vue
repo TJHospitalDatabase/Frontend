@@ -16,23 +16,28 @@
         <!--搜索与添加区域-->
         <el-row :gutter="20">
           <el-col :span="7">
-            <el-input placeholder="请输入科室"
-            v-model="queryInfo.DEPT_NAME" clearable @clear="getNurseList">
-            <el-button slot="append" icon="el-icon-search" @click="getNurseList"></el-button>
-            </el-input>
+
+          <el-select v-model="queryInfo.DEPT_NAME" filterable placeholder="请选择科室" @change="getNurseList"> 
+              <el-option
+              v-for="item in deptlist"
+              :key="item"
+              :label="item"
+              :value="item">
+              </el-option>
+          </el-select> 
+          
           </el-col>
         </el-row >
-        <el-row :gutter="20">
-          <el-col :span="7">
-            <el-input placeholder="请输入护士ID"
+        
+      
+            <el-input placeholder="请输入护士ID" style="width:30%;"
             v-model="queryInfo.NURSE_ID" clearable @clear="getNurseList">
             <el-button slot="append" icon="el-icon-search" @click="getNurseList"></el-button>
             </el-input>
-          </el-col>
-          <el-col :span="4">
+        
               <el-button type="primary" @click="addDialogVisible=true">添加值班护士</el-button>
-          </el-col>
-        </el-row>
+     
+        
 
         <!--值班护士信息区域-->
         <el-table
@@ -93,13 +98,12 @@
             :page-sizes="[2,5,10,20]" 
             :page-size="pageSize" 
             layout="total, sizes, prev, pager, next, jumper" 
-            :total="total">
+            :total="nurselist.length">
             </el-pagination>
         </div>
         </el-card>
     </el-main>
         <!--添加值班护士的对话框-->
-        <!--！！！！待进一步修正！！！！-->
         <el-dialog
           title="添加值班护士"
           :visible.sync="addDialogVisible"
@@ -160,8 +164,10 @@ export default {
         NURSE_ID:'',
         
       },
-      total:0,
+      // 护士信息表单数据
       nurselist: [],
+      //科室选择器获取数据来源
+      deptlist:[],
       department:'',
       // 控制添加值班护士对话框的显示与隐藏
       addDialogVisible: false,
@@ -179,7 +185,7 @@ export default {
         ],
         bedNum: [
           { required: true, message: '请输入病床号', trigger: 'blur' },
-          { validator: checkBedID,type:'number',min:1, max:4,message: '长度在 1 到 4 个字符', trigger: 'blur' }
+          { validator: checkBedID,type:'number',min:4, max:4,message: '长度为 4 个字符', trigger: 'blur' }
         ]
 
       }
@@ -187,6 +193,7 @@ export default {
   },
   created () {
     this.getNurseList()
+     this.getDeptList()
   },
 
   methods: {
@@ -197,22 +204,32 @@ export default {
       console.log(this.nurselist);
       this.$forceUpdate()
     },
+    //获取科室列表
+    async getDeptList(){
+    const {data: res } = await this.$http.get('findDept')
+    
+    if(res.err_code !== "0000"){
+      return this.$message.error('获取科室信息失败！')
+    }
+    console.log(res.data)
+    this.deptlist = res.data
+    console.log(this.deptlist)
+    },
+   // 获取护士列表
     async getNurseList () {
     const {data: res } = await this.$http.get('onDate',{ params: this.queryInfo})
     
     if(res.err_code !== "0000"){
       return this.$message.error('获取值班护士信息失败！')
     }
-    this.$message.success('获取值班护士信息成功！')
+    //this.$message.success('获取值班护士信息成功！')
     console.log(res.data)
-      this.nurselist = res.data.data
+      this.nurselist = res.data
       //编辑操作按钮操作值
      for(let  i=0;i<this.nurselist.length;i++){
       this.nurselist[i].edi=false;
      }
      console.log(this.nurselist)
-    // 为总数据条数赋值
-     this.total = res.data.totaL_PAGE
     },
 
     //每页条数改变时触发 选择一页显示多少行
