@@ -38,7 +38,7 @@
                 <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
                 <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" ></el-table-column>
                 <el-table-column prop="examinatioN_NAME" label="检查项目名称" ></el-table-column>
-                <el-table-column prop="examinatioN_DATE" label="检查日期" width="150" ></el-table-column>  
+                <el-table-column prop="examinatioN_DATE" label="检查日期" width="200" ></el-table-column>  
                 <el-table-column prop="doctoR_NAME" label="医生姓名" ></el-table-column>
                 <el-table-column prop="patienT_ID" label="病人ID" ></el-table-column>
                 <el-table-column prop="patienT_NAME" label="病人姓名" ></el-table-column>                  
