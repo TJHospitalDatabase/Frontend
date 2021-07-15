@@ -167,6 +167,9 @@ const axios = require('axios');
         },
       };
     },
+    created(){
+        this.search()
+    },
     methods: {
       // 监听修改对话框的关闭事件
         editDialogClosed () {
