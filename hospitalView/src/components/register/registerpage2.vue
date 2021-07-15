@@ -132,7 +132,7 @@ const axios = require('axios');
           console.log(res)
           alert("选中操作成功")
           // 这里是返回的信息
-          window.location.reload()
+          this.search()
         }
           },
         }
