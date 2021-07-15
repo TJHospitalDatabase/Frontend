@@ -16,13 +16,13 @@
               <!-- 以下为具体内容 -->
               <div style="margin-left:10px">
                 <div class="avatar_box" style="float:left;width:75px;height:75px" >
-                  <img class="avatar_img" src="../assets/avatar.jpg" >
+                  <img class="avatar_img" src="../assets/avatar.jpg">                
                 </div>
 
                 <div  style="width:400px;  margin-left:150px; color: rgb(65, 86, 145);">
                     <div style="margin-bottom:10px;">用户名: {{this.$route.query.name}}</div>
                     <div style="margin-bottom:10px;">工号：{{this.$route.query.id}}</div>
-                    <!-- <div style="margin-bottom:10px;">所属科室： 神经外科</div> -->
+                    <div style="margin-bottom:10px;">所属科室：{{this.$route.query.dept_name}}</div>
                     <div style="margin-bottom:10px;">当前时间： {{this.getCurrentTime()}}</div>
                 </div>
               </div>

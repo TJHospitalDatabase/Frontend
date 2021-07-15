@@ -110,8 +110,8 @@ import axios from 'axios'
 							case "0000": 
 							{
                                 alert("登录成功！");
-								window.sessionStorage.setItem("token",role)
-								self.$router.push({path:'/welcome', query:{id:res.data.data.user_id}});
+								window.sessionStorage.setItem("token",res.data.data.role);
+								self.$router.push({path:'/welcome', query:{id:res.data.data.useR_ID,name:self.form.user_id,dept_name:res.data.data.depT_NAME}});
 								break;
 							}								
 							default:

@@ -11,7 +11,7 @@
 
 <script>
 
-  (function(){window.sessionStorage.setItem("token", '63');})()
+  //(function(){window.sessionStorage.setItem("token", '63');})()
 
 </script>
 
