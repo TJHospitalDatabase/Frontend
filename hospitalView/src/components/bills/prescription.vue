@@ -1,64 +1,63 @@
 <template>
-    <el-card style="height:95%">
-        <!--        卡片-->
-            <!--            搜索与添加-->
-            <el-row :gutter="100">
-                <el-col :span="12">
-                    <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
-                    <el-input clearable @clear="getActivityList" placeholder="请输入处方单id" v-model="search">
-                        <el-button slot="append" icon="el-icon-search" @click="getActivityList"></el-button>
-                    </el-input>
-                </el-col>
-                <el-col :span="4">
-                    <el-button type="primary" @click="showAddActivity">添加处方单</el-button>
-                </el-col>
-            </el-row>
-            <!--            活动列表 只展示一些活动信息,详细信息可在详情查看-->
-            <el-table :data="prescriptionCurData" border stripe>
-                <el-table-column type="index"  label="序号" width=100></el-table-column>
-                <el-table-column label="处方单id" prop="prescriptioN_ID" width=240></el-table-column>
-                <el-table-column label="病人id" prop="patienT_ID" width=240></el-table-column>
-                <el-table-column label="医生id" prop="doctoR_ID" width=240></el-table-column>
-                <el-table-column label="开具时间" prop="sigN_DATE" width=280></el-table-column>
-                <el-table-column label="临床诊断" prop="diagnosis" width=380></el-table-column>
-            </el-table>
-            <!--        添加活动对话框-->
-            <el-dialog title="添加处方单" :visible.sync="addDialogVisible"
-                       width="630px" top="60px" center>
-                <!--            内容主体区域 放置一个表单-->
-                <!--绑定到addForm中，绑定验证规则对象addFormRules 表单校验项的引用为addFormRef-->
-                <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="150px"
-                         style="height:270px">
-                    <el-form-item label="病人id:" prop="patienT_ID">
-                        <!--v-model双向绑定-->
-                        <el-input style="width: 82%;" v-model="addForm.patienT_ID"></el-input>
-                    </el-form-item>
-                    <el-form-item label="医生id:" prop="doctoR_ID">
-                        <!--v-model双向绑定-->
-                        <el-input style="width: 82%;" v-model="addForm.doctoR_ID"></el-input>
-                    </el-form-item>
-                    <el-form-item label="临床诊断:" prop="diagnosis">
-                        <el-input style="width: 82%;" type="textarea"
-                                  :autosize="{ minRows: 3, maxRows: 4}" v-model="addForm.diagnosis"></el-input>
-                    </el-form-item>
-                </el-form>
-                <!--            底部区域-->
-                <span slot="footer" class="dialog-footer">
-                <el-button style="margin-right:20px" @click="cancelAdd">取 消</el-button>
-                <el-button style="margin-left:20px" type="primary" @click="addActivity">确 定</el-button>
-            </span>
-            </el-dialog>
-			<br>
-            <!--            分页区域-->
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="currentPage"
-                    :page-sizes="[ 2, 5, 10]"
-                    :page-size.sync="pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="prescriptionSearchData.length">
-            </el-pagination>
+    <el-card>
+        <!--搜索与添加-->
+        <el-row :gutter="100">
+            <el-col :span="8">
+                <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
+                <el-input clearable @clear="getActivityList" placeholder="请输入处方单id" v-model="search">
+                    <el-button slot="append" icon="el-icon-search" @click="getActivityList"></el-button>
+                </el-input>
+            </el-col>
+            <el-col :span="4">
+                <el-button type="primary" @click="showAddActivity" label="right">添加处方单</el-button>
+            </el-col>
+        </el-row>
+        <!--活动列表 只展示一些活动信息,详细信息可在详情查看-->
+        <el-table :data="prescriptionCurData" border stripe>
+            <el-table-column type="index"  label="序号" width=100></el-table-column>
+            <el-table-column label="处方单id" prop="prescriptioN_ID" width=240></el-table-column>
+            <el-table-column label="病人id" prop="patienT_ID" width=240></el-table-column>
+            <el-table-column label="医生id" prop="doctoR_ID" width=240></el-table-column>
+            <el-table-column label="开具时间" prop="sigN_DATE" width=280></el-table-column>
+            <el-table-column label="临床诊断" prop="diagnosis" width=380></el-table-column>
+        </el-table>
+        <!--添加活动对话框-->
+        <el-dialog title="添加处方单" :visible.sync="addDialogVisible"
+                    width="630px" top="60px" center>
+            <!--            内容主体区域 放置一个表单-->
+            <!--绑定到addForm中，绑定验证规则对象addFormRules 表单校验项的引用为addFormRef-->
+            <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="150px"
+                        style="height:270px">
+                <el-form-item label="病人id:" prop="patienT_ID">
+                    <!--v-model双向绑定-->
+                    <el-input style="width: 82%;" v-model="addForm.patienT_ID"></el-input>
+                </el-form-item>
+                <el-form-item label="医生id:" prop="doctoR_ID">
+                    <!--v-model双向绑定-->
+                    <el-input style="width: 82%;" v-model="addForm.doctoR_ID"></el-input>
+                </el-form-item>
+                <el-form-item label="临床诊断:" prop="diagnosis">
+                    <el-input style="width: 82%;" type="textarea"
+                                :autosize="{ minRows: 3, maxRows: 4}" v-model="addForm.diagnosis"></el-input>
+                </el-form-item>
+            </el-form>
+            <!--            底部区域-->
+            <span slot="footer" class="dialog-footer">
+            <el-button style="margin-right:20px" @click="cancelAdd">取 消</el-button>
+            <el-button style="margin-left:20px" type="primary" @click="addActivity">确 定</el-button>
+        </span>
+        </el-dialog>
+        <br>
+        <!--分页区域-->
+        <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-sizes="[ 2, 5, 10]"
+                :page-size.sync="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="prescriptionSearchData.length">
+        </el-pagination> 
     </el-card>
 </template>
 
