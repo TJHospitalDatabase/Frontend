@@ -223,8 +223,8 @@
                         //隐藏添加活动对话框
                         this.addDialogVisible = false;
                         this.getActivityList();
-                        if (result.err_code !== "0000") return this.$message.error('增加失败！')           
-                        else this.$message.info("添加检查单成功!");
+                        //if (result.err_code !== "0000") return this.$message.error('增加失败！')           
+                         this.$message.info("添加检查单成功!");
                     }
                 );
             },

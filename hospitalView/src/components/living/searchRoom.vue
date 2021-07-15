@@ -45,7 +45,7 @@
       </el-form>
           <div class="demo-drawer__footer" style="margin-left:20px;">
             <el-button @click="cancelForm">取 消</el-button>
-            <el-button type="primary" @click="search"  :loading="loading">提 交</el-button>
+            <el-button type="primary" @click="$refs.drawer.closeDrawer()"  :loading="loading">提 交</el-button>
           </div>
         </div>
     </el-drawer>   
@@ -239,7 +239,7 @@
               this.$message.warning('请填写正确的信息！')
               return}
             this.getRoomList()
-            this.$refs.drawer.closeDrawer()
+            
            })              
         },
 
@@ -307,6 +307,7 @@
           }
           this.$confirm('确定要提交搜索信息吗？')
             .then(_ => {
+             // this.search();
               this.loading = true;
               this.timer = setTimeout(() => {
                 done();
