@@ -157,7 +157,7 @@ export default {
             // 当前的页数
             PAGE_NUM:1,
             // 当前每页显示多少条数据
-            PAGE_SIZE:2
+            PAGE_SIZE:6
         },
         // 获取样本结果列表的参数对象
          s_queryInfo:{
@@ -165,7 +165,7 @@ export default {
             // 当前的页数
             PAGE_NUM:1,
             // 当前每页显示多少条数据
-            PAGE_SIZE:2
+            PAGE_SIZE:6
         },
         // 控制样本结果对话框的显示与隐藏
         checkresultlistdialogVisible:false,
