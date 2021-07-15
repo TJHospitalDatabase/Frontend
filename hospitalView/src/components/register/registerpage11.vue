@@ -1,12 +1,4 @@
 <template>
-<el-container>
-  <el-main>
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-     <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
-     <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
-     <el-breadcrumb-item>病人信息录入</el-breadcrumb-item>
-    </el-breadcrumb>
-
 <div>
     <el-card style="float:left; width:45%;">
     <el-form ref="ruleForm" :rules="rules" :model="forme" id="forme" label-width="80px">
@@ -18,8 +10,8 @@
       </el-form-item>
       <el-form-item label="性别" prop="GENDER" >
         <el-select v-model="forme.GENDER" placeholder="请选择性别" >
-          <el-option label="男" value="M"></el-option>
-          <el-option label="女" value="FM"></el-option>
+          <el-option label="男" value="男"></el-option>
+          <el-option label="女" value="女"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item  label="年龄" prop="AGE">
@@ -37,9 +29,6 @@
     <img src="../../assets/paper.png" style="float:right; width:40%; margin:50px; margin-right:100px;" />
 
 </div>
-
-  </el-main>
-</el-container>
 </template>
 
 

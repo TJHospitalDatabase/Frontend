@@ -1,103 +1,90 @@
 <template>
-<!-- 查询病床信息 -->
-<el-container>
-    <!-- 主体部分 -->
-    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <!-- 数据表单 -->
-            <el-main>
-              <!--面包屑导航区-->
-            <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>住院管理</el-breadcrumb-item>
-            <el-breadcrumb-item>病床信息查询</el-breadcrumb-item>
-            </el-breadcrumb>
-            <el-card>
-            <el-input v-model="searchGoal"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
-                        placeholder="请输入搜索信息" ></el-input>
-            <el-button icon="el-icon-search" circle @click="frontSearch" style="margin-left:20px;"></el-button>
-              <el-button type="primary" plain  @click="dialog = true" 
-              style="margin-top:20px; margin-bottom:20px; margin-left:20px;"
-              >高级筛选</el-button>
+  <!-- 查询病床信息 -->
+  <el-card>
+  <el-input v-model="searchGoal"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+              placeholder="请输入搜索信息" ></el-input>
+  <el-button icon="el-icon-search" circle @click="frontSearch" style="margin-left:20px;"></el-button>
+    <el-button type="primary" plain  @click="dialog = true" 
+    style="margin-top:20px; margin-bottom:20px; margin-left:20px;"
+    >高级筛选</el-button>
 
-              <el-drawer
-                  title="可选搜索依赖项"
-                  :before-close="handleClose"
-                  :visible.sync="dialog"
-                  direction="ltr"
-                  custom-class="demo-drawer"
-                  ref="drawer"
-                  >
-                  <div class="demo-drawer__content">
-                     <el-form ref="searchRef" :model="queryRoom"  :rules="searchRoomFormRules" label-width="0px" class="search_form">
-                <!-- 搜索框 -->
-                    <!-- <el-form-item prop="nursE_NAME">
-                      负责护士：
-                    <el-input v-model="queryRoom.nursE_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
-                        placeholder="请输入负责护士姓名" ></el-input>
-                    </el-form-item > -->
+    <el-drawer
+        title="可选搜索依赖项"
+        :before-close="handleClose"
+        :visible.sync="dialog"
+        direction="ltr"
+        custom-class="demo-drawer"
+        ref="drawer"
+        >
+        <div class="demo-drawer__content">
+            <el-form ref="searchRef" :model="queryRoom"  :rules="searchRoomFormRules" label-width="0px" class="search_form">
+      <!-- 搜索框 -->
+          <!-- <el-form-item prop="nursE_NAME">
+            负责护士：
+          <el-input v-model="queryRoom.nursE_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+              placeholder="请输入负责护士姓名" ></el-input>
+          </el-form-item > -->
 
-                    <el-form-item prop="depT_NAME">
-                      所属科室：
-                    <el-input v-model="queryRoom.depT_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
-                        placeholder="请输入科室名称" ></el-input>
-                    </el-form-item>
+          <el-form-item prop="depT_NAME">
+            所属科室：
+          <el-input v-model="queryRoom.depT_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+              placeholder="请输入科室名称" ></el-input>
+          </el-form-item>
 
-                    <el-form-item prop="uB">
-                      价格上限：
-                    <el-input v-model="queryRoom.uB"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
-                        placeholder="请输入最高价格" ></el-input>
-                    </el-form-item>
+          <el-form-item prop="uB">
+            价格上限：
+          <el-input v-model="queryRoom.uB"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+              placeholder="请输入最高价格" ></el-input>
+          </el-form-item>
 
-                    <el-form-item prop="lB">
-                      价格下限：
-                    <el-input v-model="queryRoom.lB"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
-                        placeholder="请输入最低价格" ></el-input>
-                    </el-form-item> 
-                </el-form>
-                    <div class="demo-drawer__footer" style="margin-left:20px;">
-                      <el-button @click="cancelForm">取 消</el-button>
-                      <el-button type="primary" @click="search"  :loading="loading">提 交</el-button>
-                    </div>
-                  </div>
-              </el-drawer>   
+          <el-form-item prop="lB">
+            价格下限：
+          <el-input v-model="queryRoom.lB"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
+              placeholder="请输入最低价格" ></el-input>
+          </el-form-item> 
+      </el-form>
+          <div class="demo-drawer__footer" style="margin-left:20px;">
+            <el-button @click="cancelForm">取 消</el-button>
+            <el-button type="primary" @click="search"  :loading="loading">提 交</el-button>
+          </div>
+        </div>
+    </el-drawer>   
 
-                <el-table :data="roomList.slice((currentPage-1)*pageSize,currentPage*pageSize)" stripe border>
-                    <el-table-column prop="beD_ID" label="床号">
-                    </el-table-column>
-                    <el-table-column prop="depT_NAME" label="所属科室">
-                    </el-table-column>
-                    <el-table-column prop="nursE_NAME" label="负责护士">
-                    </el-table-column>
-                    <el-table-column prop="price" label="日均费用" >
-                    </el-table-column>
-                    <el-table-column prop="iS_USED" label="是否使用" :formatter="stateFormat">
-                    </el-table-column>
-                    <el-table-column label="操作">
-                      <template slot-scope="scope">
-                        <el-button
-                          type="primary"
-                          icon="el-icon-edit"
-                          size="mini"
-                          circle
-                          @click="showEditDialog(scope.row)"
-                        ></el-button>
-                        </template>
-                      </el-table-column>
-                </el-table>
-                <!-- 分页器 -->
-                <div class="block" style="margin-top:15px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
-                    :current-page="currentPage" 
-                    :page-sizes="[2,5,10,20]" 
-                    :page-size="pageSize" 
-                    layout="total, sizes, prev, pager, next, jumper" 
-                    :total="roomList.length">
-                    </el-pagination>
-                </div>
-            </el-card>
-            </el-main>
+      <el-table :data="roomList.slice((currentPage-1)*pageSize,currentPage*pageSize)" stripe border>
+          <el-table-column prop="beD_ID" label="床号">
+          </el-table-column>
+          <el-table-column prop="depT_NAME" label="所属科室">
+          </el-table-column>
+          <el-table-column prop="nursE_NAME" label="负责护士">
+          </el-table-column>
+          <el-table-column prop="price" label="日均费用" >
+          </el-table-column>
+          <el-table-column prop="iS_USED" label="是否使用" :formatter="stateFormat">
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                size="mini"
+                circle
+                @click="showEditDialog(scope.row)"
+              ></el-button>
+              </template>
+            </el-table-column>
+      </el-table>
+      <!-- 分页器 -->
+      <div class="block" style="margin-top:15px;">
+          <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+          :current-page="currentPage" 
+          :page-sizes="[2,5,10,20]" 
+          :page-size="pageSize" 
+          layout="total, sizes, prev, pager, next, jumper" 
+          :total="roomList.length">
+          </el-pagination>
+      </div>
 
-          <!-- 修改病床信息的对话框 -->
+      <!-- 修改病床信息的对话框 -->
           <el-dialog
             title="修改病床信息"
             :visible.sync="editDialogVisible"
@@ -108,7 +95,7 @@
           <el-form
             :model="editForm"
             ref="editFormRef"
-            label-width="70px"
+            label-width="90px"
             :rules="editRoomFormRules"
           >
             <el-form-item label="病床号" prop="beD_ID">
@@ -126,9 +113,7 @@
             <el-button type="primary" @click="editRoom">确 定</el-button>
           </span>
         </el-dialog>
-          
-    </el-container>
- </el-container> 
+  </el-card> 
 </template>
 
 

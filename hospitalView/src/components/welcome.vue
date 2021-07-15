@@ -1,9 +1,9 @@
 <template>
         <!-- 主体部分 -->
-    <el-container style=" height:100%; border: 1px solid #eee; padding-top: 20px;
-    padding-right: 20px;padding-left: 20px; padding-bottom:0px !important;  background-color: rgb(250, 250, 250);">      
+    <!-- <el-container style=" height:100%; border: 1px solid #eee; padding-top: 20px;
+    padding-right: 20px;padding-left: 20px; padding-bottom:0px !important;  background-color: rgb(250, 250, 250);">       -->
     <!-- 数据表单 -->
-      <el-main style="padding-bottom:0px !important;">
+      <el-main style="padding-bottom:0px; !important; margin-top:-2.5%">
 
         <transition :name="trans">
             <div >
@@ -74,7 +74,7 @@
 
 
             </el-main>
-    </el-container>
+    <!-- </el-container> -->
 </template>
 
 <script>
