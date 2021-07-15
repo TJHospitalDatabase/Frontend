@@ -16,9 +16,10 @@
 				<div class="big-contain" v-else>
 					<div class="btitle">创建账户</div>
 					<div class="bform">
-						<input type="text" placeholder="用户名" v-model="form.user_id" maxlength="7">
+						<input type="text" placeholder="工号" v-model="form.username" maxlength="7">
+						<span class="errTips" v-if="id_notexisted">* 用户工号不存在！ *</span>
+						<input type="username" placeholder="用户名" v-model="form.user_id" maxlength="7">
 						<span class="errTips" v-if="existed">* 用户名已经存在！ *</span>
-						<input type="username" placeholder="账号" v-model="form.username" maxlength="7">
 						<input type="email" placeholder="邮箱" v-model="form.useremail">
 						<input type="password" placeholder="密码" v-model="form.userpwd" maxlength="16">
 					</div>
@@ -62,6 +63,7 @@ import axios from 'axios'
 				emailError: false,
 				passwordError: false,
 				existed: false,
+				id_notexisted:false,
 				form:{
 					user_id:'',
 					username:'',
@@ -134,19 +136,24 @@ import axios from 'axios'
 			register(){
 				const self = this;
 				if(self.form.username != "" && self.form.useremail != "" && self.form.userpwd != ""&& self.form.value != ""&&self.form.user_id != ""){
-                    axios.post('/signUp', {params:{password:self.form.userpwd,
+                    axios.post('/signUp', {PASSWORD:self.form.userpwd,
+					    ID:self.form.username,
                         user_id:self.form.user_id,
 						email:self.form.useremail,
-						role:self.form.value}  })
+						role:self.form.value})
 					.then(function(res){
 						switch(res.data.err_code){
 							case "0000":
 								alert("注册成功！");
 								self.login();
 								break;
+							case "0001":
+								alert("用户ID不存在，注册失败！");
+								self.id_notexisted=true;
+								break;
 							default:
-								alert("用户名重复，注册失败！");
-								self.existed = true;
+								alert("用户名已存在，注册失败！");
+                                self.existed = true;
 								break;
 						}
 					})
