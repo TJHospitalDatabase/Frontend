@@ -191,7 +191,7 @@ const axios = require('axios');
           this.temp.PATIENT_ID=row.patienT_ID
         },
         async search(){
-          const { data: res } =await this.$http.get('outPatient', { params: { name: this.patientNameSearch.name}})
+          const { data: res } =await this.$http.get('outPatient', { params: { PATIENT_NAME:this.patientNameSearch.name}})
             console.log(res.data)
             // 将data属性重命名为res
             this.patientData=res.data
