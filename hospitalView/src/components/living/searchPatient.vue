@@ -13,9 +13,9 @@
         <el-input v-model="searchGoal"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                   placeholder="请输入搜索信息" ></el-input>
         <el-button icon="el-icon-search" circle @click="frontSearch" style="margin-left:20px;"></el-button>
-        <el-button type="primary" plain  @click="dialog = true" 
+        <!-- <el-button type="primary" plain  @click="dialog = true" 
         style="margin-top:20px; margin-bottom:20px; margin-left:20px;"
-        >高级筛选</el-button>
+        >高级筛选</el-button> -->
 
       <el-drawer
           title="可选搜索依赖项"
@@ -284,7 +284,7 @@
             console.log(removeId)
             console.log('后端对此delete请求的返回结果：')
             console.log(res)
-            // if (res.meta.status !== 0000) return this.$message.error('删除病人失败！')
+            if (res.err_code !== "0000") return this.$message.error('删除病人失败！')
             this.$message.success('删除病人成功！')
         },
         change(e){
