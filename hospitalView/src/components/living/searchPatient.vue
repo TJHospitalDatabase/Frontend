@@ -149,7 +149,7 @@
         searchGoal:'',
         currentPage: 1, // 当前页码
         total: 20, // 总条数
-        pageSize: 2, // 每页的数据条数
+        pageSize: 10, // 每页的数据条数
 
         table: false,
         dialog: false,
@@ -219,7 +219,8 @@
         },
         async getPatientList () {
           const { data: res } =await this.$http.post('patientinhospital', this.queryPatient)
-          //console.log(res.data)
+          console.log('后端get到的病人结果如下')
+          console.log(res.data)
           this.patientList=res.data
         },
         search(){
