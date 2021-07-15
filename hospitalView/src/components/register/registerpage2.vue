@@ -122,12 +122,12 @@ const axios = require('axios');
         async select_this(index, row) {
           console.log(index, row);
           this.temp.registratioN_ID=row.registratioN_ID
-          const { data: res } = await this.$http.post('registration',
+          const { data: res } = await this.$http.get('registration',
                 {
                   REGISTRATION_ID: this.temp.registratioN_ID,
                   DOCTOR_ID: this.$route.query.id
                   }
-                )
+                )          
           console.log(res.data[0])
           alert("选中操作成功")
           // 这里是返回的信息
