@@ -1,55 +1,55 @@
-<template>
+<template >
 <!--药品库管理-->
-  <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <el-main>
-    
-    <!--面包屑导航区 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right" >
-        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>药品管理</el-breadcrumb-item>
-        <el-breadcrumb-item>药品库管理</el-breadcrumb-item>
-        </el-breadcrumb>
+  <el-container style="height:100%; border: 1px solid #eee">
+    <el-main >
+      <!--面包屑导航区 -->
+      <el-breadcrumb separator-class="el-icon-arrow-right" >
+      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>药品管理</el-breadcrumb-item>
+      <el-breadcrumb-item>药品库管理</el-breadcrumb-item>
+      </el-breadcrumb>
 
-      <el-main style="height:100%">
-        <el-card>
-          <template slot="header" >
-              <el-input
-                v-model="searchDrugClassID"
-                size="mini"
-                placeholder="输入药品类别码搜索"/>
-            </template>
+      <el-card style="height:95%">
         <el-table
-          :data="drugClassCurData"
-          style="width: 100%"
-          stripe border
-          height='100%'>
+        :data="drugClassCurData"
+        style="margin-top:-0.5%"
+        stripe
+        >
           <el-table-column
             label="药品类别码"
-            
+            width="180"
             prop="drugClassID">
           </el-table-column>
           <el-table-column
             label="药品名称"
-           width=300
+            width="180"
             prop="drugName">
           </el-table-column>
           <el-table-column
             label="药品库存"
-            
+            width="180"
             prop="inventory">
           </el-table-column>
           <el-table-column
             label="价格"
-            >
+            width="130">
             <template slot-scope="scope">
               <el-input  placeholder="请输入内容" v-show="scope.row.show" v-model="scope.row.price"></el-input>
               <span v-show="!scope.row.show">{{scope.row.price}}</span>
             </template>
           </el-table-column>
+          <el-table-column>
+          </el-table-column>
           
           <el-table-column
             align="right"
-            >
+            width="350">
+            <template slot="header" slot-scope="scope" >
+              <el-input
+                v-model="searchDrugClassID"
+                size="mini"
+                placeholder="输入药品类别码搜索"/>
+            </template>
             <template slot-scope="scope">
               <el-button
                 type="primary"
@@ -83,7 +83,7 @@
             <el-table-column
             align="right"
             width='250'>
-            <template slot="header" >
+            <template slot="header" slot-scope="scope">
               <el-input
                 v-model="searchDrugID"
                 size="mini"
@@ -102,12 +102,14 @@
             </template>
           </el-table-column>
           </el-table>
+          
           <el-pagination
             :current-page.sync="curDrugPage"
             :page-size="drugPageSize"
             layout="total, prev, pager, next, jumper"
             :total="drugSearchData.length">
           </el-pagination>
+
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" size="small" @click="deleteAllDrug">确 定</el-button>
           </div>
@@ -138,27 +140,22 @@
             <el-button type="danger" size="small" @click="deleteAllPastDrug">删除所有过期药品</el-button>
           </div>
         </el-dialog>
-        </el-card>
-      </el-main>
 
-      <el-footer style="margin-top:0.5%">
-        <el-container width="100%">
-          <div class="block">
-            <el-pagination
-              :current-page.sync="curPage"
-              :page-size="pageSize"
-              layout="total, prev, pager, next, jumper"
-              :total="drugClassSearchData.length">
-            </el-pagination>
-          </div>
-          <div  class='right'>
-            <el-button type="danger" size="small" @click="pastDrug">过期药品统计</el-button>
-          </div>
+        <div class="block">
+          <el-pagination class="paging"
+            :current-page.sync="curPage"
+            :page-size="pageSize"
+            layout="total, prev, pager, next, jumper"
+            :total="drugClassSearchData.length">
+          </el-pagination>
+        </div>
+        <div  class='right'>
+          <el-button type="danger" size="small" @click="pastDrug">过期药品统计</el-button>
+        </div> 
           
-        </el-container>
-      </el-footer>
-
-        </el-main>  
+        
+      </el-card>
+    </el-main>  
   </el-container>
 
 
@@ -231,7 +228,7 @@
           price:20,
           show:false
         }],
-        pageSize: 9,
+        pageSize: 7,
         curPage: 1,
         searchDrugClassID:'',
         tempPrice:0,
@@ -501,11 +498,16 @@
     color: #333;
   }
 
+  .paging{
+    position: absolute;
+    top:83%;
+  }
+
   .right {
     padding: 1% 0;
-    /* margin-left: 66%; */
     position: absolute;
-    left: 89%;
+    left: 86.5%; 
+    top: 83.5%
 }
 </style>
 

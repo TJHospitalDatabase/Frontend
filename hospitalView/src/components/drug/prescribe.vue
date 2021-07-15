@@ -1,103 +1,98 @@
 <template>
-<!-- 开药查询 -->
+  <!-- 开药查询 -->
   <!-- 主体部分 -->
-    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <el-main>
-      
-      
-        <!--面包屑导航区 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right" >
-        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>药品管理</el-breadcrumb-item>
-        <el-breadcrumb-item>开药查询</el-breadcrumb-item>
-        </el-breadcrumb>
+  <el-container style="height: 500px; height:100%; border: 1px solid #eee">
+    <el-main> 
+      <!--面包屑导航区 -->
+      <el-breadcrumb separator-class="el-icon-arrow-right" >
+      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>药品管理</el-breadcrumb-item>
+      <el-breadcrumb-item>开药查询</el-breadcrumb-item>
+      </el-breadcrumb>
 
-        <el-container 
-        style="height: 450px; 
-          width: 750px; 
-          border: 1px solid #eee;
-          border-radius: 5px;
-          margin: 85px 250px">
-          <el-form :model="queryForm" 
-          :rules="rules"
-          ref="queryFormRef" 
-          label-width="100px" 
-          class="demo-ruleForm"
-          style="margin: 120px 150px"
-          >
+      <el-container 
+      style="height: 450px; 
+        width: 750px; 
+        border: 1px solid #eee;
+        border-radius: 5px;
+        margin: 85px 250px">
+        <el-form :model="queryForm" 
+        :rules="rules"
+        ref="queryFormRef" 
+        label-width="100px" 
+        class="demo-ruleForm"
+        style="margin: 120px 150px"
+        >
 
 
-            <el-form-item label="病人ID" prop="patientID">
-              <el-input v-model="queryForm.patientID" ></el-input>
-            </el-form-item>
-            <!-- <el-form-item label="病人姓名">
-              <el-input v-model="queryForm.patientName"></el-input>
-            </el-form-item> -->
-            <el-form-item>
-              <el-button type="primary" @click="queryForPrescription">查询</el-button>
-            </el-form-item>
-          </el-form>
-        </el-container>
+          <el-form-item label="病人ID" prop="patientID">
+            <el-input v-model="queryForm.patientID" ></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="病人姓名">
+            <el-input v-model="queryForm.patientName"></el-input>
+          </el-form-item> -->
+          <el-form-item>
+            <el-button type="primary" @click="queryForPrescription">查询</el-button>
+          </el-form-item>
+        </el-form>
+      </el-container>
 
+      <el-dialog
+        title="提示"
+        :visible.sync="errorVisible"
+        width="30%">
+        <span>{{errorMes}}</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="errorVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
+
+      <el-dialog 
+        title="开药单" 
+        :visible.sync="prescriptionVisible"
+        width=40%>
         <el-dialog
-          title="提示"
-          :visible.sync="errorVisible"
-          width="30%">
-          <span>{{errorMes}}</span>
-          <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="errorVisible = false">确 定</el-button>
-          </span>
-        </el-dialog>
+          width="30%"
+          title="药品信息"
+          :visible.sync="drugDetailVisible"
+          :before-close="handleCloseConfirm"
+          append-to-body>
+          <el-table :data="drugDetail">
+            <el-table-column property="drugID" label="药品编码" width="150"></el-table-column>
+            <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
+            <el-table-column property="shelvesID" label="货架" ></el-table-column>
+          </el-table>
 
-        <el-dialog 
-          title="开药单" 
-          :visible.sync="prescriptionVisible">
-          <el-dialog
-            width="30%"
-            title="药品信息"
-            :visible.sync="drugDetailVisible"
-            :before-close="handleCloseConfirm"
-            append-to-body>
-            <el-table :data="drugDetail">
-              <el-table-column property="drugID" label="药品编码" width="150"></el-table-column>
-              <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
-              <el-table-column property="shelvesID" label="货架" ></el-table-column>
-            </el-table>
-
-            <div slot="footer" class="dialog-footer">            
-              <el-button type="primary" size="medium" @click="deleteDrug">确认开药并删除药品</el-button>
-              <el-button  size="medium" @click="drugDetailVisible=false">取消操作</el-button>
-            </div>
-          </el-dialog>
-
-          <el-container direction="vertical">
-            <div style="margin-left:30px">
-              <div>ID：{{prescription.patientID}}</div>              
-              <p>姓名：{{prescription.patientName}}</p>
-              <p>性别：{{prescription.gender}}</p>
-              <p>年龄：{{prescription.age}}</p>
-              <p>诊断信息：{{prescription.diagnose}}</p>
-              <br/>
-              <br/>
-            </div>
-            
-            <el-table :data="prescription.drugData">
-              <el-table-column property="drugClassID" label="药品编码" width="150"></el-table-column>
-              <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
-              <el-table-column property="drugNum" label="药品盒数" width="150"></el-table-column>
-              <el-table-column property="price" label="价格" ></el-table-column>
-            </el-table>            
-          </el-container>
-
-          <div slot="footer" class="dialog-footer">          
-            <el-button type="primary" size="medium" @click="queryForDrugInfo">开药</el-button>
+          <div slot="footer" class="dialog-footer">            
+            <el-button type="primary" size="medium" @click="deleteDrug">确认开药并删除药品</el-button>
+            <el-button  size="medium" @click="drugDetailVisible=false">取消操作</el-button>
           </div>
-          
         </el-dialog>
-  
-      </el-main>
-      
-    </el-container>
+        
+        <div style="margin-left:30px; font-size: 16px" >
+          <p>ID：{{prescription.patientID}}</p>              
+          <p>姓名：{{prescription.patientName}}</p>
+          <p>性别：{{prescription.gender}}</p>
+          <p>年龄：{{prescription.age}}</p>
+          <p>诊断信息：{{prescription.diagnose}}</p>
+          <br/>
+          <br/>
+        </div>
+        
+        <el-table :data="prescription.drugData">
+          <el-table-column property="drugClassID" label="药品编码" width="150"></el-table-column>
+          <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
+          <el-table-column property="drugNum" label="药品盒数" width="150"></el-table-column>
+          <el-table-column property="price" label="价格" ></el-table-column>
+        </el-table> 
+
+        <div slot="footer" class="dialog-footer">          
+          <el-button type="primary" size="medium" v-if="prescribeButton" @click="queryForDrugInfo">开药</el-button>
+        </div>
+          
+      </el-dialog>
+    </el-main>
+  </el-container>
 </template>
 
 
@@ -193,7 +188,8 @@
             drugName: "二号药品",
             shelvesID:"07-16"
           }
-        ]
+        ],
+        prescribeButton:true,
       }
     },
     methods:{
@@ -203,14 +199,11 @@
             axios
               .get("/drug/patient",{
                 params:{
-                  patientID: this.queryForm.patientID
+                  patient_ID: this.queryForm.patientID
                 }
               })
-              .then((response)=>{
-                
-                if(response.data.err_code==0){
-                  
-
+              .then((response)=>{              
+                if(response.data.data.length){
                   this.prescription.patientID=response.data.data[0].patienT_ID;
                   this.prescription.patientName=response.data.data[0].patienT_NAME;
                   this.prescription.age=response.data.data[0].age;
@@ -218,20 +211,46 @@
                   this.prescription.diagnose=response.data.data[0].diagnosis;
                   this.prescription.drugData=[];
                   
-                  for(let i = 0; i < response.data.data[0].givE_DRUG.length; ++i){
-                    this.prescription.drugData.push({
-                      drugClassID: response.data.data[0].givE_DRUG[i].druG_CLASS_ID,
-                      drugName: response.data.data[0].givE_DRUG[i].druG_NAME,
-                      drugNum: response.data.data[0].givE_DRUG[i].number,
-                      price: response.data.data[0].givE_DRUG[i].price
+                  axios
+                    .get("drug/patient/drug",{
+                      params:{
+                        patient_ID: this.queryForm.patientID
+                      }
                     })
-                  }
-
-                  this.prescriptionVisible=true;
+                    .then((response)=>{
+                      console.log("test2");
+                      console.log(response);
+                      if(response.data.err_code==0){
+                        if(response.data.data.length){
+                          for(let i = 0; i < response.data.data.length; ++i){
+                            this.prescription.drugData.push({
+                              drugClassID: response.data.data[i].druG_CLASS_ID,
+                              drugName: response.data.data[i].druG_NAME,
+                              drugNum: response.data.data[i].num,
+                              price: response.data.data[i].price
+                            })
+                          }
+                          this.prescribeButton=true;
+                        }
+                        else{                          
+                          this.prescribeButton=false;
+                        }                       
+                        this.prescriptionVisible=true;
+                        
+                      }
+                      else{
+                        this.errorVisible=true;
+                        this.errorMes=response.data.err_desc;
+                      }
+                    })
+                    .catch((error)=>{
+                      this.errorVisible=true;
+                      this.errorMes=response.data.err_desc;
+                    })
                 }
                 else{
+                  this.errorMes="该病人不存在！";
                   this.errorVisible=true;
-                  this.errorMes=response.data.err_desc;
                 }
               })
               .catch((error)=>{
