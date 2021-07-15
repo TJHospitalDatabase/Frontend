@@ -14,7 +14,7 @@
           <el-dropdown-item @click.native="logout"><i class="el-icon-switch-button"></i>退出账号</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span style="font-size: 15px">{{this.$route.query.name}}</span>
+      <span style="font-size: 15px">{{name}}</span>
        </div>
     </el-header>
 
@@ -152,7 +152,7 @@ export default{
         this.$router.push("/login");
     },
     goBack() {
-        this.$router.push("/home");
+        this.$router.push({path:"/welcome",query:{id:this.id, name:this.name, dept_name:this.dept_name}});
     },
   }
 }
