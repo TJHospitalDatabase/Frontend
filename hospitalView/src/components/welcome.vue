@@ -16,7 +16,7 @@
               <!-- 以下为具体内容 -->
               <div style="margin-left:10px">
                 <div class="avatar_box" style="float:left;width:75px;height:75px" >
-                  <img class="avatar_img" src="../assets/avatar.jpg">                
+                  <img class="avatar_img" src="../assets/avatar.jpg">
                 </div>
 
                 <div  style="width:400px;  margin-left:150px; color: rgb(65, 86, 145);">

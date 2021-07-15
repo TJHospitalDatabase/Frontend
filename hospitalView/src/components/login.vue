@@ -71,19 +71,19 @@ import axios from 'axios'
 				},
 				options: [
 		{
-		  value: '000011',
+		  value: 3,
           label: '挂号部'
 						},{
-          value: '000110',
+          value: 6,
           label: '门诊部'
         }, {
-          value: '100000',
+          value: 32,
           label: '住院部',
         }, {
-          value: '001000',
+          value: 8,
           label: '药品管理部'
         }, {
-          value: '010000',
+          value: 16,
           label: '检查管理部'
         }],
         value: ''
@@ -102,7 +102,8 @@ import axios from 'axios'
 				const self = this;
 				if (self.form.user_id != "" && self.form.userpwd != "") {
                     axios.get('/logIn', {params:{user_id: self.form.user_id,
-                        password: self.form.userpwd}          
+                        password: self.form.userpwd,
+						role:self.form.value}
                     })
 					.then(function(res) {
                         console.log(res.data);
