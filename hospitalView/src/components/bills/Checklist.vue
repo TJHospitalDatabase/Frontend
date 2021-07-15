@@ -168,7 +168,10 @@ export default {
        
         // 编辑项目检查状态
         async editdialog(editSample){
-            if(editSample.state==false){return this.$message.error('更新项目执行情况失败！')}
+            if(editSample.state==false){
+                editSample.state=true;
+                return this.$message.error('更新项目执行情况失败！')
+            }
             console.log(editSample.state)
 
             const{data:res}=await this.$http.get('patient/examinationPage', 
