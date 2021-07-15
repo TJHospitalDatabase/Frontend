@@ -30,7 +30,11 @@
          <el-table
             :data="treatlist.slice((currentPage-1)*pageSize,currentPage*pageSize)"
             style="width: 100%" border stript>
-            <el-table-column type="index"></el-table-column>
+            <el-table-column type="index" fixed></el-table-column>
+            <el-table-column
+              prop="patienT_ID"
+              label="患者ID" fixed>
+            </el-table-column>
             <el-table-column
               prop="patienD_NAME"
               label="患者姓名">
@@ -39,15 +43,20 @@
               prop="gender"
               label="性别">
             </el-table-column>
+
+            <!--待修改-->
             <el-table-column
               sortable
-              prop="prescriptioN_ID"
-              label="处方单ID">
+              prop="id"
+              label="单子ID">
             </el-table-column>
             <el-table-column
-              prop="depT_NAME"
-              label="科室">
+              sortable
+              prop="type"
+              label="单子种类">
             </el-table-column>
+            <!--待修改--> 
+
             <el-table-column
               sortable
               prop="sigN_DATE"
@@ -62,7 +71,7 @@
               label="医生姓名">
             </el-table-column>
             <el-table-column
-              prop="toprice"
+              prop="price"
               label="问诊费用(元)">
             </el-table-column>
             <el-table-column
@@ -82,7 +91,7 @@
             :page-sizes="[2,5,10,20]" 
             :page-size="pageSize" 
             layout="total, sizes, prev, pager, next, jumper" 
-            :total="total">
+            :total="treatlist.length">
             </el-pagination>
         </div>
      </el-card>
@@ -123,20 +132,22 @@ export default {
     if(res.err_code !== "0000"){
        return this.$message.error('获取问诊信息失败！')
      }
-    this.$message.success('获取问诊信息成功！')
+    //this.$message.success('获取问诊信息成功！')
     console.log(res.data)
-      this.treatlist = res.data.data
-    // 为总数据条数赋值
-     this.total = res.data.totaL_PAGE
+      this.treatlist = res.data
+    console.log(this.treatlist)
     },
 
 
     // 监听开关状态的改变
     async stateChanged (Info) {
       console.log(Info)
-      const {data:res} = await this.$http.put('findPrescription',{
-        PRESCRIPTION_ID: Info.prescriptioN_ID,
-        STATE: Info.state
+      console.log(Info.id)
+      
+      const {data:res} = await this.$http.get('changePrescription',{
+        params:{ID: Info.id,
+        TYPE:Info.type,
+        STATE: Info.state}
       })
     
     if(res.err_code !== "0000"){
