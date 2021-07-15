@@ -2,7 +2,7 @@
     <el-card style="height:95%">
         <!--        卡片-->
             <!--            搜索与添加-->
-            <el-row :gutter="1000">
+            <el-row :gutter="100">
                 <el-col :span="12">
                     <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
                     <el-input clearable @clear="getActivityList" placeholder="请输入处方单id" v-model="search">

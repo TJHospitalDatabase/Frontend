@@ -3,8 +3,8 @@
         <el-card style="height:95%">
         <!--        卡片-->
             <!--            搜索与添加-->
-            <el-row :gutter="1000">
-                <el-col :span="12">
+            <el-row :gutter="100">
+                <el-col :span="8">
                     <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
                     <el-input clearable @clear="getActivityList" placeholder="请输入项目检查单id" v-model="search">
                         <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
@@ -23,8 +23,8 @@
                 <el-table-column prop="examinatioN_LIST_ID" label="项目检查单ID" width="220"></el-table-column>
                 <el-table-column prop="examinatioN_NAME" label="检查项目名称" width="220"></el-table-column>
                 <el-table-column prop="examinatioN_DATE" label="开具日期" width="220"></el-table-column>
-                <el-table-column prop="patienT_ID" label="病人ID" width="220"></el-table-column>
-                <el-table-column prop="doctoR_NAME" label="医生姓名" width="220"></el-table-column>
+                <el-table-column prop="patienT_ID" label="病人ID" width="200"></el-table-column>
+                <el-table-column prop="doctoR_NAME" label="医生姓名" width="200"></el-table-column>
             </el-table>
         
             <!--        添加活动对话框-->

@@ -7,7 +7,7 @@
 					<div class="btitle">账户登录</div>
 					<div class="bform">
 						<input type="user_id" placeholder="用户名" v-model="form.user_id" maxlength="7">
-						<span class="errTips" v-if="existed">* 用户名不存在 *</span>
+						<span class="errTips" v-if="login_existed">* 用户名不存在 *</span>
 						<input type="password" placeholder="密码" v-model="form.userpwd" maxlength="16">
 						<span class="errTips" v-if="passwordError">* 密码填写错误 *</span>
 					</div>
@@ -18,8 +18,9 @@
 					<div class="bform">
 						<input type="text" placeholder="工号" v-model="form.username" maxlength="7">
 						<span class="errTips" v-if="id_notexisted">* 用户工号不存在！ *</span>
+						<span class="errTips" v-if="binded">* 此工号已绑定其他用户！ *</span>
 						<input type="username" placeholder="用户名" v-model="form.user_id" maxlength="7">
-						<span class="errTips" v-if="existed">* 用户名已经存在！ *</span>
+						<span class="errTips" v-if="register_existed">* 用户名已经存在！ *</span>
 						<input type="email" placeholder="邮箱" v-model="form.useremail">
 						<input type="password" placeholder="密码" v-model="form.userpwd" maxlength="16">
 					</div>
@@ -60,10 +61,11 @@ import axios from 'axios'
 		data(){
 			return {
 				isLogin:false,
-				emailError: false,
 				passwordError: false,
-				existed: false,
+				login_existed: false,
+				register_existed: false,
 				id_notexisted:false,
+				binded:false,
 				form:{
 					user_id:'',
 					username:'',
@@ -119,9 +121,15 @@ import axios from 'axios'
 							}								
 							default:
 							{
-								alert("登录失败！");
-                                self.emailError = true;						
-								self.passwordError = true;
+								if(res.data.err_info=="未知错误")
+								{
+									alert("用户名不存在！");
+                                    self.login_existed=true;
+								}
+								else{
+                                    alert("密码错误！");					
+								    self.passwordError = true;
+								}								
 								break;
 							}							
 						}
@@ -147,13 +155,21 @@ import axios from 'axios'
 								alert("注册成功！");
 								self.login();
 								break;
-							case "0001":
-								alert("用户ID不存在，注册失败！");
-								self.id_notexisted=true;
-								break;
 							default:
-								alert("用户名已存在，注册失败！");
-                                self.existed = true;
+								if(res.data.err_info=="ID不存在")
+								{
+									alert("工号不存在，注册失败！");
+                                    self.id_notexisted=true;
+								}
+								else if(res.data.err_info=="用户已经存在")
+								{
+                                    alert("用户名已存在，注册失败！");
+                                    self.register_existed = true;
+								}
+								else{
+									alert("对应工号已绑定其他用户，注册失败！");
+									self.binded=true;
+								}
 								break;
 						}
 					})
