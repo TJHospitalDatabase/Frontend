@@ -1,164 +1,151 @@
 <template >
-<!--药品库管理-->
-  <el-container style="height:100%; border: 1px solid #eee">
-    <el-main >
-      <!--面包屑导航区 -->
-      <el-breadcrumb separator-class="el-icon-arrow-right" >
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>药品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>药品库管理</el-breadcrumb-item>
-      </el-breadcrumb>
+  <!--药品库管理-->  
+  <el-card style="height:95%">
+    <el-table
+    :data="drugClassCurData"
+    style="margin-top:-0.5%"
+    stripe
+    >
+      <el-table-column
+        label="药品类别码"
+        width="180"
+        prop="drugClassID">
+      </el-table-column>
+      <el-table-column
+        label="药品名称"
+        width="180"
+        prop="drugName">
+      </el-table-column>
+      <el-table-column
+        label="药品库存"
+        width="180"
+        prop="inventory">
+      </el-table-column>
+      <el-table-column
+        label="价格"
+        width="130">
+        <template slot-scope="scope">
+          <el-input  placeholder="请输入内容" v-show="scope.row.show" v-model="scope.row.price"></el-input>
+          <span v-show="!scope.row.show">{{scope.row.price}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column>
+      </el-table-column>
+      
+      <el-table-column
+        align="right"
+        width="350">
+        <template slot="header" slot-scope="scope" >
+          <el-input
+            v-model="searchDrugClassID"
+            size="mini"
+            placeholder="输入药品类别码搜索"/>
+        </template>
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            plain
+            size="mini"
+            @click="queryForDrug(scope.$index, scope.row)"
+            v-show="!scope.row.show">详情</el-button>
+          <el-button
+            size="mini"
+            v-show="!scope.row.show"
+            @click="handleEditPrice(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            v-show="scope.row.show"
+            @click="complishEditPrice(scope.$index, scope.row)">完成</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-      <el-card style="height:95%">
-        <el-table
-        :data="drugClassCurData"
-        style="margin-top:-0.5%"
-        stripe
-        >
-          <el-table-column
-            label="药品类别码"
-            width="180"
-            prop="drugClassID">
-          </el-table-column>
-          <el-table-column
-            label="药品名称"
-            width="180"
-            prop="drugName">
-          </el-table-column>
-          <el-table-column
-            label="药品库存"
-            width="180"
-            prop="inventory">
-          </el-table-column>
-          <el-table-column
-            label="价格"
-            width="130">
-            <template slot-scope="scope">
-              <el-input  placeholder="请输入内容" v-show="scope.row.show" v-model="scope.row.price"></el-input>
-              <span v-show="!scope.row.show">{{scope.row.price}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column>
-          </el-table-column>
-          
-          <el-table-column
-            align="right"
-            width="350">
-            <template slot="header" slot-scope="scope" >
-              <el-input
-                v-model="searchDrugClassID"
-                size="mini"
-                placeholder="输入药品类别码搜索"/>
-            </template>
-            <template slot-scope="scope">
-              <el-button
-                type="primary"
-                plain
-                size="mini"
-                @click="queryForDrug(scope.$index, scope.row)"
-                v-show="!scope.row.show">详情</el-button>
-              <el-button
-                size="mini"
-                v-show="!scope.row.show"
-                @click="handleEditPrice(scope.$index, scope.row)">编辑</el-button>
-              <el-button
-                size="mini"
-                v-show="scope.row.show"
-                @click="complishEditPrice(scope.$index, scope.row)">完成</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+    <el-dialog title="药品详情" 
+    :visible.sync="drugVisible" width=75%
+    :before-close="handleDrugClose">
+      <el-table :data="drugCurData">
+        <el-table-column property="drugClassID" label="药品类别码" width="120"></el-table-column>
+        <el-table-column property="drugName" label="药品名称" width="120"></el-table-column>
+        <el-table-column property="drugID" label="药品编码" width="120"></el-table-column>
+        <el-table-column property="productionDate" label="生产日期" width="120"></el-table-column>
+        <el-table-column property="validUntil" label="有效期至" width="120"></el-table-column>
+        <el-table-column property="manufactor" label="生产企业" width="120"></el-table-column>
+        <el-table-column property="shelvesID" label="货架号"></el-table-column>
+        <el-table-column
+        align="right"
+        width='250'>
+        <template slot="header" slot-scope="scope">
+          <el-input
+            v-model="searchDrugID"
+            size="mini"
+            placeholder="输入药品编码搜索"/>
+        </template>
+        <template slot-scope="scope">
+          <el-popconfirm
+            :title="'确认删除'+scope.row.drugName+'('+scope.row.drugID+')?'"
+            @confirm="deleteDrug(scope.$index, scope.row)">
+            <el-button
+              type="danger"
+              plain
+              size="mini"                  
+              slot="reference">删除</el-button>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+      </el-table>
+      
+      <el-pagination
+        :current-page.sync="curDrugPage"
+        :page-size="drugPageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="drugSearchData.length">
+      </el-pagination>
 
-        <el-dialog title="药品详情" 
-        :visible.sync="drugVisible" width=75%
-        :before-close="handleDrugClose">
-          <el-table :data="drugCurData">
-            <el-table-column property="drugClassID" label="药品类别码" width="120"></el-table-column>
-            <el-table-column property="drugName" label="药品名称" width="120"></el-table-column>
-            <el-table-column property="drugID" label="药品编码" width="120"></el-table-column>
-            <el-table-column property="productionDate" label="生产日期" width="120"></el-table-column>
-            <el-table-column property="validUntil" label="有效期至" width="120"></el-table-column>
-            <el-table-column property="manufactor" label="生产企业" width="120"></el-table-column>
-            <el-table-column property="shelvesID" label="货架号"></el-table-column>
-            <el-table-column
-            align="right"
-            width='250'>
-            <template slot="header" slot-scope="scope">
-              <el-input
-                v-model="searchDrugID"
-                size="mini"
-                placeholder="输入药品编码搜索"/>
-            </template>
-            <template slot-scope="scope">
-              <el-popconfirm
-                :title="'确认删除'+scope.row.drugName+'('+scope.row.drugID+')?'"
-                @confirm="deleteDrug(scope.$index, scope.row)">
-                <el-button
-                  type="danger"
-                  plain
-                  size="mini"                  
-                  slot="reference">删除</el-button>
-              </el-popconfirm>
-            </template>
-          </el-table-column>
-          </el-table>
-          
-          <el-pagination
-            :current-page.sync="curDrugPage"
-            :page-size="drugPageSize"
-            layout="total, prev, pager, next, jumper"
-            :total="drugSearchData.length">
-          </el-pagination>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" size="small" @click="deleteAllDrug">确 定</el-button>
+      </div>
+    </el-dialog>
 
-          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" size="small" @click="deleteAllDrug">确 定</el-button>
-          </div>
-        </el-dialog>
+    <el-dialog title="过期药品详情" 
+    :visible.sync="drugPastVisible" width=60%>
+      <el-table :data="drugPastCurData">
+        <el-table-column property="drugClassID" label="药品类别码" width="120"></el-table-column>
+        <el-table-column property="drugName" label="药品名称" width="120"></el-table-column>
+        <el-table-column property="drugID" label="药品编码" width="120"></el-table-column>
+        <el-table-column property="productionDate" label="生产日期" width="120"></el-table-column>
+        <el-table-column property="validUntil" label="有效期至" width="120"></el-table-column>
+        <el-table-column property="manufactor" label="生产企业" width="120"></el-table-column>
+        <el-table-column property="shelvesID" label="货架号"></el-table-column>
+        <el-table-column
+        align="right"
+        width='250'>
+      </el-table-column>
+      </el-table>
+      <el-pagination
+        :current-page.sync="curDrugPastPage"
+        :page-size="drugPastPageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="drugPast.length">
+      </el-pagination>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="danger" size="small" v-if="deletedPastDrug.length" @click="deleteAllPastDrug">删除所有过期药品</el-button>
+      </div>
+    </el-dialog>
 
-        <el-dialog title="过期药品详情" 
-        :visible.sync="drugPastVisible" width=60%>
-          <el-table :data="drugPastCurData">
-            <el-table-column property="drugClassID" label="药品类别码" width="120"></el-table-column>
-            <el-table-column property="drugName" label="药品名称" width="120"></el-table-column>
-            <el-table-column property="drugID" label="药品编码" width="120"></el-table-column>
-            <el-table-column property="productionDate" label="生产日期" width="120"></el-table-column>
-            <el-table-column property="validUntil" label="有效期至" width="120"></el-table-column>
-            <el-table-column property="manufactor" label="生产企业" width="120"></el-table-column>
-            <el-table-column property="shelvesID" label="货架号"></el-table-column>
-            <el-table-column
-            align="right"
-            width='250'>
-          </el-table-column>
-          </el-table>
-          <el-pagination
-            :current-page.sync="curDrugPastPage"
-            :page-size="drugPastPageSize"
-            layout="total, prev, pager, next, jumper"
-            :total="drugPast.length">
-          </el-pagination>
-          <div slot="footer" class="dialog-footer">
-            <el-button type="danger" size="small" v-if="deletedPastDrug.length" @click="deleteAllPastDrug">删除所有过期药品</el-button>
-          </div>
-        </el-dialog>
-
-        <div class="block">
-          <el-pagination class="paging"
-            :current-page.sync="curPage"
-            :page-size="pageSize"
-            layout="total, prev, pager, next, jumper"
-            :total="drugClassSearchData.length">
-          </el-pagination>
-        </div>
-        <div  class='right'>
-          <el-button type="danger" size="small" @click="pastDrug">过期药品统计</el-button>
-        </div> 
-          
-        
-      </el-card>
-    </el-main>  
-  </el-container>
-
-
+    <div class="block">
+      <el-pagination class="paging"
+        :current-page.sync="curPage"
+        :page-size="pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="drugClassSearchData.length">
+      </el-pagination>
+    </div>
+    <div  class='right'>
+      <el-button type="danger" size="small" @click="pastDrug">过期药品统计</el-button>
+    </div> 
+      
+    
+  </el-card>
 </template>
 
 

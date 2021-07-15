@@ -1,12 +1,5 @@
 <template>
-     <el-container style="height:100%; border: 1px solid #eee">
-        <el-main>
-        <!--        面包屑-->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item >单目开具</el-breadcrumb-item>
-            <el-breadcrumb-item>住院单开具</el-breadcrumb-item>
-        </el-breadcrumb>
+    
 
         <el-card style="height:95%">
         <!--        卡片-->
@@ -74,8 +67,6 @@
                     :total="activityList.length">
             </el-pagination>
     </el-card>
-    </el-main>  
-  </el-container>
 </template>
 
 <script>

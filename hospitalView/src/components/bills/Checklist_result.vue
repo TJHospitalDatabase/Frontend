@@ -1,91 +1,78 @@
-<template>
-    <!-- 主体部分 -->
-    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <!-- 数据表单 -->
-    <el-main>
-        <!--面包屑导航区 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>单目管理</el-breadcrumb-item>
-        <el-breadcrumb-item>检查单结果管理</el-breadcrumb-item>
-        </el-breadcrumb>
+<template>    
+    <!-- 卡片区域 -->
+    <el-card>
+        <!-- 搜索区域 -->
+        <el-row :gutter="20" >
+            <el-col :span="8">
+                <el-input placeholder="请输入搜索内容" v-model="searchgoal" clearable 
+                @clear="getCheckresultlist"  @keyup.enter.native="frontSearch">
+                <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
 
-        <!-- 卡片区域 -->
-        <el-card>
-            <!-- 搜索区域 -->
-            <el-row :gutter="20" >
-                <el-col :span="8">
-                    <el-input placeholder="请输入搜索内容" v-model="searchgoal" clearable 
-                    @clear="getCheckresultlist"  @keyup.enter.native="frontSearch">
-                    <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
+                <!-- <el-input placeholder="请输入搜索内容"  v-model="r_queryInfo.EXAMINATION_LIST_ID" clearable @clear="getCheckresultlist">
+                <el-button slot="append" icon="el-icon-search" @click="getCheckresultlist"></el-button> -->
+                </el-input>  
+            </el-col>
+        </el-row>
+        <!-- 检查单表格区域 -->
+        <el-table :data="checkresultlist_current" style="width: 100%" stripe border>
 
-                    <!-- <el-input placeholder="请输入搜索内容"  v-model="r_queryInfo.EXAMINATION_LIST_ID" clearable @clear="getCheckresultlist">
-                    <el-button slot="append" icon="el-icon-search" @click="getCheckresultlist"></el-button> -->
-                    </el-input>  
-                </el-col>
-            </el-row>
-            <!-- 检查单表格区域 -->
-            <el-table :data="checkresultlist_current" style="width: 100%" stripe border>
+            <!-- 表头区域 -->
+            <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
+            <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" width="105"></el-table-column>
+            <el-table-column prop="examinatioN_NAME" label="检查项目名称" width="150"></el-table-column>
+                <el-table-column prop="examinatioN_DATE" label="检查日期" width="200"></el-table-column>
+            <el-table-column prop="doctoR_NAME" label="医生姓名" width="100"></el-table-column>
+            <el-table-column prop="patienT_ID" label="病人ID" width="100"></el-table-column>
+            <el-table-column prop="patienT_NAME" label="病人姓名" width="100"></el-table-column> 
+                <el-table-column prop="diagnosis" label="临床诊断" width="150"></el-table-column>
+            <el-table-column prop="depT_NAME" label="科室" width="100"></el-table-column>
 
-                <!-- 表头区域 -->
+            <!-- 项目检查单按钮区域 -->
+            <el-table-column  label="项目检查结果" width="150">
+                    <template slot-scope="scope">
+                    <el-link @click="getDatalist(scope.row.examinatioN_LIST_ID)">结果查看<i class="el-icon-view el-icon--right"></i> </el-link>
+                    </template>
+            </el-table-column>
+
+        </el-table>
+
+            <!--分页设置区域 -->
+            <el-pagination
+                align='center'
+                style="position: absolute;top:83%;"
+                :current-page.sync="r_queryInfo.PAGE_NUM"
+                :page-size="r_queryInfo.PAGE_SIZE"
+                layout="total,prev, pager, next, jumper"
+                :total="checkresultlist.length">
+            </el-pagination>
+
+        <!-- 样本结果查看对话框 -->
+            <el-dialog title="检查结果" :visible.sync="checkresultlistdialogVisible" width="50%" center>
+
+            <!-- 检查单数据区域 -->                        
+            <el-table :data="datalist_current" border style="width: 100%">
+            <!-- 表头区域 -->
                 <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
-                <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" width="105"></el-table-column>
-                <el-table-column prop="examinatioN_NAME" label="检查项目名称" width="150"></el-table-column>
-                 <el-table-column prop="examinatioN_DATE" label="检查日期" width="200"></el-table-column>
-                <el-table-column prop="doctoR_NAME" label="医生姓名" width="100"></el-table-column>
-                <el-table-column prop="patienT_ID" label="病人ID" width="100"></el-table-column>
-                <el-table-column prop="patienT_NAME" label="病人姓名" width="100"></el-table-column> 
-                 <el-table-column prop="diagnosis" label="临床诊断" width="150"></el-table-column>
-                <el-table-column prop="depT_NAME" label="科室" width="100"></el-table-column>
-
-                <!-- 项目检查单按钮区域 -->
-                <el-table-column  label="项目检查结果" width="150">
-                     <template slot-scope="scope">
-                        <el-link @click="getDatalist(scope.row.examinatioN_LIST_ID)">结果查看<i class="el-icon-view el-icon--right"></i> </el-link>
-                     </template>
-                </el-table-column>
-
+                <el-table-column prop="resulT_NAME" label="样本种类" width="150"></el-table-column>
+                <el-table-column prop="resulT_NUM" label="检查结果" width="260"></el-table-column>
+                <el-table-column prop="resulT_RANGE" label="参考范围" width="255"></el-table-column>                                      
             </el-table>
 
-              <!--分页设置区域 -->
-                <el-pagination
-                    align='center'
-                    style="position: absolute;top:83%;"
-                    :current-page.sync="r_queryInfo.PAGE_NUM"
-                    :page-size="r_queryInfo.PAGE_SIZE"
-                    layout="total,prev, pager, next, jumper"
-                    :total="checkresultlist.length">
-                </el-pagination>
+            <!--分页设置区域 -->
+            <el-pagination
+                :current-page.sync="s_queryInfo.PAGE_NUM"
+                :page-size="s_queryInfo.PAGE_SIZE"
+                layout="total, prev, pager, next, jumper"
+                :total=" datalist.length">
+            </el-pagination>
 
-            <!-- 样本结果查看对话框 -->
-             <el-dialog title="检查结果" :visible.sync="checkresultlistdialogVisible" width="50%" center>
-   
-                <!-- 检查单数据区域 -->                        
-                <el-table :data="datalist_current" border style="width: 100%">
-                <!-- 表头区域 -->
-                    <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
-                    <el-table-column prop="resulT_NAME" label="样本种类" width="150"></el-table-column>
-                    <el-table-column prop="resulT_NUM" label="检查结果" width="260"></el-table-column>
-                    <el-table-column prop="resulT_RANGE" label="参考范围" width="255"></el-table-column>                                      
-                </el-table>
+            <!-- 底部按钮区域 -->
+            <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="checkresultlistdialogVisible= false">确 定</el-button>
+            </span>
+        </el-dialog>
 
-                <!--分页设置区域 -->
-                <el-pagination
-                    :current-page.sync="s_queryInfo.PAGE_NUM"
-                    :page-size="s_queryInfo.PAGE_SIZE"
-                    layout="total, prev, pager, next, jumper"
-                    :total=" datalist.length">
-                </el-pagination>
-
-                <!-- 底部按钮区域 -->
-                <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="checkresultlistdialogVisible= false">确 定</el-button>
-                </span>
-            </el-dialog>
-
-        </el-card>
-    </el-main>
-    </el-container>
+    </el-card>
 </template>
 
 <script>

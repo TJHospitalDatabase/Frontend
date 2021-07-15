@@ -1,12 +1,4 @@
 <template>
-<el-container>
-  <el-main>
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-     <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
-     <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
-     <el-breadcrumb-item>病人信息录入</el-breadcrumb-item>
-    </el-breadcrumb>
-
 <div>
     <el-card style="float:left; width:45%;">
     <el-form ref="ruleForm" :rules="rules" :model="forme" id="forme" label-width="80px">
@@ -37,9 +29,6 @@
     <img src="../../assets/paper.png" style="float:right; width:40%; margin:50px; margin-right:100px;" />
 
 </div>
-
-  </el-main>
-</el-container>
 </template>
 
 

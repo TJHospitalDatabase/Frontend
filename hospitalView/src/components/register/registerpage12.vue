@@ -1,64 +1,53 @@
 
 <template>
+  <el-card>
+  <el-form ref="search11Ref" :model="patientNameSearch" :rules="searchRules" label-width="0px" class="search_form">
+              <!-- 搜索框 -->
+                  <el-form-item prop="name">
+                  <el-input v-model="patientNameSearch.name"   prefix-icon="el-icon-zoom-in" style="width:70%;"></el-input>
+                  <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>          
+                  </el-form-item>
+              </el-form>
+<el-table
+  :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+  style="width: 100%" stripe border>
 
-<el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <el-main>
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-     <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
-     <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
-     <el-breadcrumb-item>病人信息查询</el-breadcrumb-item>
-    </el-breadcrumb>
-    <el-card>
-    <el-form ref="search11Ref" :model="patientNameSearch" :rules="searchRules" label-width="0px" class="search_form">
-                <!-- 搜索框 -->
-                    <el-form-item prop="name">
-                    <el-input v-model="patientNameSearch.name"   prefix-icon="el-icon-zoom-in" style="width:70%;"></el-input>
-                    <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>          
-                    </el-form-item>
-                </el-form>
-  <el-table
-    :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-    style="width: 100%" stripe border>
+  <el-table-column prop="patienT_ID"
+    label="病人ID">
+    
+  </el-table-column>
+  
+  <el-table-column prop="patienT_NAME"
+    label="名字">
+    
+  </el-table-column>
 
-    <el-table-column prop="patienT_ID"
-      label="病人ID">
-      
-    </el-table-column>
+  <el-table-column prop="gender"
+    label="性别">
     
-    <el-table-column prop="patienT_NAME"
-      label="名字">
-      
-    </el-table-column>
-
-    <el-table-column prop="gender"
-      label="性别">
-      
-    </el-table-column>
+  </el-table-column>
+  
+  <el-table-column prop="age"
+    label="年龄">
     
-    <el-table-column prop="age"
-      label="年龄">
-      
-    </el-table-column>
+  </el-table-column>
+  
+  <el-table-column prop="phone"
+    label="联系方式">
     
-    <el-table-column prop="phone"
-      label="联系方式">
-      
-    </el-table-column>
-    
-  </el-table>
-            <div class="block" style="margin-top:15px;">
-              <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
-                :current-page="currentPage" 
-                :page-sizes="[1,2,5,10,20]" 
-                :page-size="pageSize" 
-                layout="total, sizes, prev, pager, next, jumper" 
-                :total="patientData.length">
-              </el-pagination>
-            </div>
-    </el-card>
-    </el-main>
-</el-container>
-
+  </el-table-column>
+  
+</el-table>
+          <div class="block" style="margin-top:15px;">
+            <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+              :current-page="currentPage" 
+              :page-sizes="[1,2,5,10,20]" 
+              :page-size="pageSize" 
+              layout="total, sizes, prev, pager, next, jumper" 
+              :total="patientData.length">
+            </el-pagination>
+          </div>
+  </el-card>
 </template>
 
 

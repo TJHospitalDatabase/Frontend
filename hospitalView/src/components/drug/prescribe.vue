@@ -1,98 +1,88 @@
 <template>
-  <!-- 开药查询 -->
-  <!-- 主体部分 -->
-  <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <el-main> 
-      <!--面包屑导航区 -->
-      <el-breadcrumb separator-class="el-icon-arrow-right" >
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>药品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>开药查询</el-breadcrumb-item>
-      </el-breadcrumb>
-
-      <el-container 
-      style="height: 450px; 
-        width: 750px; 
-        border: 1px solid #eee;
-        border-radius: 5px;
-        margin: 85px 250px">
-        <el-form :model="queryForm" 
-        :rules="rules"
-        ref="queryFormRef" 
-        label-width="100px" 
-        class="demo-ruleForm"
-        style="margin: 120px 150px"
-        >
+  <!-- 开药查询 -->     
+  <el-container 
+  style="height: 450px; 
+    width: 750px; 
+    border: 1px solid #eee;
+    border-radius: 5px;
+    margin: 85px 250px">
+    <el-form :model="queryForm" 
+    :rules="rules"
+    ref="queryFormRef" 
+    label-width="100px" 
+    class="demo-ruleForm"
+    style="margin: 120px 150px"
+    >
 
 
-          <el-form-item label="病人ID" prop="patientID">
-            <el-input v-model="queryForm.patientID" ></el-input>
-          </el-form-item>
-          <!-- <el-form-item label="病人姓名">
-            <el-input v-model="queryForm.patientName"></el-input>
-          </el-form-item> -->
-          <el-form-item>
-            <el-button type="primary" @click="queryForPrescription">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </el-container>
+      <el-form-item label="病人ID" prop="patientID">
+        <el-input v-model="queryForm.patientID" ></el-input>
+      </el-form-item>
+      <!-- <el-form-item label="病人姓名">
+        <el-input v-model="queryForm.patientName"></el-input>
+      </el-form-item> -->
+      <el-form-item>
+        <el-button type="primary" @click="queryForPrescription">查询</el-button>
+      </el-form-item>
+    </el-form>
 
+    
+    <el-dialog
+      title="提示"
+      :visible.sync="errorVisible"
+      width="30%">
+      <span>{{errorMes}}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="errorVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog 
+      title="开药单" 
+      :visible.sync="prescriptionVisible"
+      width=40%>
       <el-dialog
-        title="提示"
-        :visible.sync="errorVisible"
-        width="30%">
-        <span>{{errorMes}}</span>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="errorVisible = false">确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <el-dialog 
-        title="开药单" 
-        :visible.sync="prescriptionVisible"
-        width=40%>
-        <el-dialog
-          width="30%"
-          title="药品信息"
-          :visible.sync="drugDetailVisible"
-          :before-close="handleCloseConfirm"
-          append-to-body>
-          <el-table :data="drugDetail">
-            <el-table-column property="drugID" label="药品编码" width="150"></el-table-column>
-            <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
-            <el-table-column property="shelvesID" label="货架" ></el-table-column>
-          </el-table>
-
-          <div slot="footer" class="dialog-footer">            
-            <el-button type="primary" size="medium" @click="deleteDrug">确认开药并删除药品</el-button>
-            <el-button  size="medium" @click="drugDetailVisible=false">取消操作</el-button>
-          </div>
-        </el-dialog>
-        
-        <div style="margin-left:30px; font-size: 16px" >
-          <p>ID：{{prescription.patientID}}</p>              
-          <p>姓名：{{prescription.patientName}}</p>
-          <p>性别：{{prescription.gender}}</p>
-          <p>年龄：{{prescription.age}}</p>
-          <p>诊断信息：{{prescription.diagnose}}</p>
-          <br/>
-          <br/>
-        </div>
-        
-        <el-table :data="prescription.drugData">
-          <el-table-column property="drugClassID" label="药品编码" width="150"></el-table-column>
+        width="30%"
+        title="药品信息"
+        :visible.sync="drugDetailVisible"
+        :before-close="handleCloseConfirm"
+        append-to-body>
+        <el-table :data="drugDetail">
+          <el-table-column property="drugID" label="药品编码" width="150"></el-table-column>
           <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
-          <el-table-column property="drugNum" label="药品盒数" width="150"></el-table-column>
-          <el-table-column property="price" label="价格" ></el-table-column>
-        </el-table> 
+          <el-table-column property="shelvesID" label="货架" ></el-table-column>
+        </el-table>
 
-        <div slot="footer" class="dialog-footer">          
-          <el-button type="primary" size="medium" v-if="prescribeButton" @click="queryForDrugInfo">开药</el-button>
+        <div slot="footer" class="dialog-footer">            
+          <el-button type="primary" size="medium" @click="deleteDrug">确认开药并删除药品</el-button>
+          <el-button  size="medium" @click="drugDetailVisible=false">取消操作</el-button>
         </div>
-          
       </el-dialog>
-    </el-main>
+      
+      <div style="margin-left:30px; font-size: 16px" >
+        <p>ID：{{prescription.patientID}}</p>              
+        <p>姓名：{{prescription.patientName}}</p>
+        <p>性别：{{prescription.gender}}</p>
+        <p>年龄：{{prescription.age}}</p>
+        <p>诊断信息：{{prescription.diagnose}}</p>
+        <br/>
+        <br/>
+      </div>
+      
+      <el-table :data="prescription.drugData">
+        <el-table-column property="drugClassID" label="药品编码" width="150"></el-table-column>
+        <el-table-column property="drugName" label="药品名称" width="150"></el-table-column>
+        <el-table-column property="drugNum" label="药品盒数" width="150"></el-table-column>
+        <el-table-column property="price" label="价格" ></el-table-column>
+      </el-table> 
+
+      <div slot="footer" class="dialog-footer">          
+        <el-button type="primary" size="medium" v-if="prescribeButton" @click="queryForDrugInfo">开药</el-button>
+      </div>
+        
+    </el-dialog>
   </el-container>
+
 </template>
 
 
