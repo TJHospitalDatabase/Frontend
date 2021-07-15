@@ -18,25 +18,23 @@
           <el-col :span="7">
 
           <el-select v-model="queryInfo.DEPT_NAME" filterable placeholder="请选择科室" @change="getNurseList"> 
-              <el-option
-              v-for="item in deptlist"
-              :key="item"
-              :label="item"
-              :value="item">
-              </el-option>
+          <el-option
+          v-for="item in deptlist"
+          :key="item"
+          :label="item"
+          :value="item">
+          </el-option>
           </el-select> 
           
           </el-col>
         </el-row >
         
-      
-            <el-input placeholder="请输入护士ID" style="width:30%;"
+           <el-input placeholder="请输入护士ID" style="width:30%;"
             v-model="queryInfo.NURSE_ID" clearable @clear="getNurseList">
             <el-button slot="append" icon="el-icon-search" @click="getNurseList"></el-button>
             </el-input>
         
-              <el-button type="primary" @click="addDialogVisible=true">添加值班护士</el-button>
-     
+           <el-button type="primary" @click="addDialogVisible=true">添加值班护士</el-button>
         
 
         <!--值班护士信息区域-->
@@ -65,7 +63,7 @@
             <el-table-column
               label="值班状态">
               <template slot-scope="scope">
-                  <el-switch v-model="scope.row.iS_ON_DATE" @change="nurseStateChanged(scope.row)">
+                  <el-switch v-model="scope.row.state" @change="nurseStateChanged(scope.row)">
                   </el-switch>
               </template>
             </el-table-column>
@@ -110,21 +108,21 @@
           width="30%" @close="addDialogClosed">
           <!--内容主体区-->
           <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="70px">
-          <el-form-item prop="nurseID" label="护士ID">
-          <el-input v-model="addForm.nurseID"></el-input>
+          <el-form-item prop="NURSE_ID" label="护士ID">
+          <el-input v-model="addForm.NURSE_ID"></el-input>
           </el-form-item>
-          <el-form-item prop="bedNum" label="病床号">
-          <el-input v-model="addForm.bedNum"></el-input>
+          <el-form-item prop="BED_ID" label="病床号">
+          <el-input v-model="addForm.BED_ID"></el-input>
           </el-form-item>
-          <el-form-item prop="state" label="值班状态">
-          <el-switch v-model="addForm.state"></el-switch>
+          <el-form-item prop="STATE" label="值班状态">
+          <el-switch v-model="addForm.STATE"></el-switch>
           </el-form-item>
           </el-form>
           <!--底部区域-->
           <span slot="footer" class="dialog-footer">
             <el-button @click="resetForm">重 置</el-button>
             <el-button @click="addDialogVisible=false">取 消</el-button>
-            <el-button type="primary" @click="submitForm">确 定</el-button>
+            <el-button type="primary" @click="submitForm(addForm)">确 定</el-button>
           </span>
         </el-dialog>
 
@@ -137,8 +135,8 @@ export default {
   data () {
     //验证护士ID的规则
   var checkNurseID= (rule, value,cb) =>{
-   for(let i=0;i<nurselist.length;i++)
-   {if(value==nurselist[i].nursE_ID) return cb()}
+   for(let i=0;i<this.nurselist.length;i++)
+   {if(value==this.nurselist[i].nursE_ID) return cb()}
    cb(new Erro('请正确输入存在的护士ID'))
 
   }
@@ -164,6 +162,7 @@ export default {
         NURSE_ID:'',
         
       },
+      total:0,
       // 护士信息表单数据
       nurselist: [],
       //科室选择器获取数据来源
@@ -173,19 +172,19 @@ export default {
       addDialogVisible: false,
       // 添加值班护士表单数据
       addForm: {
-        nurseID: '',
-        bedNum: '',
-        state: '',
+        NURSE_ID: '',
+        BED_ID: '',
+        STATE: true
       },
       // 添加信息的验证规则对象
       addFormRules: {
-        nurseID: [
+        NURSE_ID: [
           { required: true, message: '请输入护士ID', trigger: 'blur' },
           { validator: checkNurseID,type:'number', max:20,message: '长度最多 20 个字符', trigger: 'blur' }
         ],
-        bedNum: [
+        BED_ID: [
           { required: true, message: '请输入病床号', trigger: 'blur' },
-          { validator: checkBedID,type:'number',min:4, max:4,message: '长度为 4 个字符', trigger: 'blur' }
+          {min:4, max:4,message: '长度为 4 个字符', trigger: 'blur' }
         ]
 
       }
@@ -247,13 +246,14 @@ export default {
     // 监听开关状态的改变
      async nurseStateChanged (nurseInfo) {
        console.log(nurseInfo)
-       const { data:res } = await this.$http.put('onDate',{
+       const { data:res } = await this.$http.get('isonDate',{
+         params:{
          NURSE_ID: nurseInfo.nursE_ID,
          BED_ID: nurseInfo.beD_ID,
-         STATE: nurseInfo.iS_ON_DATE
+         STATE: nurseInfo.state}
 
        })
-    
+    console.log(res)
      if(res.err_code !== "0000"){
        nurseInfo.iS_ON_DATE = !nurseInfo.iS_ON_DATE
        return this.$message.error('更新护士值班状态失败！')
@@ -261,21 +261,19 @@ export default {
      this.$message.success('更新护士值班状态成功！')
      },
 
-    nurseStateChanged(){this.$message.success('更新护士值班状态成功！');},
-
-    // 修改值班护士信息并提交
-    submitForm (nurseInfo) {
-      this.addDialogVisible = false
+   
+    // 修改值班护士信息并提交(弹框)
+    submitForm () {
+      
       this.$refs.addFormRef.validate(async valid => {
         if (!valid) return
            
-        const { data:res } = await this.$http.put('onDate',{
-        NURSE_ID: nurseInfo.nursE_ID,
-        BED_ID: nurseInfo.beD_ID,
-        STATE: nurseInfo.iS_ON_DATE
+        const { data:res } = await this.$http.get('isonDate',{
+         params:this.addForm}
 
-      })
-
+       )
+      console.log(this.addForm)
+      console.log(res)
         if(res.err_code!=="0000")
         {return this.$message.error('修改值班护士信息失败！')}
        
@@ -296,22 +294,22 @@ export default {
     resetForm () {
       this.$refs.addFormRef.resetFields()
     },
-    // 修改对话框中病床号
+    // 修改表格中病床号
    async confirmEdit (index,row) {
      
       row.edi=false
       this.$forceUpdate()
       console.log(row)
-      const { data:res } = await this.$http.put('onDate',{
-        NURSE_ID: row.nursE_ID,
-        BED_ID: row.beD_ID,
-        STATE: row.iS_ON_DATE
-      }
-      
-      )
+      const { data:res } = await this.$http.get('isonDate',{
+         params:{
+         NURSE_ID: row.nursE_ID,
+         BED_ID: row.beD_ID,
+         STATE: row.state}
+
+       })
     
     if(res.err_code !== "0000"){
-      row.iS_ON_DATE = !row.iS_ON_DATE
+      row.state = !row.state
       return this.$message.error('更新床号失败！')
     }
     this.$message.success('更新床号成功！')
