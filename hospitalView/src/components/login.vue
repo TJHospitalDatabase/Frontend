@@ -103,7 +103,7 @@ import axios from 'axios'
 				if (self.form.user_id != "" && self.form.userpwd != "") {
                     axios.get('/logIn', {params:{user_id: self.form.user_id,
                         password: self.form.userpwd,
-						role:self.form.value}
+						role:self.form.value}          
                     })
 					.then(function(res) {
                         console.log(res.data);

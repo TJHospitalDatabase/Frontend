@@ -14,7 +14,7 @@
           <el-dropdown-item @click.native="logout"><i class="el-icon-switch-button"></i>退出账号</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span style="font-size: 15px">{{this.$route.query.name}}</span>
+      <span style="font-size: 15px">{{name}}</span>
        </div>
     </el-header>
 
@@ -133,10 +133,9 @@ export default{
   data(){
     return{
       transitionName:'fade',
-
-      id:'233333',
-      name:'怎么还有人在做数据库啊医生',
-      dept_name:'不学数据库了'
+      id:this.$route.query.id,
+      name:this.$route.query.name,
+      dept_name:this.$route.query.dept_name
     }
   },
   computed:{
@@ -153,7 +152,7 @@ export default{
         this.$router.push("/login");
     },
     goBack() {
-        this.$router.push("/home");
+        this.$router.push({path:"/welcome",query:{id:this.id, name:this.name, dept_name:this.dept_name}});
     },
   }
 }
