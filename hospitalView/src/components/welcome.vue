@@ -1,12 +1,16 @@
 <template>
-
-
         <!-- 主体部分 -->
-    <el-container style="height: 550px; height:100%; border: 1px solid #eee">      
+    <el-container style=" height:100%; border: 1px solid #eee; padding-top: 20px;
+    padding-right: 20px;padding-left: 20px; padding-bottom:0px !important;  background-color: rgb(250, 250, 250);">      
     <!-- 数据表单 -->
-            <el-main>
-              <div>
-              <h2 class="newtext" style="margin-top:0px"> 欢迎来到医院管理系统！</h2></div>
+      <el-main style="padding-bottom:0px !important;">
+
+        <transition :name="trans">
+            <div >
+              <h2 class="newtext" style="margin-top:0px"> 欢迎来到医院管理系统！</h2>
+          </div>
+        </transition>
+
             <div>
             <el-card class="info-card" style="height:180px">
               <div slot="header" class="clearfix" style="margin-left:10px">
@@ -22,15 +26,13 @@
                 <div  style="width:400px;  margin-left:150px; color: rgb(65, 86, 145);">
                     <div style="margin-bottom:10px;">用户名: {{this.$route.query.name}}</div>
                     <div style="margin-bottom:10px;">工号：{{this.$route.query.id}}</div>
-                    <!-- <div style="margin-bottom:10px;">所属科室： 神经外科</div> -->
                     <div style="margin-bottom:10px;">当前时间： {{this.getCurrentTime()}}</div>
                 </div>
               </div>
               </el-card>
             </div>
 
-
-              <div >
+              <div style="margin-top:25px">
                 <el-carousel indicator-position="outside" style="float:left; width:45%;height:350px">
                    <el-carousel-item >
                        <img src='../assets/doctor.jpg' style="height: 100%; width:100%">
@@ -46,7 +48,7 @@
                     </el-carousel-item>  
                 </el-carousel>
            
-                <el-card class="box-card" style="float:right; width:50%; margin-bottom: 5px;" >
+                <el-card class="box-card" style="float:right; width:50%; margin-top: 0px;" >
                   <div slot="header" class="clearfix">
                     <span style="color: rgb(65, 86, 145);"><i class="el-icon-info" ></i> 公告栏</span>
                   </div>
@@ -69,8 +71,6 @@
                 </el-card>
               </div>
 
-            
-            
 
             </el-main>
     </el-container>
@@ -80,6 +80,9 @@
   export default {
     data() {
       return {
+        trans:'down',
+        value: new Date(),
+        show: false,
         gettime:'',
       };
     },
@@ -169,13 +172,6 @@
     margin: 0;
   }
   
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
-  
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
-  }
 
    .text {
     font-size: 14px;
@@ -206,7 +202,7 @@
     border-radius: 50%;
     padding: 5px;
     box-shadow: 0 0 10px #ddd;
-    background-color: #fff;
+    background-color: rgb(255, 255, 255);
     margin-bottom: 15px;
   }
 
@@ -214,6 +210,6 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background-color: #eee;
+      background-color: rgb(228, 228, 228);
     }
 </style>
