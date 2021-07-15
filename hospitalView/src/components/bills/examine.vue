@@ -20,7 +20,7 @@
 	
             <!--            活动列表 只展示一些活动信息,详细信息可在详情查看-->
             <el-table :data="examineCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" 
-                border style="width: 100%" stripe>
+                 style="width: 100%" stripe border>
                 <!-- 项目检查单列表区域 -->
                 <el-table-column fixed type="index" label="序号" width=80px ></el-table-column>
                 <el-table-column prop="patienT_NAME" label="病人姓名" ></el-table-column>

@@ -50,7 +50,7 @@
           </div>
         </el-drawer>
 
-      <el-table :data="patientList.slice((currentPage-1)*pageSize,currentPage*pageSize)">
+      <el-table :data="patientList.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%" stripe border>
           <el-table-column prop="patienT_ID" label="编号" width="100">
           </el-table-column> 
           <el-table-column prop="patienT_NAME" label="病人姓名" width="100">

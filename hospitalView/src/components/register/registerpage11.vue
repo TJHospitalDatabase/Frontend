@@ -6,31 +6,38 @@
      <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
      <el-breadcrumb-item>病人信息录入</el-breadcrumb-item>
     </el-breadcrumb>
-<el-card style = "width:50% !important">
-<el-form ref="ruleForm" :rules="rules" :model="forme" id="forme" label-width="80px">
-  <h3>
-    请在下方录入病人信息
-  </h3>
-  <el-form-item label="姓名" prop="PATIENT_NAME" >
-    <el-input v-model="forme.PATIENT_NAME" ></el-input>
-  </el-form-item>
-  <el-form-item label="性别" prop="GENDER" >
-    <el-select v-model="forme.GENDER" placeholder="请选择性别" >
-      <el-option label="男" value="M"></el-option>
-      <el-option label="女" value="FM"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item  label="年龄" prop="AGE">
-    <el-input v-model.number="forme.AGE"></el-input>
-  </el-form-item>
-  <el-form-item label="联系方式" prop="PHONE">
-    <el-input v-model="forme.PHONE"></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="onSubmit">提交</el-button>
-  </el-form-item>
-</el-form>
-</el-card>
+
+<div>
+    <el-card style="float:left; width:45%;">
+    <el-form ref="ruleForm" :rules="rules" :model="forme" id="forme" label-width="80px">
+      <h3>
+        请在下方录入病人信息
+      </h3>
+      <el-form-item label="姓名" prop="PATIENT_NAME" >
+        <el-input v-model="forme.PATIENT_NAME" ></el-input>
+      </el-form-item>
+      <el-form-item label="性别" prop="GENDER" >
+        <el-select v-model="forme.GENDER" placeholder="请选择性别" >
+          <el-option label="男" value="M"></el-option>
+          <el-option label="女" value="FM"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item  label="年龄" prop="AGE">
+        <el-input v-model.number="forme.AGE"></el-input>
+      </el-form-item>
+      <el-form-item label="联系方式" prop="PHONE">
+        <el-input v-model="forme.PHONE"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
+      </el-form-item>
+    </el-form>
+    </el-card>
+
+    <img src="../../assets/paper.png" style="float:right; width:20%; " />
+
+</div>
+
   </el-main>
 </el-container>
 </template>

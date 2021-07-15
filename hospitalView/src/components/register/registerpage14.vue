@@ -16,7 +16,7 @@
                 </el-form>
   <el-table
     :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-    style="width: 100%">
+    style="width: 100%" stripe border>
 
     <el-table-column prop="registratioN_ID"
       label="挂号单ID">
