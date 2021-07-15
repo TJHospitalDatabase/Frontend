@@ -30,11 +30,11 @@
                   <div class="demo-drawer__content">
                      <el-form ref="searchRef" :model="queryRoom"  :rules="searchRoomFormRules" label-width="0px" class="search_form">
                 <!-- 搜索框 -->
-                    <el-form-item prop="nursE_NAME">
+                    <!-- <el-form-item prop="nursE_NAME">
                       负责护士：
                     <el-input v-model="queryRoom.nursE_NAME"   prefix-icon="el-icon-zoom-in" style="width:70%;" 
                         placeholder="请输入负责护士姓名" ></el-input>
-                    </el-form-item >
+                    </el-form-item > -->
 
                     <el-form-item prop="depT_NAME">
                       所属科室：
@@ -55,8 +55,8 @@
                     </el-form-item> 
                 </el-form>
                     <div class="demo-drawer__footer" style="margin-left:20px;">
-                      <el-button @click="cancelForm()">取 消</el-button>
-                      <el-button type="primary" @click="search()"  :loading="loading">提 交</el-button>
+                      <el-button @click="cancelForm">取 消</el-button>
+                      <el-button type="primary" @click="search"  :loading="loading">提 交</el-button>
                     </div>
                   </div>
               </el-drawer>   
@@ -69,6 +69,8 @@
                     <el-table-column prop="nursE_NAME" label="负责护士">
                     </el-table-column>
                     <el-table-column prop="price" label="日均费用" >
+                    </el-table-column>
+                    <el-table-column prop="iS_USED" label="是否使用" :formatter="stateFormat">
                     </el-table-column>
                     <el-table-column label="操作">
                       <template slot-scope="scope">
@@ -155,13 +157,13 @@
 
         formLabelWidth: '80px',
         timer: null,
-    
+
         roomList:[],
         queryRoom:{
           beD_ID:'',
           nursE_NAME:'',
           depT_NAME:'',
-          uB:'',
+          uB:'2000',
           lB:'',
         },
 
@@ -179,12 +181,12 @@
             { type:'string', message: '请输入合法的科室名称', trigger: 'blur'},
             { validator: checkDept, trigger: 'blur' }
           ],
-          uB:[
-            { type:'number', message: '请输入数字', trigger: 'blur'},
-          ],
-          lB:[
-            { type:'number', message: '请输入数字', trigger: 'blur'},
-          ]
+          // uB:[
+          //   { type:'number', message: '请输入数字', trigger: 'blur'},
+          // ],
+          // lB:[
+          //   { type:'number', message: '请输入数字', trigger: 'blur'},
+          // ]
         },
 
         editRoomFormRules:{
@@ -201,12 +203,18 @@
       };
     },
 
-
     created () {
       this.getRoomList()
     },  
 
     methods:{
+      stateFormat(row, column) {
+    if (row.iS_USED === true) {
+      return '是'
+    } else  {
+      return '空床位'
+    } 
+  },
        // 模糊搜索
       async frontSearch () {
          this.queryRoom.uB=this.queryRoom.uB-0
@@ -241,14 +249,13 @@
         search(){
           console.log('请求数据的依赖参数queryRoom内容如下')
           console.log(this.queryRoom)
-          this.getRoomList()
-          // this.$refs.searchRef.validate( valid => {
-          //   if (!valid){ 
-          //     this.$message.warning('请填写正确的信息！')
-          //     return}
-          //   this.getRoomList()
-          //   this.$refs.drawer.closeDrawer()
-          //  })              
+          this.$refs.searchRef.validate( valid => {
+            if (!valid){ 
+              this.$message.warning('请填写正确的信息！')
+              return}
+            this.getRoomList()
+            this.$refs.drawer.closeDrawer()
+           })              
         },
 
         // 编辑病床信息
@@ -327,6 +334,7 @@
             })
             .catch(_ => {});
         },
+
         cancelForm() {
           this.loading = false;
           this.dialog = false;

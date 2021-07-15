@@ -137,7 +137,7 @@
             :total="drugPast.length">
           </el-pagination>
           <div slot="footer" class="dialog-footer">
-            <el-button type="danger" size="small" @click="deleteAllPastDrug">删除所有过期药品</el-button>
+            <el-button type="danger" size="small" v-if="deletedPastDrug.length" @click="deleteAllPastDrug">删除所有过期药品</el-button>
           </div>
         </el-dialog>
 
@@ -248,6 +248,7 @@
         deletedDrug:[
         ],
         drugVisible: false,
+        curDeleteRow:-1,
 
         drugPast:[],
         curDrugPastPage: 1,
@@ -331,6 +332,7 @@
       queryForDrug(index, row){
         this.drugVisible=true;
         console.log(row.drugClassID);
+        this.curDeleteRow=index;
         axios
           .get("/drug/drugclass",{
             params:{
@@ -401,7 +403,8 @@
                   type: 'error'
                 });
               }
-            })            
+            })
+          this.drugClassCurData[this.curDeleteRow].inventory-=this.deletedDrug.length;           
           this.deletedDrug=[];
         }
 
@@ -447,6 +450,23 @@
                   message: '所有过期药品删除成功！',
                   type: 'success'
                 });
+                axios
+                  .get("drugclass/all")
+                  .then((response)=>{
+                    if(response.data.err_code==0){
+                      this.drugClassData = [];
+                      for(let i=0; i<response.data.data.length; ++i){
+                        this.drugClassData.push({
+                          drugClassID: response.data.data[i].druG_CLASS_ID,
+                          drugName: response.data.data[i].druG_NAME,
+                          inventory: response.data.data[i].inventory,
+                          price: response.data.data[i].price,
+                          show: false
+                        })
+                      }
+
+                    }
+                  })
               }
               else{
                 this.$message({

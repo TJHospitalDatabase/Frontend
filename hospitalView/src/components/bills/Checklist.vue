@@ -18,8 +18,8 @@
                 <el-col :span="8">
                     <!-- 后端搜索 -->
                     <!-- <el-input placeholder="请输入项目检查单编号" v-model="this.queryInfo.EXAMINATION_LIST_ID" clearable 
-                    @clear="getChecklist"> -->
-                    <el-button slot="append" icon="el-icon-search" @click="getChecklist"></el-button>
+                    @clear="getChecklist">
+                    <el-button slot="append" icon="el-icon-search" @click="getChecklist"></el-button> -->
 
                     <!-- 前端搜索 -->
                     <el-input placeholder="请输入搜索内容" v-model="searchgoal" clearable 
@@ -58,12 +58,14 @@
                 </el-table-column> 
             </el-table>             
             <!-- 分页效果  -->
+            <div style="position:absolute;top:83%;">
             <el-pagination
             :current-page.sync="queryInfo.PAGE_NUM"
             :page-size="queryInfo.PAGE_SIZE"
             layout="total,prev, pager, next,jumper"
             :total="checklist.length">
             </el-pagination>
+            </div>
 
             <!-- 查看结果对话框 -->
                 <el-dialog title="检查结果" :visible.sync="emptyFormVisible" width="50%" >
@@ -254,7 +256,7 @@ export default {
             // 当前的页数
             PAGE_NUM:1,
             // 当前每页显示多少条数据
-            PAGE_SIZE:2
+            PAGE_SIZE:6
         },
 
         // 获取样本结果列表的参数对象
@@ -263,7 +265,7 @@ export default {
             // 当前的页数
             PAGE_NUM:1,
             // 当前每页显示多少条数据
-            PAGE_SIZE:2
+            PAGE_SIZE:6
         },
         //总页面
         total:0,
