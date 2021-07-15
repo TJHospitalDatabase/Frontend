@@ -169,11 +169,7 @@
           if(res.err_code=="0000")
           {
             alert("删除成功")
-            const { data: res } =await this.$http.get('registration/find', { params: { PATIENT_NAME: this.registrationIDSearch.patienT_NAME}})
-            console.log(res.data)
-            // 将data属性重命名为res
-            this.patientData=res.data
-            // console.log(this.patientData)
+            window.location.reload()
             }
           else
           {
