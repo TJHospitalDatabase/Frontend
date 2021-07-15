@@ -34,7 +34,7 @@
     </el-form>
     </el-card>
 
-    <img src="../../assets/paper.png" style="float:right; width:20%; " />
+    <img src="../../assets/paper.png" style="float:right; width:40%; margin:50px; margin-right:100px;" />
 
 </div>
 
