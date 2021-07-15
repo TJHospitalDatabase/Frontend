@@ -82,14 +82,14 @@
             width="50%"
             @close="editDialogClosed"
             :append-to-body = true>
-            <el-form >
+            <el-form ref="ruleForm" :rules="rules" :model="forme" id="forme">
             <el-form-item label="病人ID:"  >
               {{temp.PATIENT_ID}}
             </el-form-item>
             <el-form-item label="姓名:"  >
               {{temp.PATIENT_NAME}}
             </el-form-item>
-            <el-form-item label="科室选择" >
+            <el-form-item label="科室选择" prop="departmentID">
               <el-select v-model="forme.departmentID" placeholder="请选择科室">
               <el-option label="骨科" value="骨科"></el-option>
               <el-option label="内科" value="内科"></el-option>
@@ -165,6 +165,11 @@ const axios = require('axios');
             PATIENT_NAME:"",
             PATIENT_ID:""
         },
+        rules: {
+          departmentID: [
+            { required: true, message: '请选择科室', trigger: 'change' }
+          ]
+        }
       };
     },
     created(){
@@ -203,6 +208,11 @@ const axios = require('axios');
         
         async onSubmit()
         {
+          this.$refs.ruleForm.validate(async valid => {
+            // console.log(valid)
+            // 表单预校验失败
+            if (valid) 
+            {
             this.forme.AGE=this.forme.AGE-0;
             const { data: res } = await this.$http.put('registration',
                 {
@@ -219,7 +229,7 @@ const axios = require('axios');
             callback: action => {
             }
             });
-            }
+            }}})
         }
         }
     }
