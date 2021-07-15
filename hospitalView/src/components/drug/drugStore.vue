@@ -21,7 +21,7 @@
         <el-table
           :data="drugClassCurData"
           style="width: 100%"
-          stripe
+          stripe border
           height='100%'>
           <el-table-column
             label="药品类别码"

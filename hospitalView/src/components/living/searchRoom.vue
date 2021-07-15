@@ -61,7 +61,7 @@
                   </div>
               </el-drawer>   
 
-                <el-table :data="roomList.slice((currentPage-1)*pageSize,currentPage*pageSize)">
+                <el-table :data="roomList.slice((currentPage-1)*pageSize,currentPage*pageSize)" stripe border>
                     <el-table-column prop="beD_ID" label="床号">
                     </el-table-column>
                     <el-table-column prop="depT_NAME" label="所属科室">

@@ -25,7 +25,7 @@
                 </el-col>
             </el-row>
             <!-- 检查单表格区域 -->
-            <el-table :data="checkresultlist_current" style="width: 100%" stripe>
+            <el-table :data="checkresultlist_current" style="width: 100%" stripe border>
 
                 <!-- 表头区域 -->
                 <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
