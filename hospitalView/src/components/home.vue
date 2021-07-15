@@ -76,8 +76,9 @@
         <el-container  style="height: 500px; height:100%; width:100%; border: 1px solid #eee">
           <el-main>
             <!--面包屑导航区 -->
-            <el-breadcrumb separator-class="el-icon-arrow-right" >
-              <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
+            <el-breadcrumb separator-class="el-icon-arrow-right" v-if="isWelcome">
+              <el-breadcrumb-item :to="{ path: '/welcome', query:{id:id,name:name,dept_name:dept_name}}"
+              @click.native="isWelcome=false">首页</el-breadcrumb-item>
               <el-breadcrumb-item>{{breadContent.first}}</el-breadcrumb-item>
               <el-breadcrumb-item>{{breadContent.second}}</el-breadcrumb-item>
             </el-breadcrumb>
@@ -159,8 +160,7 @@ export default{
   },
   methods:{
     selectRouter(index,indexPath){
-      console.log(index);
-      console.log(indexPath);
+      this.isWelcome=true;
       switch (index) {
         case "registerpage11":
           this.breadContent.first='门诊管理';
