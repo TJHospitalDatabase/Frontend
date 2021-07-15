@@ -1,4 +1,3 @@
-                                            
 <template>
 
 <el-container style=" height:100%; width: 100%; border: 1px solid #eee">
@@ -132,6 +131,7 @@ const axios = require('axios');
           console.log(this.$route.query.id)
           console.log(res)
           alert("选中操作成功")
+          this.search()
           // 这里是返回的信息
         }
           },

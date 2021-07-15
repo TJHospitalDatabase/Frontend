@@ -1,45 +1,36 @@
 <template>
-    <el-container>
-    <!-- 主体部分 -->
-    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-        <el-main>
+    <el-container style="height:100%; border: 1px solid #eee">
+         <el-main >
         <!--        面包屑-->
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item >单目管理</el-breadcrumb-item>
             <el-breadcrumb-item>处方单开具</el-breadcrumb-item>
         </el-breadcrumb>
-<el-card>
-       <!--  搜索与添加-->
-        <div>
-            <!-- 搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
-            <el-input clearable @clear="getActivityList" placeholder="请输入内容" v-model="query" style="width:60%;">
-            <el-button slot="append" icon="el-icon-search" @click="getActivityList"></el-button>
-            </el-input>
-            <el-button type="primary" @click="showAddActivity" style="width:10%">添加处方单</el-button>
-        </div>
-       
+
+        <el-card style="height:95%">
+        <!--        卡片-->
+            <!--            搜索与添加-->
+            <el-row :gutter="1000">
+                <el-col :span="12">
+                    <!--                    搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
+                    <el-input clearable @clear="getActivityList" placeholder="请输入处方单id" v-model="search">
+                        <el-button slot="append" icon="el-icon-search" @click="getActivityList"></el-button>
+                    </el-input>
+                </el-col>
+                <el-col :span="4">
+                    <el-button type="primary" @click="showAddActivity">添加处方单</el-button>
+                </el-col>
+            </el-row>
             <!--            活动列表 只展示一些活动信息,详细信息可在详情查看-->
-            <el-table :data="prescriptionCurData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border stripe>
-                <el-table-column type="index"  label="序号" width=80></el-table-column>
-                <el-table-column label="处方单id" prop="prescriptioN_ID" ></el-table-column>
-                <el-table-column label="病人id" prop="patienT_ID" ></el-table-column>
-                <el-table-column label="医生id" prop="doctoR_ID" ></el-table-column>
-                <el-table-column label="开具时间" prop="sigN_DATE" ></el-table-column>
-                <el-table-column label="临床诊断" prop="diagnosis" ></el-table-column>
+            <el-table :data="prescriptionCurData" border stripe>
+                <el-table-column type="index"  label="序号" width=100></el-table-column>
+                <el-table-column label="处方单id" prop="prescriptioN_ID" width=240></el-table-column>
+                <el-table-column label="病人id" prop="patienT_ID" width=240></el-table-column>
+                <el-table-column label="医生id" prop="doctoR_ID" width=240></el-table-column>
+                <el-table-column label="开具时间" prop="sigN_DATE" width=280></el-table-column>
+                <el-table-column label="临床诊断" prop="diagnosis" width=380></el-table-column>
             </el-table>
-                <!--            分页区域-->
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="currentPage"
-                    :page-sizes="[ 2, 5, 10]"
-                    :page-size="pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="activityList.length">
-            </el-pagination>
-</el-card>
-</el-main>
             <!--        添加活动对话框-->
             <el-dialog title="添加处方单" :visible.sync="addDialogVisible"
                        width="630px" top="60px" center>
@@ -67,9 +58,19 @@
             </span>
             </el-dialog>
 			<br>
-        
-    </el-container>
-    </el-container>
+            <!--            分页区域-->
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    :page-sizes="[ 2, 5, 10]"
+                    :page-size.sync="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="prescriptionSearchData.length">
+            </el-pagination>
+   </el-card>
+    </el-main>  
+  </el-container>
 </template>
 
 <script>
@@ -90,8 +91,7 @@
                 //获取活动列表参数对象
                 //查询到的当页活动
                 activityList: [],
-                showList:[],
-                query:'',
+                search:'',
                  //当前的页码
                 pageNumber: 1,
                 //每页显示的条数
@@ -111,7 +111,6 @@
                     doctoR_ID: "",
                     sigN_DATE: "",
                     diagnosis: "",
-                    state: "",
                 },
                 showForm: {},
                 //添加活动的校验规则
@@ -134,18 +133,15 @@
         created()
         {
            this.getActivityList();
-            let nowDate = new Date();
-                        let date = {
-                        year: nowDate.getFullYear(),
-                        month: nowDate.getMonth() + 1,
-                        date: nowDate.getDate(),
-                        }
-                        console.log(date);
-                        let systemDate = date.year + '-' + 0 + date.month + '-' + 0 + date.date;
         },
         computed:{
+        prescriptionSearchData(){
+        return (this.activityList.filter(data => !this.search || 
+          data.prescriptioN_ID.toLowerCase().includes(this.search.toLowerCase())))
+        },
         prescriptionCurData:function(){
-        return this.activityList.slice((this.currentPage-1)*this.pageSize,Math.min(this.currentPage*this.pageSize,this.activityList.length));
+        return this.prescriptionSearchData.slice((this.currentPage - 1) * this.pageSize,
+        Math.min(this.currentPage * this.pageSize, this.prescriptionSearchData.length));
         }
         },
         methods: {
@@ -160,15 +156,14 @@
 
             },
             frontSearch(){
-            const query=this.query
-            if(query){
+            const search=this.search
+            if(search){
             this.activityList=this.activityList.filter(data=>{
                 return Object.keys(data).some(key=>{
-                    return String(data[key]).toLowerCase().indexOf(query)>-1
+                    return String(data[key]).toLowerCase().indexOf(search)>-1
                 })
             })
             }
-            console.log(this.activityList)
             },
             //监听pageSize改变的事件
             handleSizeChange(newSize)
@@ -192,7 +187,6 @@
                     this.$refs.addFormRef.resetFields();
                 });
 
-                this.addForm.prescriptioN_ID="";
                 this.addForm.patienT_ID = "";
                 this.addForm.doctoR_ID = "";
                 this.addForm.diagnosis = "";
@@ -213,19 +207,20 @@
                         console.log(date);
                         let systemDate = date.year + '-' + 0 + date.month + '-' + date.date;
                         let result = await this.$http.put("http://101.132.106.237:5050/prescription",
-                            {data:
+                            
                             {
                                 patienT_ID: this.addForm.patienT_ID,
                                 doctoR_ID: this.addForm.doctoR_ID,
                                 sigN_DATE: systemDate,
                                 diagnosis: this.addForm.diagnosis,
-                                state: false}                            
-                            });
+                            }                            
+                            );
                         console.log(systemDate);
                         //隐藏添加活动对话框
                         this.addDialogVisible = false;
                         this.getActivityList();
-                        this.$message.info("添加处方单成功!");
+                        if (result.err_code !== "0000") return this.$message.error('增加失败！')           
+                        else this.$message.info("添加检查单成功!");
                     }
                 );
             },
