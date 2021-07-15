@@ -1,14 +1,5 @@
 <template>
-    <el-container style="height:100%; border: 1px solid #eee">
-         <el-main >
-        <!--        面包屑-->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item >单目管理</el-breadcrumb-item>
-            <el-breadcrumb-item>处方单开具</el-breadcrumb-item>
-        </el-breadcrumb>
-
-        <el-card style="height:95%">
+    <el-card style="height:95%">
         <!--        卡片-->
             <!--            搜索与添加-->
             <el-row :gutter="1000">
@@ -68,9 +59,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="prescriptionSearchData.length">
             </el-pagination>
-   </el-card>
-    </el-main>  
-  </el-container>
+    </el-card>
 </template>
 
 <script>

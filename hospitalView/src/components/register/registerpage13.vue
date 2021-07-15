@@ -1,82 +1,71 @@
-<template>
-<el-container>
-    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-        <el-main>
-          
-          <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
-          <el-breadcrumb-item>挂号</el-breadcrumb-item>
-          </el-breadcrumb>
-          <el-card>
-            <el-form ref="search11Ref" :model="patientNameSearch" :rules="searchRules" label-width="0px" class="search_form">
-                        <!-- 搜索框 -->
-                            <el-form-item prop="name">
-                            <el-input v-model="patientNameSearch.name"   prefix-icon="el-icon-zoom-in" style="width:70%;"></el-input>
-                            <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>          
-                            </el-form-item>
-                        </el-form>
-            <el-table
-              :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-              style="width: 100%" stripe border>
+<template>    
+  <el-card>
+    <el-form ref="search11Ref" :model="patientNameSearch" :rules="searchRules" label-width="0px" class="search_form">
+                <!-- 搜索框 -->
+                    <el-form-item prop="name">
+                    <el-input v-model="patientNameSearch.name"   prefix-icon="el-icon-zoom-in" style="width:70%;"></el-input>
+                    <el-button type="primary" @click="search" style="margin-left:20px;">搜索</el-button>          
+                    </el-form-item>
+                </el-form>
+    <el-table
+      :data="patientData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      style="width: 100%" stripe border>
 
-              <el-table-column prop="patienT_ID"
-                label="病人ID">
-                <template #default="scope">
-                    <p>{{ scope.row.patienT_ID }}</p>
-                </template>
-              </el-table-column>
-              
-              <el-table-column prop="patienT_NAME"
-                label="名字">
-                <template slot-scope="scope">
-                    <p>{{ scope.row.patienT_NAME }}</p>
-                </template>
-              </el-table-column>
+      <el-table-column prop="patienT_ID"
+        label="病人ID">
+        <template #default="scope">
+            <p>{{ scope.row.patienT_ID }}</p>
+        </template>
+      </el-table-column>
+      
+      <el-table-column prop="patienT_NAME"
+        label="名字">
+        <template slot-scope="scope">
+            <p>{{ scope.row.patienT_NAME }}</p>
+        </template>
+      </el-table-column>
 
-              <el-table-column prop="gender"
-                label="性别">
-                <template slot-scope="scope">
-                    <p>{{ scope.row.gender }}</p>
-                </template>
-              </el-table-column>
-              
-              <el-table-column prop="age"
-                label="年龄">
-                <template slot-scope="scope">
-                    <p>{{ scope.row.age }}</p>
-                </template>
-              </el-table-column>
-              
-              <el-table-column prop="phone"
-                label="联系方式">
-                <template slot-scope="scope">
-                    <p>{{ scope.row.phone }}</p>
-                </template>
-              </el-table-column>
-              
-              <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    type="primary"
-                    @click="showEditDialog(scope.$index, scope.row)">选中</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <div class="block" style="margin-top:15px;">
-              <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
-                :current-page="currentPage" 
-                :page-sizes="[1,2,5,10,20]" 
-                :page-size="pageSize" 
-                layout="total, sizes, prev, pager, next, jumper" 
-                :total="patientData.length">
-              </el-pagination>
-            </div>
-          </el-card>
-        </el-main>
+      <el-table-column prop="gender"
+        label="性别">
+        <template slot-scope="scope">
+            <p>{{ scope.row.gender }}</p>
+        </template>
+      </el-table-column>
+      
+      <el-table-column prop="age"
+        label="年龄">
+        <template slot-scope="scope">
+            <p>{{ scope.row.age }}</p>
+        </template>
+      </el-table-column>
+      
+      <el-table-column prop="phone"
+        label="联系方式">
+        <template slot-scope="scope">
+            <p>{{ scope.row.phone }}</p>
+        </template>
+      </el-table-column>
+      
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="showEditDialog(scope.$index, scope.row)">选中</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="block" style="margin-top:15px;">
+      <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+        :current-page="currentPage" 
+        :page-sizes="[1,2,5,10,20]" 
+        :page-size="pageSize" 
+        layout="total, sizes, prev, pager, next, jumper" 
+        :total="patientData.length">
+      </el-pagination>
+    </div>
 
-         <el-dialog
+    <el-dialog
             title="挂号单"
             :visible.sync="editDialogVisible"
             width="50%"
@@ -129,9 +118,7 @@
             <el-button @click="onSubmit" type="primary" >确 定</el-button>
           </span>
         </el-dialog>
-        
-    </el-container>
-</el-container>
+  </el-card>
 </template>
 
 

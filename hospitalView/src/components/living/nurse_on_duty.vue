@@ -1,16 +1,4 @@
 <template>
-<el-container>
-    <!-- 主体部分 -->
-    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <!-- 数据表单 -->
-    <el-main>
-    <!--面包屑导航区-->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-     <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-     <el-breadcrumb-item>住院管理</el-breadcrumb-item>
-     <el-breadcrumb-item>住院护士值班信息</el-breadcrumb-item>
-    </el-breadcrumb>
-
       <!--卡片视图区域-->
         <el-card>
         <!--搜索与添加区域-->
@@ -99,8 +87,7 @@
             :total="nurselist.length">
             </el-pagination>
         </div>
-        </el-card>
-    </el-main>
+
         <!--添加值班护士的对话框-->
         <el-dialog
           title="添加值班护士"
@@ -126,8 +113,9 @@
           </span>
         </el-dialog>
 
- </el-container>
- </el-container> 
+        </el-card>
+        
+ 
 </template>
 
 <script>

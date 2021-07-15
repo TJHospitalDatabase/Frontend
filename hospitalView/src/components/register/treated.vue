@@ -1,104 +1,88 @@
 <template>
-<el-container>
-    <!-- 主体部分 -->
-    <el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <!-- 数据表单 -->
-            <el-main>
-        <!--面包屑导航区-->
-     <el-breadcrumb separator-class="el-icon-arrow-right">
-     <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
-     <el-breadcrumb-item>问诊信息</el-breadcrumb-item>
-     <el-breadcrumb-item>问诊信息列表</el-breadcrumb-item>
-     </el-breadcrumb>
-
-     <!--卡片视图区-->
-     <el-card>      
-            <div>
-              <div  style="margin-bottom: 10px;">患者ID：</div>
-                <el-input
-                style="width: 20%"
-                size="large"
-                placeholder="请输入患者ID"
-                v-model="queryInfo.PATIENT_ID" 
-                clearable
-                @clear="getTreatList">
-                </el-input>
-              <el-button type="primary" icon="el-icon-search" @click="getTreatList">搜 索</el-button><!--事件还未定义-->
-            </div>
-          
-         <!--问诊信息列表(表单内容待根据postman中内容进行更改)-->
-         <el-table
-            :data="treatlist.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-            style="width: 100%" border stript>
-            <el-table-column type="index" fixed></el-table-column>
-            <el-table-column
-              prop="patienT_ID"
-              label="患者ID" fixed>
-            </el-table-column>
-            <el-table-column
-              prop="patienD_NAME"
-              label="患者姓名">
-            </el-table-column>
-            <el-table-column
-              prop="gender"
-              label="性别">
-            </el-table-column>
-
-            <!--待修改-->
-            <el-table-column
-              sortable
-              prop="id"
-              label="单子ID">
-            </el-table-column>
-            <el-table-column
-              sortable
-              prop="type"
-              label="单子种类">
-            </el-table-column>
-            <!--待修改--> 
-
-            <el-table-column
-              sortable
-              prop="sigN_DATE"
-              label="开具日期">
-            </el-table-column>
-            <el-table-column
-              prop="doctoR_ID"
-              label="医生ID">
-            </el-table-column>
-            <el-table-column
-              prop="doctoR_NAME"
-              label="医生姓名">
-            </el-table-column>
-            <el-table-column
-              prop="price"
-              label="问诊费用(元)">
-            </el-table-column>
-            <el-table-column
-              sortable
-              label="缴费状态">
-              <template slot-scope="scope">
-                  <el-switch v-model="scope.row.state" @change="stateChanged(scope.row)">
-                  </el-switch>
-              </template>
-            </el-table-column>
-         </el-table>
-         
-<!-- 分页器 -->
-        <div class="block" style="margin-top:15px;">
-            <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
-            :current-page="currentPage" 
-            :page-sizes="[2,5,10,20]" 
-            :page-size="pageSize" 
-            layout="total, sizes, prev, pager, next, jumper" 
-            :total="treatlist.length">
-            </el-pagination>
+  <!--卡片视图区-->
+  <el-card>      
+        <div>
+          <div  style="margin-bottom: 10px;">患者ID：</div>
+            <el-input
+            style="width: 20%"
+            size="large"
+            placeholder="请输入患者ID"
+            v-model="queryInfo.PATIENT_ID" 
+            clearable
+            @clear="getTreatList">
+            </el-input>
+          <el-button type="primary" icon="el-icon-search" @click="getTreatList">搜 索</el-button><!--事件还未定义-->
         </div>
-     </el-card>
+      
+      <!--问诊信息列表(表单内容待根据postman中内容进行更改)-->
+      <el-table
+        :data="treatlist.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        style="width: 100%" border stript>
+        <el-table-column type="index" fixed></el-table-column>
+        <el-table-column
+          prop="patienT_ID"
+          label="患者ID" fixed>
+        </el-table-column>
+        <el-table-column
+          prop="patienD_NAME"
+          label="患者姓名">
+        </el-table-column>
+        <el-table-column
+          prop="gender"
+          label="性别">
+        </el-table-column>
 
-            </el-main>
-    </el-container>
-</el-container>
+        <!--待修改-->
+        <el-table-column
+          sortable
+          prop="id"
+          label="单子ID">
+        </el-table-column>
+        <el-table-column
+          sortable
+          prop="type"
+          label="单子种类">
+        </el-table-column>
+        <!--待修改--> 
+
+        <el-table-column
+          sortable
+          prop="sigN_DATE"
+          label="开具日期">
+        </el-table-column>
+        <el-table-column
+          prop="doctoR_ID"
+          label="医生ID">
+        </el-table-column>
+        <el-table-column
+          prop="doctoR_NAME"
+          label="医生姓名">
+        </el-table-column>
+        <el-table-column
+          prop="price"
+          label="问诊费用(元)">
+        </el-table-column>
+        <el-table-column
+          sortable
+          label="缴费状态">
+          <template slot-scope="scope">
+              <el-switch v-model="scope.row.state" @change="stateChanged(scope.row)">
+              </el-switch>
+          </template>
+        </el-table-column>
+      </el-table>
+      
+<!-- 分页器 -->
+    <div class="block" style="margin-top:15px;">
+        <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+        :current-page="currentPage" 
+        :page-sizes="[2,5,10,20]" 
+        :page-size="pageSize" 
+        layout="total, sizes, prev, pager, next, jumper" 
+        :total="treatlist.length">
+        </el-pagination>
+    </div>
+  </el-card>
 </template>
 
 <script>

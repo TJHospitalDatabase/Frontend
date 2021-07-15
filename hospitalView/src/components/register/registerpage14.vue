@@ -1,11 +1,4 @@
 <template>
-<el-container style="height: 500px; height:100%; border: 1px solid #eee">
-    <el-main>
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>门诊管理</el-breadcrumb-item>
-          <el-breadcrumb-item>挂号单处理</el-breadcrumb-item>
-          </el-breadcrumb>
           <el-card>
           <el-form ref="search11Ref" :model="registrationIDSearch" :rules="searchRules" label-width="0px" class="search_form">
                 <!-- 搜索框 -->
@@ -73,8 +66,8 @@
                 :total="patientData.length">
               </el-pagination>
             </div>
-          </el-card>
 
+  
         <el-dialog
             title="提示"
             :visible.sync="editDialogVisible"
@@ -91,8 +84,9 @@
             <el-button @click="handleDelete" type="primary" >是</el-button>
               </span>
         </el-dialog>
-    </el-main>
-</el-container>
+
+  </el-card>
+
 </template>
 
 <script>
