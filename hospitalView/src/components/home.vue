@@ -133,10 +133,9 @@ export default{
   data(){
     return{
       transitionName:'fade',
-
-      id:'233333',
-      name:'怎么还有人在做数据库啊医生',
-      dept_name:'不学数据库了'
+      id:this.$route.query.id,
+      name:this.$route.query.name,
+      dept_name:this.$route.query.dept_name
     }
   },
   computed:{
