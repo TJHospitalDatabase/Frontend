@@ -163,7 +163,7 @@
           if(res.err_code=="0000")
           {
             alert("删除成功")
-            window.location.reload()
+            this.search()
             }
           else
           {
