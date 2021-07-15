@@ -95,7 +95,7 @@
           <el-form
             :model="editForm"
             ref="editFormRef"
-            label-width="70px"
+            label-width="90px"
             :rules="editRoomFormRules"
           >
             <el-form-item label="病床号" prop="beD_ID">

@@ -140,7 +140,7 @@ export default {
 
      currentPage: 1, // 当前页码
         total: 0, // 总条数
-        pageSize: 2, // 每页的数据条数
+        pageSize: 10, // 每页的数据条数
 
 
       queryInfo: {

@@ -10,8 +10,8 @@
       </el-form-item>
       <el-form-item label="性别" prop="GENDER" >
         <el-select v-model="forme.GENDER" placeholder="请选择性别" >
-          <el-option label="男" value="M"></el-option>
-          <el-option label="女" value="FM"></el-option>
+          <el-option label="男" value="男"></el-option>
+          <el-option label="女" value="女"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item  label="年龄" prop="AGE">
