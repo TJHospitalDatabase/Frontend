@@ -125,6 +125,9 @@
         }
       };
     },
+    created(){
+        this.search()
+    },
     methods: {
       editDialogClosed () {
           // this.$refs.editFormRef.resetFields()
