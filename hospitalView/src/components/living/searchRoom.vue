@@ -68,10 +68,6 @@
                     </el-table-column>
                     <el-table-column prop="nursE_NAME" label="负责护士">
                     </el-table-column>
-                    <el-table-column prop="capacity" label="总床位数">
-                    </el-table-column>
-                    <el-table-column prop="remaiN_CAPACITY" label="剩余床位数">
-                    </el-table-column>
                     <el-table-column prop="price" label="日均费用" >
                     </el-table-column>
                     <el-table-column label="操作">
@@ -155,7 +151,7 @@
 
         currentPage: 1, // 当前页码（默认值）
         total: 20, // 总条数（默认值）
-        pageSize: 2, // 每页的数据条数（默认值）
+        pageSize: 10, // 每页的数据条数（默认值）
 
         formLabelWidth: '80px',
         timer: null,
@@ -229,6 +225,7 @@
             })
           })
         }
+        console.log('模糊搜索的结果如下')
         console.log(this.roomList)
       },
 
@@ -236,20 +233,22 @@
           this.queryRoom.uB=this.queryRoom.uB-0
           this.queryRoom.lB=this.queryRoom.lB-0
           const { data: res } =await this.$http.post('room', this.queryRoom)
-          //console.log(res.data)
+          console.log('后端get到的病床结果如下')
+          console.log(res.data)
           this.roomList=res.data
         },
 
         search(){
           console.log('请求数据的依赖参数queryRoom内容如下')
           console.log(this.queryRoom)
-          this.$refs.searchRef.validate( valid => {
-            if (!valid){ 
-              this.$message.warning('请填写正确的信息！')
-              return}
-            this.getRoomList()
-            this.$refs.drawer.closeDrawer()
-           })              
+          this.getRoomList()
+          // this.$refs.searchRef.validate( valid => {
+          //   if (!valid){ 
+          //     this.$message.warning('请填写正确的信息！')
+          //     return}
+          //   this.getRoomList()
+          //   this.$refs.drawer.closeDrawer()
+          //  })              
         },
 
         // 编辑病床信息
@@ -275,7 +274,7 @@
               this.$message.warning('请填写正确的信息！')
               return}
 
-           const { data: res } = await this.$http.put('patientinhospital', {
+           const { data: res } = await this.$http.put('room', {
               BED_ID:this.editForm.beD_ID,
               NURSE_NAME:this.editForm.nursE_NAME,
               PRICE:this.editForm.price 
@@ -283,12 +282,11 @@
 
             this.editDialogVisible = false         
             this.$message.success('更新病床信息成功！')
-            this.getRoomList()
+            
             console.log('后端对此put请求的返回结果：')
             console.log(res)
+            this.getRoomList()
          })      
-
-
 
         },
 
