@@ -73,7 +73,7 @@ export default {
           ],
           PHONE: [
             { required: true, message: '请输入病人联系方式', trigger: 'blur' },
-            { min: 7, max: 11, message: '长度在 7 到 11 个字符', trigger: 'blur' }
+            { min: 1, max: 11, message: '长度不超过11 个字符', trigger: 'blur' }
           ]
         }
       };
@@ -95,7 +95,8 @@ export default {
                   AGE: this.forme.AGE,
                   PHONE: this.forme.PHONE}
                 )
-             alert("提交成功")
+              if(res.err_code=="0000")
+              {alert("提交成功")}
             }
             else
             alert("提交失败，请确保年龄输入正确")

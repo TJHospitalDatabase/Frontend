@@ -129,12 +129,13 @@
       editDialogClosed () {
           // this.$refs.editFormRef.resetFields()
         },
-        handleDelete(index, row) {
-        console.log(index, row);
-      },
+      // handleDelete(index, row) {
+      //   console.log(index, row);
+      // },
       showEditDialog (index, row) {
           this.editDialogVisible = true
           this.temp.registratioN_ID=row.registratioN_ID
+          console.log(this.temp.registratioN_ID)
           },
        // 监听修改对话框的关闭事件
       //每页条数改变时触发 选择一页显示多少行
@@ -157,17 +158,19 @@
             },
       async handleDelete()
       {
-            const { data: res } = await this.$http.delete('registration',
-                {
-                  REGISTRATION_ID: this.temp.registratioN_ID,
-                  }
-                )
-          console.log(this.temp.registratioN_ID)
+          const { data: res } = await this.$http.delete('registration',
+            {
+              params:{REGISTRATION_ID: this.temp.registratioN_ID}})
           console.log(res)
           // 这里是返回的信息
           if(res.err_code=="0000")
           {
             alert("删除成功")
+            const { data: res } =await this.$http.get('registration/find', { params: { PATIENT_NAME: this.registrationIDSearch.patienT_NAME}})
+            console.log(res.data)
+            // 将data属性重命名为res
+            this.patientData=res.data
+            // console.log(this.patientData)
             }
           else
           {
@@ -177,3 +180,7 @@
     },
   }
 </script>
+
+
+
+

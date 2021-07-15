@@ -1,4 +1,3 @@
-
 <template>
 <el-container>
     <el-container style="height: 500px; height:100%; border: 1px solid #eee">
@@ -92,8 +91,36 @@
             </el-form-item>
             <el-form-item label="科室选择" >
               <el-select v-model="forme.departmentID" placeholder="请选择科室">
-              <el-option label="内科" value="inner"></el-option>
-              <el-option label="外科" value="outer"></el-option>
+              <el-option label="骨科" value="骨科"></el-option>
+              <el-option label="内科" value="内科"></el-option>
+              <el-option label="外科" value="外科"></el-option>
+              <el-option label="妇产科" value="妇产科"></el-option>
+              <el-option label="骨外科" value="骨外科"></el-option>
+              <el-option label="肝胆外科" value="肝胆外科"></el-option>
+              <el-option label="神经外科" value="神经外科"></el-option>
+              <el-option label="五官科" value="五官科"></el-option>
+              <el-option label="皮肤科" value="皮肤科"></el-option>
+              <el-option label="泌尿外科" value="泌尿外科"></el-option>
+              <el-option label="烧伤外科" value="烧伤外科"></el-option>
+              <el-option label="呼吸病科" value="呼吸病科"></el-option>
+              <el-option label="循环病科" value="循环病科"></el-option>
+              <el-option label="消化病科" value="消化病科"></el-option>
+              <el-option label="血液病科" value="血液病科"></el-option>
+              <el-option label="风湿免疫病科" value="风湿免疫病科"></el-option>
+              <el-option label="神经系统科" value="神经系统科"></el-option>
+              <el-option label="儿科" value="儿科"></el-option>
+              <el-option label="中医老年科" value="中医老年科"></el-option>
+              <el-option label="中医风湿病科" value="中医风湿病科"></el-option>
+              <el-option label="中医糖尿病科" value="中医糖尿病科"></el-option>
+              <el-option label="中医肺脾科" value="中医肺脾科"></el-option>
+              <el-option label="中医心肾科" value="中医心肾科"></el-option>
+              <el-option label="中医肿瘤科" value="中医肿瘤科"></el-option>
+              <el-option label="中医妇科" value="中医妇科"></el-option>
+              <el-option label="中医肛肠科" value="中医肛肠科"></el-option>
+              <el-option label="中医按摩科" value="中医按摩科"></el-option>
+              <el-option label="中医针灸科" value="中医针灸科"></el-option>
+              <el-option label="中医外科" value="中医外科"></el-option>
+              <el-option label="急诊科" value="急诊科"></el-option>
             </el-select>
             </el-form-item>
             </el-form>
@@ -143,7 +170,7 @@ const axios = require('axios');
     methods: {
       // 监听修改对话框的关闭事件
         editDialogClosed () {
-          this.$refs.editFormRef.resetFields()
+          // this.$refs.editFormRef.resetFields()
         },
         //每页条数改变时触发 选择一页显示多少行
         handleSizeChange(val) {
@@ -181,18 +208,16 @@ const axios = require('axios');
                   DEPT_NAME: this.forme.departmentID,
                   }
                 )
-          console.log(res.data[0])
+          if(res.err_code=="0000")
+          {
           // 这里是返回的信息
           this.$alert('提交成功', '提示', {
             confirmButtonText: '确定',
             callback: action => {
             }
             });
+            }
         }
         }
     }
 </script>
-
-
-
-
