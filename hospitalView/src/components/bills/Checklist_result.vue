@@ -36,7 +36,7 @@
                 <el-table-column prop="patienT_ID" label="病人ID" width="100"></el-table-column>
                 <el-table-column prop="patienT_NAME" label="病人姓名" width="100"></el-table-column> 
                  <el-table-column prop="diagnosis" label="临床诊断" width="150"></el-table-column>
-                <el-table-column prop="depT_NAME" label="科室" width="150"></el-table-column>
+                <el-table-column prop="depT_NAME" label="科室" width="100"></el-table-column>
 
                 <!-- 项目检查单按钮区域 -->
                 <el-table-column  label="项目检查结果" width="150">
