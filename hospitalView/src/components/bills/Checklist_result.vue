@@ -29,7 +29,7 @@
 
                 <!-- 表头区域 -->
                 <el-table-column fixed type="index" label="序号" width="50"></el-table-column>
-                <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" width="100"></el-table-column>
+                <el-table-column prop="examinatioN_LIST_ID" label="检查项目ID" width="105"></el-table-column>
                 <el-table-column prop="examinatioN_NAME" label="检查项目名称" width="150"></el-table-column>
                  <el-table-column prop="examinatioN_DATE" label="检查日期" width="200"></el-table-column>
                 <el-table-column prop="doctoR_NAME" label="医生姓名" width="100"></el-table-column>
@@ -49,6 +49,8 @@
 
               <!--分页设置区域 -->
                 <el-pagination
+                    align='center'
+                    style="position: absolute;top:83%;"
                     :current-page.sync="r_queryInfo.PAGE_NUM"
                     :page-size="r_queryInfo.PAGE_SIZE"
                     layout="total,prev, pager, next, jumper"
@@ -180,5 +182,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
     
 </style>
