@@ -39,7 +39,7 @@
                 </el-form-item>
                 <el-form-item label="医生id:" prop="doctoR_ID">
                     <!--v-model双向绑定-->
-                    <el-input style="width: 82%;" v-model="addForm.doctoR_ID"></el-input>
+                    <el-input :disabled='true' style="width: 82%;" v-model="addForm.doctoR_ID"></el-input>
                 </el-form-item>
                 <el-form-item label="临床诊断:" prop="diagnosis">
                     <el-input style="width: 82%;" type="textarea"
@@ -93,7 +93,7 @@
                 //添加活动表单数据
                 addForm: {
                     patienT_ID:"",
-                    doctoR_ID: "",
+                    doctoR_ID: "123456879",
                     beD_ID:"",
                     diagnosis: "",
                     admissioN_DATE: ""
@@ -188,7 +188,7 @@
                 });
 
                 this.addForm.patienT_ID = "";
-                this.addForm.doctoR_ID="";
+                this.addForm.doctoR_ID=this.$route.query.id;
                 this.addForm.diagnosis = "";
                 this.addForm.admissioN_DATE = "";
             },

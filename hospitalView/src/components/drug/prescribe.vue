@@ -77,7 +77,7 @@
       </el-table> 
 
       <div slot="footer" class="dialog-footer">          
-        <el-button type="primary" size="medium" v-if="prescribeButton" @click="queryForDrugInfo">开药</el-button>
+        <el-button type="primary" size="medium" :disabled="!prescribeButton" @click="queryForDrugInfo">开药</el-button>
       </div>
         
     </el-dialog>
@@ -192,7 +192,9 @@
                   patient_ID: this.queryForm.patientID
                 }
               })
-              .then((response)=>{              
+              .then((response)=>{  
+                console.log('test5');
+                console.log(response)            
                 if(response.data.data.length){
                   this.prescription.patientID=response.data.data[0].patienT_ID;
                   this.prescription.patientName=response.data.data[0].patienT_NAME;
@@ -239,7 +241,7 @@
                     })
                 }
                 else{
-                  this.errorMes="该病人不存在！";
+                  this.errorMes="该病人不存在或该病人未开具处方单！";
                   this.errorVisible=true;
                 }
               })

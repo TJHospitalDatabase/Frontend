@@ -195,9 +195,9 @@ export default {
     async getDeptList(){
     const {data: res } = await this.$http.get('findDept')
     
-    if(res.err_code !== "0000"){
-      return this.$message.error('获取科室信息失败！')
-    }
+    // if(res.err_code !== "0000"){
+    //   return this.$message.error('获取科室信息失败！')
+    // }
     console.log(res.data)
     this.deptlist = res.data
     console.log(this.deptlist)

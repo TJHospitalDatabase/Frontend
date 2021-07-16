@@ -38,7 +38,7 @@
                     </el-form-item>
                     <el-form-item label="医生id:" prop="doctoR_ID">
                     <!--v-model双向绑定-->
-                    <el-input style="width: 82%;" v-model="addForm.doctoR_ID"></el-input>
+                    <el-input style="width: 82%;" :disabled='true' v-model="addForm.doctoR_ID"></el-input>
                 </el-form-item>
                 <el-form-item label="检查项目名称:" prop="examinatioN_NAME">
                         <el-input style="width: 82%;" v-model="addForm.examinatioN_NAME"></el-input>
@@ -196,7 +196,7 @@
 
                 this.addForm.examinatioN_NAME="";
                 this.addForm.patienT_ID= "";
-                this.addForm.doctoR_ID="";
+                this.addForm.doctoR_ID=this.$route.query.id;
 
             },
             addActivity()
