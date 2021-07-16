@@ -125,7 +125,8 @@
         },
         rules: {
           patientID: [
-            { required: true, message: '请输入病人ID', trigger: 'blur' }
+            { required: true, message: '请输入病人ID', trigger: 'blur' },
+            //{ type: "number", message: '请正确输入病人ID', trigger: 'blur' }
           ]
         },
         prescriptionVisible:false,
@@ -199,7 +200,7 @@
                   this.prescription.patientID=response.data.data[0].patienT_ID;
                   this.prescription.patientName=response.data.data[0].patienT_NAME;
                   this.prescription.age=response.data.data[0].age;
-                  this.prescription.gender=(response.data.data[0].gender=='M')?"男":"女";
+                  this.prescription.gender=response.data.data[0].gender;
                   this.prescription.diagnose=response.data.data[0].diagnosis;
                   this.prescription.drugData=[];
                   

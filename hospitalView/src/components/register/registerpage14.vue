@@ -164,6 +164,7 @@
           {
             alert("删除成功")
             this.search()
+            this.editDialogVisible=false;
             }
           else
           {

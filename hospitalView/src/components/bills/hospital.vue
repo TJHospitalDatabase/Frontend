@@ -39,7 +39,7 @@
                 </el-form-item>
                 <el-form-item label="医生id:" prop="doctoR_ID">
                     <!--v-model双向绑定-->
-                    <el-input :disabled='true' style="width: 82%;" v-model="addForm.doctoR_ID"></el-input>
+                    <el-input :disabled='false' style="width: 82%;" v-model="addForm.doctoR_ID"></el-input>
                 </el-form-item>
                 <el-form-item label="临床诊断:" prop="diagnosis">
                     <el-input style="width: 82%;" type="textarea"
@@ -223,8 +223,9 @@
                         //隐藏添加活动对话框
                         this.addDialogVisible = false;
                         this.getActivityList();
-                        //if (result.err_code !== "0000") return this.$message.error('增加失败！')           
-                         this.$message.info("添加检查单成功!");
+                        if (result.data.err_code !=="0000"&&result.data.err_info!=="Operation is not valid due to the current state of the object.") 
+                        return this.$message.error('增加失败！');        
+                        this.$message.info("添加住院单成功!");
                     }
                 );
             },

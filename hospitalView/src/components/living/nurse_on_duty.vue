@@ -164,6 +164,7 @@ export default {
         BED_ID: '',
         STATE: true
       },
+      curBedID:'',
       // 添加信息的验证规则对象
       addFormRules: {
         NURSE_ID: [
@@ -185,6 +186,7 @@ export default {
 
   methods: {
     test(index,row){
+      this.curBedID=row.beD_ID;
       console.log(row.edi);
       row.edi=!row.edi;
       console.log(row.edi);
@@ -243,7 +245,7 @@ export default {
        })
     console.log(res)
      if(res.err_code !== "0000"){
-       nurseInfo.iS_ON_DATE = !nurseInfo.iS_ON_DATE
+       nurseInfo.state = !nurseInfo.state;
        return this.$message.error('更新护士值班状态失败！')
      }
      this.$message.success('更新护士值班状态成功！')
@@ -297,8 +299,9 @@ export default {
        })
     
     if(res.err_code !== "0000"){
-      row.state = !row.state
-      return this.$message.error('更新床号失败！')
+      row.beD_ID=this.curBedID;
+      return this.$message.error('更新床号失败！');
+
     }
     this.$message.success('更新床号成功！')
     
