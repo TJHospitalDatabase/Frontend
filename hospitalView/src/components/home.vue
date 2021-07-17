@@ -3,8 +3,8 @@
     <!-- 头部 -->
     <el-header class="header" >
       <div>
-      <img src="../assets/hosipital.jpg" style="margin-left: 15px"  alt />
-      <span style=" font-weight:bold;">上海市红十字第八人民医院管理系统</span>
+        <img src="../assets/hosipital.jpg" style="margin-left: 15px"  alt />
+        <span style=" font-weight:bold;">上海市红十字第八人民医院管理系统</span>
       </div>
 
       <div>
@@ -72,8 +72,8 @@
       </el-aside>
 
       <!-- 数据表单 -->
-      <el-main >
-        <el-container  style="height: 500px; height:100%; width:100%; border: 1px solid #eee">
+      <el-main>
+        <el-container style="height: 500px; height:100%; width:100%; border: 1px solid #eee">
           <el-main>
             <!--面包屑导航区 -->
             <el-breadcrumb separator-class="el-icon-arrow-right" v-if="isWelcome">
@@ -84,7 +84,7 @@
             </el-breadcrumb>
             <!--路由占位符-->
             <transition :name="transitionName">
-            <router-view></router-view>
+              <router-view></router-view>
             </transition>
           </el-main>
         </el-container>
@@ -229,7 +229,7 @@ export default{
         default:
           break;
       }
-      console.log(this.breadContent);
+      //console.log(this.breadContent);
     },
     reset(){
       //console.log(this);
@@ -237,10 +237,10 @@ export default{
       return this.$message.success('你成功重置了信息！');
     },
     logout(){
-        this.$router.push("/login");
+      this.$router.push("/login");
     },
     goBack() {
-        this.$router.push({path:"/welcome",query:{id:this.id, name:this.name, dept_name:this.dept_name}});
+      this.$router.push({path:"/welcome",query:{id:this.id, name:this.name, dept_name:this.dept_name}});
     },
   }
 }

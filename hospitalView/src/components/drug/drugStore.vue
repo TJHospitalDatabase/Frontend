@@ -245,6 +245,7 @@
         drugPastVisible: false,
       }
     },
+
     computed:{
       drugClassSearchData(){
         return (this.drugClassData.filter(data => !this.searchDrugClassID || 
@@ -267,11 +268,13 @@
         Math.min(this.curDrugPastPage * this.drugPastPageSize, this.drugPast.length));
       }
     },
+
     methods: {
       handleEditPrice(index, row) {
         row.show=true;
         this.tempPrice=row.price;
       },
+
       complishEditPrice(index, row) {
         row.show=false;        
         if(!(row.price==this.tempPrice)){
@@ -318,7 +321,7 @@
       },
       queryForDrug(index, row){
         this.drugVisible=true;
-        console.log(row.drugClassID);
+        //console.log(row.drugClassID);
         this.curDeleteRow=index;
         axios
           .get("/drug/drugclass",{
@@ -342,7 +345,6 @@
               }
             }
           })
-
       },
       deleteDrug(index, row){
         this.deletedDrug.push({
@@ -356,7 +358,7 @@
           shelvesID: row.shelvesID
         })
         this.drugData.splice(index + (this.curDrugPage - 1) * this.drugPageSize,1)
-        console.log('test');
+        //console.log('test');
       },
       deleteResultDrug(){
         let res=[];
@@ -368,7 +370,7 @@
         return res;
       },
       deleteAllDrug() {
-        console.log(this.deleteResultDrug());
+        //console.log(this.deleteResultDrug());
         this.drugVisible = false;
         if(!(this.deletedDrug.length==0)){
           axios
@@ -430,7 +432,7 @@
               data:this.deletedPastDrug
             })
             .then((response)=>{
-              console.log(response);
+              //console.log(response);
               if(response.data.data==true){
                 this.$message({
                   showClose: true,
@@ -464,7 +466,7 @@
               }
             })
             .catch((error)=>{
-              console.log(error)
+              //console.log(error)
             })          
           this.deletedPastDrug=[];
         }
@@ -486,11 +488,9 @@
                 show: false
               })
             }
-
           }
         })
     }
-    
   }
 </script>
 

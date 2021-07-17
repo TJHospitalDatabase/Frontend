@@ -194,8 +194,8 @@
                 }
               })
               .then((response)=>{  
-                console.log('test5');
-                console.log(response)            
+                //.log('test5');
+                //console.log(response)            
                 if(response.data.data.length){
                   this.prescription.patientID=response.data.data[0].patienT_ID;
                   this.prescription.patientName=response.data.data[0].patienT_NAME;
@@ -211,8 +211,8 @@
                       }
                     })
                     .then((response)=>{
-                      console.log("test2");
-                      console.log(response);
+                      //console.log("test2");
+                      //console.log(response);
                       if(response.data.err_code==0){
                         if(response.data.data.length){
                           for(let i = 0; i < response.data.data.length; ++i){
@@ -251,7 +251,7 @@
                 this.errorMes=response.data.err_desc;
               })
           } else {
-            console.log('error submit!!');
+            //console.log('error submit!!');
             return false;
           }
         });
@@ -271,7 +271,7 @@
         .put("/drug/giveDrug",this.drugDataHandle())
         .then((response)=>{
           if(response.data.err_code==0){
-            console.log('test1');
+            //console.log('test1');
             this.drugDetailVisible=true;
             this.drugDetail=[];
             for(let i=0; i<response.data.data.length; ++i){

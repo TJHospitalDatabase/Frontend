@@ -1,34 +1,33 @@
 <template>
-<div>
+  <div>
     <el-card style="float:left; width:45%;">
-    <el-form ref="ruleForm" :rules="rules" :model="forme" id="forme" label-width="80px">
-      <h3>
-        请在下方录入病人信息
-      </h3>
-      <el-form-item label="姓名" prop="PATIENT_NAME" >
-        <el-input v-model="forme.PATIENT_NAME" ></el-input>
-      </el-form-item>
-      <el-form-item label="性别" prop="GENDER" >
-        <el-select v-model="forme.GENDER" placeholder="请选择性别" >
-          <el-option label="男" value="男"></el-option>
-          <el-option label="女" value="女"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item  label="年龄" prop="AGE">
-        <el-input v-model.number="forme.AGE"></el-input>
-      </el-form-item>
-      <el-form-item label="联系方式" prop="PHONE">
-        <el-input v-model="forme.PHONE"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">提交</el-button>
-      </el-form-item>
-    </el-form>
+      <el-form ref="ruleForm" :rules="rules" :model="forme" id="forme" label-width="80px">
+        <h3>
+          请在下方录入病人信息
+        </h3>
+        <el-form-item label="姓名" prop="PATIENT_NAME" >
+          <el-input v-model="forme.PATIENT_NAME" ></el-input>
+        </el-form-item>
+        <el-form-item label="性别" prop="GENDER" >
+          <el-select v-model="forme.GENDER" placeholder="请选择性别" >
+            <el-option label="男" value="男"></el-option>
+            <el-option label="女" value="女"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item  label="年龄" prop="AGE">
+          <el-input v-model.number="forme.AGE"></el-input>
+        </el-form-item>
+        <el-form-item label="联系方式" prop="PHONE">
+          <el-input v-model="forme.PHONE"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">提交</el-button>
+        </el-form-item>
+      </el-form>
     </el-card>
 
     <img src="../../assets/paper.png" style="float:right; width:40%; margin:50px; margin-right:100px;" />
-
-</div>
+  </div>
 </template>
 
 
@@ -36,9 +35,8 @@
 <script src="//unpkg.com/vue@next"></script>
 <script src="//unpkg.com/element-plus/lib/index.full.js"></script>
 <script>
-
-const axios = require('axios');
-export default {
+  const axios = require('axios');
+  export default {
     data() {
       return {
         forme: {
@@ -69,15 +67,15 @@ export default {
     },
     methods: {
       onSubmit(){      
-          this.$refs.ruleForm.validate(async valid => {
-            // console.log(valid)
-            // 表单预校验失败
-            if (valid) 
-            {
+        this.$refs.ruleForm.validate(async valid => {
+          // console.log(valid)
+          // 表单预校验失败
+          if (valid) 
+          {
             this.forme.AGE=this.forme.AGE-0;
             if(this.forme.AGE<130)
             {
-            const { data: res } = await this.$http.put('outPatient',
+              const { data: res } = await this.$http.put('outPatient',
                 {
                   PATIENT_NAME: this.forme.PATIENT_NAME,
                   GENDER: this.forme.GENDER,
@@ -85,22 +83,22 @@ export default {
                   PHONE: this.forme.PHONE}
                 )
               if(res.err_code=="0000")
-              {alert("提交成功")}
+                alert("提交成功")
             }
             else
-            alert("提交失败，请确保年龄输入正确")
+              alert("提交失败，请确保年龄输入正确")
           }
           else {
-             alert("提交失败，请确保输入合法")
+            alert("提交失败，请确保输入合法")
           }
-         })
+        })
       },
       
       resetForm() {
         // this.$refs.ruleForm.resetFields();
       }    
-      }
-}
+    }
+  }
 </script>
 
 <style>

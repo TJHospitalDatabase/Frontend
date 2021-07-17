@@ -1,20 +1,21 @@
 <template>
-    <el-card >
+    <el-card>
         <!--搜索与添加-->
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-row :gutter="100">
-            <el-col :span="8">
-                <!--搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
-                <el-input clearable @clear="getActivityList" placeholder="请输入住院单id" v-model="search">
-                    <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
-                </el-input>
-            </el-col>
-            <el-col :span="4">
-                <el-button type="primary" @click="showAddActivity"  label="right">添加住院单</el-button>
-            </el-col>
+            <el-row :gutter="100">
+                <el-col :span="8">
+                    <!--搜索取消时也会刷新搜索页面,搜索确定时,将携带query搜索特定内容的活动-->
+                    <el-input clearable @clear="getActivityList" placeholder="请输入住院单id" v-model="search">
+                        <el-button slot="append" icon="el-icon-search" @click="frontSearch"></el-button>
+                    </el-input>
+                </el-col>
 
-        </el-row>
+                <el-col :span="4">
+                    <el-button type="primary" @click="showAddActivity"  label="right">添加住院单</el-button>
+                </el-col>
+            </el-row>
         </el-form>
+
         <el-table :data="hospitalCurData" border stripe>
             <el-table-column type="index" label="序号" width=100></el-table-column>
             <el-table-column label="住院单id" prop="recipT_ID" width=160></el-table-column>
@@ -28,43 +29,48 @@
 
         <!--添加活动对话框-->
         <el-dialog title="添加住院单" :visible.sync="addDialogVisible"
-                    width="630px" top="60px" center>
-            <!--            内容主体区域 放置一个表单-->
+            width="630px" top="60px" center>
+            <!--内容主体区域 放置一个表单-->
             <!--绑定到addForm中，绑定验证规则对象addFormRules 表单校验项的引用为addFormRef-->
             <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="150px"
-                        style="height:380px">
+                style="height:380px">
                 <el-form-item label="病人id:" prop="patienT_ID">
                     <!--v-model双向绑定-->
                     <el-input style="width: 82%;" v-model="addForm.patienT_ID"></el-input>
                 </el-form-item>
+
                 <el-form-item label="医生id:" prop="doctoR_ID">
                     <!--v-model双向绑定-->
                     <el-input :disabled='false' style="width: 82%;" v-model="addForm.doctoR_ID"></el-input>
                 </el-form-item>
+
                 <el-form-item label="临床诊断:" prop="diagnosis">
                     <el-input style="width: 82%;" type="textarea"
-                                :autosize="{ minRows: 3, maxRows: 4}" v-model="addForm.diagnosis"></el-input>
+                    :autosize="{ minRows: 3, maxRows: 4}" v-model="addForm.diagnosis"></el-input>
                 </el-form-item>
+
                 <el-form-item label="入院时间:" prop="admissioN_DATE">
-                        <el-input style="width: 82%;" v-model="addForm.admissioN_DATE"></el-input>
+                    <el-input style="width: 82%;" v-model="addForm.admissioN_DATE"></el-input>
                 </el-form-item>
             </el-form>
+
             <!--            底部区域-->
             <span slot="footer" class="dialog-footer">
-            <el-button style="margin-right:20px" @click="cancelAdd">取 消</el-button>
-            <el-button style="margin-left:20px" type="primary" @click="addActivity">确 定</el-button>
-        </span>
+                <el-button style="margin-right:20px" @click="cancelAdd">取 消</el-button>
+                <el-button style="margin-left:20px" type="primary" @click="addActivity">确 定</el-button>
+            </span>
         </el-dialog>
         <br>
+
         <!--分页区域-->
         <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="currentPage"
-                :page-sizes="[ 2, 5, 10]"
-                :page-size.sync="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="activityList.length">
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="[ 2, 5, 10]"
+            :page-size.sync="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="activityList.length">
         </el-pagination>
     </el-card>
 </template>
@@ -118,65 +124,73 @@
                 }
             };
         },
+
          //一开始就显示活动列表
         created()
         {
            this.getActivityList();
         },
+
         computed:{
-        hospitalSearchData(){
-        return (this.activityList.filter(data => !this.search || 
-          data.recipT_ID.toLowerCase().includes(this.search.toLowerCase())))
+            hospitalSearchData(){
+                return (this.activityList.filter(data => !this.search || 
+                data.recipT_ID.toLowerCase().includes(this.search.toLowerCase())))
+            },
+            hospitalCurData:function(){
+                return this.hospitalSearchData.slice((this.currentPage - 1) * this.pageSize,
+                Math.min(this.currentPage * this.pageSize, this.hospitalSearchData.length));
+            }
         },
-        hospitalCurData:function(){
-        return this.hospitalSearchData.slice((this.currentPage - 1) * this.pageSize,
-        Math.min(this.currentPage * this.pageSize, this.hospitalSearchData.length));
-        }
-        },
+
         methods: {
             async getActivityList()
             {
                 let result = await this.$http.get("http://101.132.106.237:5050/recipt",
                     {
                         recipT_ID:""
-                    });
+                    }
+                );
 
                 this.activityList = result.data.data;
             },
             frontSearch(){
-            const search=this.search
-            if(search){
-            this.activityList=this.activityList.filter(data=>{
-                return Object.keys(data).some(key=>{
-                    return String(data[key]).toLowerCase().indexOf(search)>-1
-                })
-            })
-            }
-            console.log(this.activityList)
+                const search=this.search
+                if(search){
+                    this.activityList=this.activityList.filter(data=>{
+                        return Object.keys(data).some(key=>{
+                            return String(data[key]).toLowerCase().indexOf(search)>-1
+                        })
+                    })
+                }
+                //console.log(this.activityList)
             },
+
             frontSearch(){
-            const query=this.query
-            if(query){
-            this.activityList=this.activityList.filter(data=>{
-                return Object.keys(data).some(key=>{
-                    return String(data[key]).toLowerCase().indexOf(query)>-1
-                })
-            })
-            }
-            console.log(this.activityList)
+                const query=this.query;
+                if(query){
+                    this.activityList=this.activityList.filter(data=>{
+                        return Object.keys(data).some(key=>{
+                            return String(data[key]).toLowerCase().indexOf(query)>-1
+                        })
+                    })
+                }
+                //console.log(this.activityList)
             },
+
             //监听pageSize改变的事件
             handleSizeChange(newSize)
             {
                 this.pageSize = newSize;
                 this.getActivityList();
             },
+
             //监听pageNum改变的事件
             handleCurrentChange(newPage)
             {
                 this.currentPage = newPage;
                 this.getActivityList();
             },
+
             //添加活动
             showAddActivity()
             {
@@ -192,6 +206,7 @@
                 this.addForm.diagnosis = "";
                 this.addForm.admissioN_DATE = "";
             },
+
             addActivity()
             {
                 this.$refs.addFormRef.validate(
@@ -200,16 +215,16 @@
                         if (!valid) return;
                         let nowDate = new Date();
                         let date = {
-                        year: nowDate.getFullYear(),
-                        month: nowDate.getMonth() + 1,
-                        date: nowDate.getDate(),
+                            year: nowDate.getFullYear(),
+                            month: nowDate.getMonth() + 1,
+                            date: nowDate.getDate(),
                         }
-                        console.log(date);
+                        //console.log(date);
                         let systemDate = date.year + '-' + 0 + date.month + '-' + date.date;
-                        console.log(systemDate);
+                        //console.log(systemDate);
                         let bedResult= await this.$http.get("http://101.132.106.237:5050/giveBed");
                         let bed_ID=bedResult.data.data;
-                        console.log(bed_ID);
+                        //console.log(bed_ID);
                         let result = await this.$http.put("http://101.132.106.237:5050/recipt",
                             {
                                 patient_ID: this.addForm.patienT_ID,
@@ -224,11 +239,12 @@
                         this.addDialogVisible = false;
                         this.getActivityList();
                         if (result.data.err_code !=="0000"&&result.data.err_info!=="Operation is not valid due to the current state of the object.") 
-                        return this.$message.error('增加失败！');        
+                            return this.$message.error('增加失败！');        
                         this.$message.info("添加住院单成功!");
                     }
                 );
             },
+            
             //添加活动框里面的取消添加活动按钮触发的事件
             cancelAdd()
             {
