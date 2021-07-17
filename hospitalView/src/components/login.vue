@@ -110,13 +110,18 @@ import axios from 'axios'
 						role:self.form.value}          
                     })
 					.then(function(res) {
+								console.log("test")
                         console.log(res.data);
+						console.log(res.data.data.id);
 						switch(res.data.err_code){
 							case "0000": 
 							{
-                                alert("登录成功！");
+                                
 								window.sessionStorage.setItem("token",res.data.data.role);
-								self.$router.push({path:'/welcome', query:{id:res.data.data.useR_ID,name:self.form.user_id,dept_name:res.data.data.depT_NAME}});
+								console.log("1232121")
+								console.log(res.data.data.id)
+								self.$router.push({path:'/welcome', query:{id:res.data.data.id,name:res.data.data.name,dept_name:res.data.data.depT_NAME}});
+								alert("登录成功！");
 								break;
 							}								
 							default:

@@ -104,7 +104,7 @@ export default {
             // 打印res
             // 返回数据
             this.checkresultlist=this.checkresultlist.filter(val=>{
-                return val.state==true
+                return val.state==2
             })
         },
 

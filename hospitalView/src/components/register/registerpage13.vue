@@ -201,6 +201,7 @@ const axios = require('axios');
             if (valid) 
             {
             this.forme.AGE=this.forme.AGE-0;
+            this.editDialogVisible=false;
             const { data: res } = await this.$http.put('registration',
                 {
                   PATIENT_NAME: this.temp.PATIENT_NAME,

@@ -124,8 +124,14 @@ export default {
            console.log(res.err_code)
             if (res.err_code != "0000") 
             {this.$message.error('获取检查项目列表失败！')}
+        console.log(res) 
         // 返回数据
         this.checklist=res.data
+        console.log("this.checklist"); 
+        console.log(this.checklist);   
+        for(let i=0;i<this.checklist.length;++i){
+            this.checklist[i].state=(this.checklist[i].state==1)?false:true;
+        }
         console.log(this.checklist)     
        },
 
@@ -177,7 +183,7 @@ export default {
             const{data:res}=await this.$http.get('patient/examinationPage', 
             {params:
             {EXAMINATION_LIST_ID: editSample.examinatioN_LIST_ID,
-            STATE:editSample.state}})
+            STATE:editSample.state-0+1}})
 
             console.log(res.data)
             if (res.err_code != "0000") 
