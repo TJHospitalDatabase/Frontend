@@ -1,67 +1,72 @@
 <template>
-<div class="background">
-	<div class="login-register">
-		<div class="contain">
-			<div class="big-box" :class="{active:isLogin}"> 
-				<div class="big-contain" v-if="!isLogin">
-					<div class="btitle">账户登录</div>
-					<div class="bform">
-						<input type="user_id" placeholder="用户名" v-model="form.user_id" maxlength="7">
-						<span class="errTips" v-if="existed">* 用户名不存在 *</span>
-						<input type="password" placeholder="密码" v-model="form.userpwd" maxlength="16">
-						<span class="errTips" v-if="passwordError">* 密码填写错误 *</span>
+	<div class="background">
+		<div class="login-register">
+			<div class="contain">
+				<div class="big-box" :class="{active:isLogin}"> 
+					<div class="big-contain" v-if="!isLogin">
+						<div class="btitle">账户登录</div>
+						<div class="bform">
+							<input type="user_id" placeholder="用户名" v-model="form.user_id" maxlength="7">
+							<span class="errTips" v-if="login_existed">* 用户名不存在 *</span>
+							<input type="password" placeholder="密码" v-model="form.userpwd" maxlength="16">
+							<span class="errTips" v-if="passwordError">* 密码填写错误 *</span>
+						</div>
+						<button class="bbutton" @click="login">登录</button>
 					</div>
-					<button class="bbutton" @click="login">登录</button>
-				</div>
-				<div class="big-contain" v-else>
-					<div class="btitle">创建账户</div>
-					<div class="bform">
-						<input type="text" placeholder="用户名" v-model="form.user_id" maxlength="7">
-						<span class="errTips" v-if="existed">* 用户名已经存在！ *</span>
-						<input type="username" placeholder="账号" v-model="form.username" maxlength="7">
-						<input type="email" placeholder="邮箱" v-model="form.useremail">
-						<input type="password" placeholder="密码" v-model="form.userpwd" maxlength="16">
+					<div class="big-contain" v-else>
+						<div class="btitle">创建账户</div>
+						<div class="bform">
+							<input type="text" placeholder="工号" v-model="form.username" maxlength="7">
+							<span class="errTips" v-if="id_notexisted">* 用户工号不存在！ *</span>
+							<span class="errTips" v-if="binded">* 此工号已绑定其他用户！ *</span>
+							<input type="username" placeholder="用户名" v-model="form.user_id" maxlength="7">
+							<span class="errTips" v-if="register_existed">* 用户名已经存在！ *</span>
+							<input type="email" placeholder="邮箱" v-model="form.useremail">
+							<input type="password" placeholder="密码" v-model="form.userpwd" maxlength="16">
+						</div>
+						<div class="bselect">
+							<el-select v-model="form.value" clearable placeholder="角色选择" style="width:350px">
+								<el-option
+								v-for="item in options"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+								</el-option>
+							</el-select>
+						</div>		
+						<button class="bbutton" @click="register">注册</button>
 					</div>
-					<div class="bselect">
-					<el-select v-model="form.value" clearable placeholder="角色选择" style="width:350px">
-                        <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-					</div>		
-					<button class="bbutton" @click="register">注册</button>
 				</div>
-			</div>
-			<div class="small-box" :class="{active:isLogin}">
-				<div class="small-contain" v-if="!isLogin">
-					<div class="stitle">你好!</div>
-					<p class="scontent">开始注册，进入医院管理系统</p>
-					<button class="sbutton" @click="changeType">注册</button>
-				</div>
-				<div class="small-contain" v-else>
-					<div class="stitle">医院管理系统</div>
-					<p class="scontent">点击下方，登录你的账户</p>
-					<button class="sbutton" @click="changeType">登录</button>
+
+				<div class="small-box" :class="{active:isLogin}">
+					<div class="small-contain" v-if="!isLogin">
+						<div class="stitle">你好!</div>
+						<p class="scontent">开始注册，进入医院管理系统</p>
+						<button class="sbutton" @click="changeType">注册</button>
+					</div>
+					<div class="small-contain" v-else>
+						<div class="stitle">医院管理系统</div>
+						<p class="scontent">点击下方，登录你的账户</p>
+						<button class="sbutton" @click="changeType">登录</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	</div>
 </template>
 
 <script>
-import axios from 'axios'
+	import axios from 'axios'
 	export default{
 		name:'login-register',
 		data(){
 			return {
 				isLogin:false,
-				emailError: false,
 				passwordError: false,
-				existed: false,
+				login_existed: false,
+				register_existed: false,
+				id_notexisted:false,
+				binded:false,
 				form:{
 					user_id:'',
 					username:'',
@@ -70,23 +75,24 @@ import axios from 'axios'
 					value:''
 				},
 				options: [
-		{
-		  value: '000011',
-          label: '挂号部'
-						},{
-          value: '000110',
-          label: '门诊部'
-        }, {
-          value: '100000',
-          label: '住院部',
-        }, {
-          value: '001000',
-          label: '药品管理部'
-        }, {
-          value: '010000',
-          label: '检查管理部'
-        }],
-        value: ''
+					{
+					value: 3,
+					label: '挂号部'
+									},{
+					value: 6,
+					label: '门诊部'
+					}, {
+					value: 32,
+					label: '住院部',
+					}, {
+					value: 8,
+					label: '药品管理部'
+					}, {
+					value: 16,
+					label: '检查管理部'
+					}
+				],
+        		value: ''
 			}
 		},
 		methods:{
@@ -102,29 +108,40 @@ import axios from 'axios'
 				const self = this;
 				if (self.form.user_id != "" && self.form.userpwd != "") {
                     axios.get('/logIn', {params:{user_id: self.form.user_id,
-                        password: self.form.userpwd}          
+                        password: self.form.userpwd,
+						role:self.form.value}          
                     })
 					.then(function(res) {
-                        console.log(res.data);
+						// console.log("test")
+                        // console.log(res.data);
+						// console.log(res.data.data.id);
 						switch(res.data.err_code){
 							case "0000": 
-							{
-                                alert("登录成功！");
-								window.sessionStorage.setItem("token",role)
-								self.$router.push({path:'/welcome', query:{id:res.data.data.user_id}});
+							{                                
+								window.sessionStorage.setItem("token",res.data.data.role);
+								// console.log("1232121")
+								// console.log(res.data.data.id)
+								self.$router.push({path:'/welcome', query:{id:res.data.data.id,name:res.data.data.name,dept_name:res.data.data.depT_NAME}});
+								alert("登录成功！");
 								break;
 							}								
 							default:
 							{
-								alert("登录失败！");
-                                self.emailError = true;						
-								self.passwordError = true;
+								if(res.data.err_info=="未知错误")
+								{
+									alert("用户名不存在！");
+                                    self.login_existed=true;
+								}
+								else{
+                                    alert("密码错误！");					
+								    self.passwordError = true;
+								}								
 								break;
 							}							
 						}
 					})
 					.catch( err => {
-						console.log(err);
+						// console.log(err);
 					})
 				} else{
 					alert("填写不能为空！");
@@ -133,10 +150,14 @@ import axios from 'axios'
 			register(){
 				const self = this;
 				if(self.form.username != "" && self.form.useremail != "" && self.form.userpwd != ""&& self.form.value != ""&&self.form.user_id != ""){
-                    axios.post('/signUp', {params:{password:self.form.userpwd,
+                    axios.post('/signUp', {
+						PASSWORD:self.form.userpwd,
+					    ID:self.form.username,
                         user_id:self.form.user_id,
 						email:self.form.useremail,
-						role:self.form.value}  })
+						role:self.form.value
+						}
+					)
 					.then(function(res){
 						switch(res.data.err_code){
 							case "0000":
@@ -144,13 +165,25 @@ import axios from 'axios'
 								self.login();
 								break;
 							default:
-								alert("用户名重复，注册失败！");
-								self.existed = true;
+								if(res.data.err_info=="ID不存在")
+								{
+									alert("工号不存在，注册失败！");
+                                    self.id_notexisted=true;
+								}
+								else if(res.data.err_info=="用户已经存在")
+								{
+                                    alert("用户名已存在，注册失败！");
+                                    self.register_existed = true;
+								}
+								else{
+									alert("对应工号已绑定其他用户，注册失败！");
+									self.binded=true;
+								}
 								break;
 						}
 					})
 					.catch( err => {
-						console.log(err);
+						//console.log(err);
 					})
 				} else {
 					alert("填写不能为空！");
